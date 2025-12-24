@@ -1,0 +1,128 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ============================= */
+/* THEME VARIABLES */
+/* ============================= */
+
+:root {
+  --background: oklch(0.98 0 0);
+  --foreground: oklch(0.15 0 0);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0 0);
+
+  /* Brand Colors */
+  --primary: oklch(0.35 0.12 199);      /* Deep Teal */
+  --secondary: oklch(0.65 0.15 190);    /* Cyan */
+  --accent: oklch(0.68 0.16 185);       /* Aqua */
+
+  --muted: oklch(0.92 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+
+  --border: oklch(0.92 0.01 199);
+  --input: oklch(0.96 0.01 199);
+  --ring: oklch(0.35 0.12 199);
+
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: oklch(0.12 0 0);
+  --foreground: oklch(0.98 0 0);
+
+  --card: oklch(0.15 0 0);
+  --card-foreground: oklch(0.98 0 0);
+
+  --primary: oklch(0.55 0.14 195);
+  --secondary: oklch(0.7 0.16 190);
+  --accent: oklch(0.72 0.17 185);
+
+  --muted: oklch(0.3 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+
+  --border: oklch(0.25 0.01 199);
+  --input: oklch(0.2 0.01 199);
+  --ring: oklch(0.55 0.14 195);
+}
+
+/* ============================= */
+/* FONT SYSTEM */
+/* ============================= */
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Sora", sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+/* ============================= */
+/* BASE STYLES */
+/* ============================= */
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* ============================= */
+/* UTILITIES */
+/* ============================= */
+
+@layer utilities {
+  /* Premium glass effect */
+  .glass {
+    @apply backdrop-blur-md bg-white/70 border border-white/20
+           dark:bg-slate-900/40 dark:border-slate-700/30;
+  }
+
+  .glass-subtle {
+    @apply backdrop-blur-sm bg-white/50 dark:bg-slate-900/20;
+  }
+
+  /* Subtle motion helpers */
+  .animate-fade-up {
+    animation: fadeUp 0.6s ease-out both;
+  }
+
+  @keyframes fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
