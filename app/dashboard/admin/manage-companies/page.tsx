@@ -2,41 +2,33 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { MapPin, Pencil, Search } from "lucide-react"
+import { Search, MapPin, Globe, ShieldCheck, CheckCircle2, Pencil } from "lucide-react"
 
 const companies = [
   {
     id: "tech-startup-co",
     name: "TechStart Innovation",
+    logo: "/logos/techstart.png",
     category: "Technology",
-    image: "/modern-ecommerce-platform.jpg",
+    description: "Leading fintech solutions provider transforming digital payments and modern banking.",
     location: "San Francisco, CA",
+    whatsapp: "1234567890",
+    includedItems: ["Software Dev", "UI/UX Design", "Cloud Hosting"],
+    isVerified: true,
     plan: "Paid",
   },
   {
     id: "fashion-hub",
     name: "Fashion Hub",
+    logo: "/logos/fashion.png",
     category: "Retail",
-    image: "/brand-identity-design.jpg",
+    description: "Curated fashion marketplace connecting independent designers with global customers.",
     location: "New York, NY",
+    whatsapp: "9876543210",
+    includedItems: ["Wholesale", "Custom Tailoring", "Express Shipping"],
+    isVerified: false,
     plan: "Free",
-  },
-  {
-    id: "health-wellness",
-    name: "Health & Wellness Co",
-    category: "Healthcare",
-    image: "/mobile-application-design.jpg",
-    location: "Boston, MA",
-    plan: "Paid",
-  },
-  {
-    id: "sustainable-future",
-    name: "Sustainable Future",
-    category: "Sustainability",
-    image: "/analytics-dashboard-interface.jpg",
-    location: "Portland, OR",
-    plan: "Free",
-  },
+  }
 ]
 
 export default function ManageCompaniesPage() {
@@ -44,132 +36,121 @@ export default function ManageCompaniesPage() {
   const [filter, setFilter] = useState<"All" | "Paid" | "Free">("All")
 
   const filteredCompanies = companies.filter((company) => {
-    const matchesSearch = company.name
-      .toLowerCase()
-      .includes(search.toLowerCase())
-
-    const matchesFilter =
-      filter === "All" ? true : company.plan === filter
-
+    const matchesSearch = company.name.toLowerCase().includes(search.toLowerCase())
+    const matchesFilter = filter === "All" ? true : company.plan === filter
     return matchesSearch && matchesFilter
   })
 
   return (
-    <main className="pt-20 pb-24">
-
-      {/* ===== HEADER ===== */}
-      <section className="pb-10 border-b border-border">
-        <div className="max-w-7xl mx-auto px-6">
-          <h1 className="font-display text-3xl font-semibold mb-1">
-            Manage Companies
-          </h1>
-          <p className="text-muted-foreground">
-            View and manage all approved companies
-          </p>
-        </div>
-      </section>
-
-      {/* ===== FILTERS ===== */}
-      <section className="py-8">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row gap-4 md:items-center justify-between">
-
-          {/* Search */}
-          <div className="relative w-full md:max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input
-              type="text"
-              placeholder="Search company..."
+    <main className="pt-24 bg-[#fcfcfc] min-h-screen">
+      
+      {/* ===== HEADER / FILTERS ===== */}
+      <section className="bg-white border-b border-border sticky top-0 z-20 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+             <input 
+              type="text" 
+              placeholder="Search companies..." 
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
-            />
+              className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 outline-none w-full md:w-80"
+             />
+             <div className="flex bg-slate-100 p-1 rounded-lg">
+              {["All", "Paid", "Free"].map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setFilter(type as any)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+                    filter === type ? "bg-white text-primary shadow-sm" : "text-slate-500"
+                  }`}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
           </div>
-
-          {/* Filter */}
-          <div className="flex gap-2">
-            {["All", "Paid", "Free"].map((type) => (
-              <button
-                key={type}
-                onClick={() => setFilter(type as any)}
-                className={`px-4 py-2 rounded-md text-sm font-medium border transition ${
-                  filter === type
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "bg-background border-border hover:border-primary/40"
-                }`}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-
+          <h1 className="hidden md:block text-sm font-bold text-slate-400 uppercase tracking-widest">Admin Dashboard</h1>
         </div>
       </section>
 
-      {/* ===== COMPANIES GRID ===== */}
-      <section>
-        <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* ===== COMPANIES LIST (Same Card Style as Page 1) ===== */}
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="space-y-4">
+            {filteredCompanies.map((company) => (
+              <div 
+                key={company.id} 
+                className="group relative bg-white rounded-2xl border border-border hover:border-primary/40 transition-all duration-300 hover:shadow-md overflow-hidden"
+              >
+                <div className="flex flex-col md:flex-row items-stretch md:items-center p-4 md:p-6 gap-6">
+                  
+                  {/* 1. LOGO AREA */}
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-xl border border-slate-100 bg-slate-50 flex-shrink-0 flex items-center justify-center p-3 overflow-hidden">
+                    <img src={company.logo} alt={company.name} className="w-full h-full object-contain" />
+                  </div>
 
-          {filteredCompanies.length === 0 && (
-            <div className="col-span-full py-20 text-center text-muted-foreground">
-              No companies found
-            </div>
-          )}
+                  {/* 2. MAIN CONTENT AREA (Horizontal Lines) */}
+                  <div className="flex-1 space-y-3">
+                    {/* Line 1: Name, Category, Verification */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      <h3 className="text-xl font-bold text-slate-900 group-hover:text-primary transition-colors">
+                        {company.name}
+                      </h3>
+                      {company.isVerified && (
+                        <span className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">
+                          <ShieldCheck className="w-3 h-3" /> Verified
+                        </span>
+                      )}
+                      <span className="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase">
+                        {company.category}
+                      </span>
+                    </div>
 
-          {filteredCompanies.map((company) => (
-            <div
-              key={company.id}
-              className="group rounded-2xl overflow-hidden border border-border bg-background hover:border-primary/40 transition hover:-translate-y-1"
-            >
+                    {/* Line 2: Description */}
+                    <p className="text-sm text-slate-500 line-clamp-1 max-w-2xl">
+                      {company.description}
+                    </p>
 
-              {/* IMAGE */}
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src={company.image}
-                  alt={company.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                />
+                    {/* Line 3: Included Items (Chips) */}
+                    <div className="flex flex-wrap gap-2">
+                      {company.includedItems.map((item, idx) => (
+                        <span key={idx} className="flex items-center gap-1 text-[11px] font-medium text-slate-600">
+                          <CheckCircle2 className="w-3 h-3 text-primary" /> {item}
+                        </span>
+                      ))}
+                    </div>
 
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-black/10" />
+                    {/* Line 4: Location & Quick Links */}
+                    <div className="flex items-center gap-4 text-xs font-medium text-slate-400 pt-1">
+                      <div className="flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-primary" />
+                        {company.location}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <Globe className="w-3.5 h-3.5" />
+                        Plan: <span className={company.plan === "Paid" ? "text-amber-600 font-bold" : ""}>{company.plan}</span>
+                      </div>
+                    </div>
+                  </div>
 
-                {/* PLAN BADGE */}
-                <span
-                  className={`absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-medium ${
-                    company.plan === "Paid"
-                      ? "bg-green-600 text-white"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {company.plan}
-                </span>
+                  {/* 3. ACTION AREA (Admin Logic) */}
+                  <div className="flex flex-row md:flex-col gap-3 border-t md:border-t-0 md:border-l border-border pt-4 md:pt-0 md:pl-6 min-w-[180px]">
+                    <Link href={`/dashboard/admin/manage-companies/${company.id}`} className="flex-1">
+                      <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-all shadow-sm">
+                        <Pencil className="w-4 h-4" /> Edit Profile
+                      </button>
+                    </Link>
+                    <Link href={`/companies/${company.id}`} className="flex-1">
+                      <button className="w-full px-4 py-2.5 bg-slate-50 text-slate-600 border border-slate-200 rounded-xl text-sm font-bold hover:bg-slate-100 transition-all">
+                        View Live
+                      </button>
+                    </Link>
+                  </div>
 
-                {/* EDIT ICON */}
-                <Link
-                  href={`/dashboard/admin/manage-companies/${company.id}`}
-                  className="absolute top-4 right-4 p-2 rounded-md bg-background/90 border border-border hover:border-primary transition"
-                >
-                  <Pencil className="w-4 h-4 text-primary" />
-                </Link>
-              </div>
-
-              {/* CONTENT */}
-              <div className="p-6">
-                <span className="text-xs text-primary font-medium">
-                  {company.category}
-                </span>
-
-                <h3 className="font-display text-xl font-semibold mt-1 mb-3">
-                  {company.name}
-                </h3>
-
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <MapPin className="w-4 h-4 text-primary" />
-                  {company.location}
                 </div>
               </div>
-
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 

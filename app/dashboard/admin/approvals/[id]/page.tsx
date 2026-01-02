@@ -10,6 +10,9 @@ import {
   Globe,
   CheckCircle,
   XCircle,
+  Package,
+  CheckCircle2
+  
 } from "lucide-react"
 import { useParams } from "next/navigation"
 
@@ -23,6 +26,8 @@ const companyRequestData: Record<string, any> = {
     website: "techstart.io",
     submittedBy: "admin@techstart.io",
     submittedOn: "18 Jan 2025",
+    category: "Technology", 
+     includedItems: ["Software Dev", "UI/UX Design", "Cloud Hosting"],   
     status: "Pending",
   },
 }
@@ -113,6 +118,13 @@ export default function CompanyApprovalDetailPage() {
             </span>
           </div>
 
+          <div className="flex items-center gap-3">
+            <Package className="w-5 h-5 text-primary" />
+            <span>
+              <strong>Services:</strong> {company.includedItems.join(", ")}
+            </span>
+          </div>
+
           {company.website && (
             <div className="flex items-center gap-3">
               <Globe className="w-5 h-5 text-primary" />
@@ -131,6 +143,13 @@ export default function CompanyApprovalDetailPage() {
             <Mail className="w-5 h-5 text-primary" />
             <span>
               <strong>Submitted By:</strong> {company.submittedBy}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <CheckCircle2 className="w-5 h-5 text-primary" />
+            <span>
+              <strong>Category:</strong> {company.category}
             </span>
           </div>
 

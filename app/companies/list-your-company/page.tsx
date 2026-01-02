@@ -1,189 +1,237 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
-import { Upload, ArrowLeft } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Upload, ArrowLeft, Plus, X, MessageSquare, Loader2, Check } from "lucide-react"
 
 export default function ListYourCompanyPage() {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+  const [includedItems, setIncludedItems] = useState<string[]>([])
+  const [currentItem, setCurrentItem] = useState("")
+
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+    description: "", // Linked to Short Description
+    location: "",
+    whatsapp: "",
+    email: "",
+    password: "",
+    logo: "", // Will store the Base64 image string
+  })
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  // --- LOGO UPLOAD LOGIC ---
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, logo: reader.result as string }))
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
+
+    try {
+      const response = await fetch("/api/companies", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...formData,
+          services: includedItems.map(item => ({ title: item })),
+          status: "pending" 
+        }),
+      })
+
+      if (response.ok) {
+        alert("Success! Your business is pending admin approval.")
+        router.push("/companies")
+      } else {
+        alert("Failed to submit. Please check all fields.")
+      }
+    } catch (error) {
+      console.error("Submission error:", error)
+      alert("Something went wrong.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const addIncludedItem = () => {
+    if (currentItem.trim() && !includedItems.includes(currentItem)) {
+      setIncludedItems([...includedItems, currentItem.trim()])
+      setCurrentItem("")
+    }
+  }
+
+  const removeItem = (itemToRemove: string) => {
+    setIncludedItems(includedItems.filter((item) => item !== itemToRemove))
+  }
+
   return (
-    <main className="pt-24">
-
-      {/* ===== HEADER ===== */}
-      <section className="pb-16">
+    <main className="pt-24 bg-muted/10 min-h-screen">
+      <section className="pb-12">
         <div className="max-w-4xl mx-auto px-4">
-          <Link
-            href="/companies"
-            className="inline-flex items-center gap-2 text-sm text-primary font-medium mb-6 hover:translate-x-1 transition"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Companies
+          <Link href="/companies" className="inline-flex items-center gap-2 text-sm text-primary font-medium mb-6 hover:-translate-x-1 transition-transform">
+            <ArrowLeft className="w-4 h-4" /> Back to Directory
           </Link>
-
-          <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
-            List Your Company
+          <h1 className="font-display text-4xl font-bold mb-4 tracking-tight text-foreground">
+            Register Your <span className="text-primary">Business</span>
           </h1>
-          <p className="text-muted-foreground max-w-2xl">
-            Submit your company details for review. Once approved by our team,
-            your company will be featured on our platform.
+          <p className="text-muted-foreground max-w-2xl text-lg">
+            Join the Jisnu Digital ecosystem. Provide your details below for verification.
           </p>
         </div>
       </section>
 
-      {/* ===== FORM ===== */}
       <section className="pb-28">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="rounded-2xl border border-border bg-background p-8 md:p-10">
+          <div className="rounded-3xl border border-border bg-background shadow-xl shadow-primary/5 p-8 md:p-12">
+            <form onSubmit={handleSubmit} className="space-y-10">
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 border-b border-border pb-2">
+                  <div className="w-2 h-8 bg-primary rounded-full" />
+                  <h2 className="text-2xl font-bold">Company Identity</h2>
+                </div>
 
-            <form className="space-y-8">
-
-              {/* ===== COMPANY DETAILS ===== */}
-              <div>
-                <h2 className="font-display text-xl font-semibold mb-4">
-                  Company Information
-                </h2>
-
-                <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Company Name
-                    </label>
+                <div className="grid gap-8">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-foreground/80">Company Name</label>
                     <input
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
                       type="text"
                       required
-                      placeholder="Your company name"
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
+                      placeholder="e.g. Acme Solutions"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20 outline-none transition-all"
                     />
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Category
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-foreground/80">Business Category</label>
                     <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20 outline-none transition-all"
                     >
-                      <option value="">Select category</option>
+                      <option value="">Select a category</option>
                       <option>Technology</option>
-                      <option>Healthcare</option>
-                      <option>Finance</option>
-                      <option>Retail</option>
-                      <option>Education</option>
-                      <option>Sustainability</option>
-                      <option>Other</option>
+                      <option>Retail & E-commerce</option>
+                      <option>Health & Wellness</option>
+                      <option>Manufacturing</option>
+                      <option>Professional Services</option>
                     </select>
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Location
-                    </label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-foreground/80">Short Description</label>
                     <input
+                      name="description" // 👈 CRITICAL: This connects to your database field
+                      value={formData.description}
+                      onChange={handleInputChange}
                       type="text"
                       required
-                      placeholder="City, Country"
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Founded Year
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      placeholder="e.g. 2020"
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
+                      placeholder="Brief overview of your business..."
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20 outline-none transition-all"
                     />
                   </div>
                 </div>
 
-                <div className="mt-6">
-                  <label className="block text-sm font-medium mb-2">
-                    Short Description
-                  </label>
-                  <textarea
-                    required
-                    rows={4}
-                    placeholder="Briefly describe what your company does"
-                    className="w-full px-4 py-3 rounded-md border border-border bg-background focus:outline-none focus:border-primary resize-none"
-                  />
-                </div>
-              </div>
-
-              {/* ===== LOGO UPLOAD ===== */}
-              <div>
-                <h2 className="font-display text-xl font-semibold mb-4">
-                  Company Logo
-                </h2>
-
-                <div className="flex items-center gap-4">
-                  <div className="h-24 w-24 rounded-lg border border-dashed border-border flex items-center justify-center text-muted-foreground">
-                    <Upload className="w-6 h-6" />
-                  </div>
-
-                  <div>
-                    <input type="file" accept="image/*" />
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Optional. If not uploaded, a placeholder logo will be shown.
-                    </p>
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-foreground/80">Company Logo</label>
+                  <div className="relative flex items-center gap-6 p-6 rounded-2xl border-2 border-dashed border-border bg-muted/10 hover:bg-muted/20 transition-colors cursor-pointer group">
+                    <div className="h-16 w-16 rounded-xl bg-background border border-border flex items-center justify-center text-primary overflow-hidden">
+                      {formData.logo ? (
+                        <img src={formData.logo} alt="Preview" className="w-full h-full object-cover" />
+                      ) : (
+                        <Upload className="w-6 h-6" />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleFileChange} // 👈 Triggers the Base64 conversion
+                        className="block w-full text-sm text-muted-foreground file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-primary/90" 
+                      />
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {formData.logo ? <span className="text-green-600 flex items-center gap-1"><Check className="w-3 h-3" /> Image Selected</span> : "PNG, JPG up to 5MB"}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              {/* ===== OWNER ACCOUNT ===== */}
-              <div>
-                <h2 className="font-display text-xl font-semibold mb-4">
-                  Owner Account
-                </h2>
+              {/* ... REST OF YOUR FORM (CONTACT, INCLUSIONS, CREDENTIALS) REMAINS THE SAME ... */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 border-b border-border pb-2">
+                  <div className="w-2 h-8 bg-accent rounded-full" />
+                  <h2 className="text-2xl font-bold">Contact & Location</h2>
+                </div>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold">Primary Location</label>
+                    <input name="location" value={formData.location} onChange={handleInputChange} type="text" required placeholder="City, State" className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold flex items-center gap-2"><MessageSquare className="w-4 h-4 text-[#25D366]" /> WhatsApp Number</label>
+                    <input name="whatsapp" value={formData.whatsapp} onChange={handleInputChange} type="tel" required placeholder="+91..." className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20" />
+                  </div>
+                </div>
+              </div>
 
+              <div className="space-y-6">
+                <div className="flex items-center gap-2 border-b border-border pb-2">
+                  <div className="w-2 h-8 bg-yellow-500 rounded-full" />
+                  <h2 className="text-2xl font-bold">Business Inclusion</h2>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <input type="text" value={currentItem} onChange={(e) => setCurrentItem(e.target.value)} placeholder="e.g. Free Delivery" className="flex-1 px-4 py-3 rounded-xl border border-border bg-muted/20 outline-none" />
+                    <button type="button" onClick={addIncludedItem} className="px-4 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors"><Plus className="w-5 h-5" /></button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {includedItems.map((item) => (
+                      <span key={item} className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary text-sm font-bold rounded-lg border border-primary/20">
+                        {item} <button type="button" onClick={() => removeItem(item)}><X className="w-3 h-3 hover:text-destructive" /></button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-muted/30 border border-border">
+                <h3 className="font-bold mb-4">Dashboard Credentials</h3>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="owner@company.com"
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      Password
-                    </label>
-                    <input
-                      type="password"
-                      required
-                      placeholder="Create a password"
-                      className="w-full px-4 py-3 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
-                    />
-                  </div>
+                  <input name="email" value={formData.email} onChange={handleInputChange} type="email" placeholder="Login Email" required className="bg-background px-4 py-3 rounded-xl border border-border" />
+                  <input name="password" value={formData.password} onChange={handleInputChange} type="password" placeholder="Create Password" required className="bg-background px-4 py-3 rounded-xl border border-border" />
                 </div>
-
-                <p className="text-xs text-muted-foreground mt-3">
-                  You will use these credentials later to manage your company
-                  profile after approval.
-                </p>
               </div>
 
-              {/* ===== SUBMIT ===== */}
-              <div className="pt-6 border-t border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <p className="text-sm text-muted-foreground max-w-md">
-                  After submission, our team will review your details. Approval
-                  usually takes 24–48 hours.
-                </p>
-
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6 pt-6">
+                <p className="text-xs text-muted-foreground max-w-sm">By submitting, you agree to our Terms of Service.</p>
                 <button
                   type="submit"
-                  className="px-8 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition"
+                  disabled={loading}
+                  className="w-full md:w-auto px-12 py-4 bg-primary text-primary-foreground font-bold rounded-2xl hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-1 transition-all disabled:opacity-50 flex items-center gap-2"
                 >
-                  Submit for Review
+                  {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                  Apply for Listing
                 </button>
               </div>
-
             </form>
           </div>
         </div>

@@ -1,152 +1,127 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ArrowRight, MapPin } from "lucide-react"
-
-const companies = [
-  {
-    id: "tech-startup-co",
-    name: "TechStart Innovation",
-    category: "Technology",
-    image: "/modern-ecommerce-platform.jpg",
-    description: "Leading fintech solutions provider transforming digital payments.",
-    location: "San Francisco, CA",
-  },
-  {
-    id: "fashion-hub",
-    name: "Fashion Hub",
-    category: "Retail",
-    image: "/brand-identity-design.jpg",
-    description: "Curated fashion marketplace connecting designers with customers.",
-    location: "New York, NY",
-  },
-  {
-    id: "health-wellness",
-    name: "Health & Wellness Co",
-    category: "Healthcare",
-    image: "/mobile-application-design.jpg",
-    description: "Digital health platform providing personalized wellness solutions.",
-    location: "Boston, MA",
-  },
-  {
-    id: "sustainable-future",
-    name: "Sustainable Future",
-    category: "Sustainability",
-    image: "/analytics-dashboard-interface.jpg",
-    description: "Eco-friendly products and solutions for sustainable living.",
-    location: "Portland, OR",
-  },
-]
+import { ArrowRight, MapPin, MessageSquare, CheckCircle2, Globe, ShieldCheck, Loader2 } from "lucide-react"
 
 export default function CompaniesPage() {
+  const [companies, setCompanies] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        const res = await fetch("/api/companies/public")
+        const data = await res.json()
+        setCompanies(data)
+      } catch (err) {
+        console.error("Failed to load companies")
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCompanies()
+  }, [])
+
   return (
-    <main className="pt-24">
+    <main className="pt-24 bg-[#fcfcfc] min-h-screen">
+      {/* SEARCH BAR */}
+      <section className="bg-white border-b border-border sticky top-0 z-20 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-4 w-full md:w-auto">
+             <input type="text" placeholder="Search companies..." className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 outline-none w-full md:w-80" />
+          </div>
+          <Link href="/companies/list-your-company">
+            <button className="whitespace-nowrap flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 transition-all text-sm">
+              List Your Business Free <ArrowRight className="w-4 h-4" />
+            </button>
+          </Link>
+        </div>
+      </section>
 
-      {/* ===== HERO ===== */}
-      <section className="py-20 md:py-28 bg-gradient-to-br from-primary/5 to-accent/5">
+      {/* COMPANIES LIST */}
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="max-w-3xl">
-            <h1 className="font-display text-5xl md:text-6xl font-semibold mb-6">
-              Featured{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Companies
-              </span>
-            </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Discover companies partnering with Jisnu Digital to build impactful
-              digital products and solutions.
-            </p>
-          </div>
-        </div>
-      </section>
+          {loading ? (
+            <div className="flex flex-col items-center py-20">
+              <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
+              <p className="text-muted-foreground font-medium">Loading verified businesses...</p>
+            </div>
+          ) : (
+            <div className="flex flex-col gap-6">
+              {companies.map((company: any) => (
+                <div key={company._id} className="bg-white rounded-2xl border border-border hover:border-primary/40 transition-all duration-300 hover:shadow-md overflow-hidden">
+                  <div className="flex flex-col md:flex-row items-center p-6 gap-8">
+                    
+                    {/* 1. LOGO (Always on Left) */}
+                    <div className="w-32 h-32 rounded-xl border border-slate-100 bg-slate-50 flex-shrink-0 flex items-center justify-center p-4">
+                      <img 
+                        src={company.logo || '/placeholder-logo.png'} 
+                        alt={company.name} 
+                        className="w-full h-full object-contain" 
+                      />
+                    </div>
 
-      {/* ===== LIST YOUR COMPANY CTA (PRIMARY ENTRY POINT) ===== */}
-      <section className="py-12 border-b border-border bg-background">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div>
-            <h2 className="font-display text-2xl font-semibold mb-2">
-              Want to list your company?
-            </h2>
-            <p className="text-muted-foreground">
-              Submit your company details. Once approved by our team, your company
-              will be featured here.
-            </p>
-          </div>
+                    {/* 2. CONTENT AREA */}
+                    <div className="flex-1 space-y-3">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <h3 className="text-2xl font-bold text-slate-900">{company.name}</h3>
+                        <span className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2 py-1 rounded-full font-bold uppercase">
+                           <ShieldCheck className="w-3 h-3" /> Verified
+                        </span>
+                        <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-2 py-1 rounded uppercase">
+                          {company.category}
+                        </span>
+                      </div>
 
-          <Link href="/companies/list-your-company">
-            <button className="inline-flex items-center gap-2 px-6 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition">
-              List Your Company
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </Link>
-        </div>
-      </section>
+                      {/* Displaying the 'description' field from your MongoDB */}
+                      <p className="text-slate-600 leading-relaxed max-w-3xl line-clamp-2">
+                        {company.description || "Leading provider of quality services and community excellence."}
+                      </p>
 
-      {/* ===== COMPANIES GRID ===== */}
-      <section className="py-20 md:py-28">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {companies.map((company) => (
-            <Link
-              key={company.id}
-              href={`/companies/${company.id}`}
-              className="group"
-            >
-              <article className="h-full rounded-2xl overflow-hidden border border-border bg-background hover:border-primary/40 transition hover:-translate-y-1">
+                      {/* Mapping the 'services' array */}
+                      <div className="flex flex-wrap gap-3">
+                        {company.services?.map((service: any, idx: number) => (
+                          <span key={idx} className="flex items-center gap-1 text-xs font-medium text-slate-600 bg-slate-50 px-3 py-1 rounded-lg border border-slate-100">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-primary" /> {service.title}
+                          </span>
+                        ))}
+                      </div>
 
-                {/* Image */}
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={company.image}
-                    alt={company.name}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute top-4 right-4">
-                    <span className="px-3 py-1 rounded-full bg-primary text-primary-foreground text-xs font-medium">
-                      {company.category}
-                    </span>
+                      <div className="flex items-center gap-6 text-sm font-medium text-slate-400 pt-2">
+                        <div className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-primary" /> {company.location}</div>
+                        <div className="flex items-center gap-1.5"><Globe className="w-4 h-4 text-slate-400" /> Website</div>
+                      </div>
+                    </div>
+
+                    {/* 3. ACTION BUTTONS (Right Side on Desktop) */}
+                    <div className="flex flex-col gap-3 min-w-[200px] w-full md:w-auto">
+                      <a 
+                        href={`https://wa.me/${company.whatsapp}`} 
+                        target="_blank" 
+                        className="flex items-center justify-center gap-2 px-6 py-3 bg-[#25D366] text-white rounded-xl font-bold hover:bg-[#1eb954] transition-all"
+                      >
+                        <MessageSquare className="w-5 h-5" /> WhatsApp
+                      </a>
+                      <Link href={`/companies/${company._id}`} className="w-full">
+                        <button className="w-full px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-sm">
+                          View Full Profile
+                        </button>
+                      </Link>
+                    </div>
                   </div>
                 </div>
+              ))}
 
-                {/* Content */}
-                <div className="p-6 flex flex-col h-full">
-                  <h3 className="font-display text-xl font-semibold mb-2 group-hover:text-primary transition">
-                    {company.name}
-                  </h3>
-
-                  <p className="text-sm text-muted-foreground flex-grow mb-4">
-                    {company.description}
-                  </p>
-
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground border-t border-border pt-4">
-                    <MapPin className="w-4 h-4 text-primary" />
-                    {company.location}
-                  </div>
-                </div>
-              </article>
-            </Link>
-          ))}
+              {companies.length === 0 && (
+                 <div className="text-center py-32 border-2 border-dashed rounded-3xl bg-white">
+                    <p className="text-muted-foreground text-lg">No approved companies found in this category.</p>
+                 </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
-
-      {/* ===== BOTTOM CTA ===== */}
-      <section className="py-24 bg-muted/30">
-        <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="font-display text-4xl font-semibold mb-4">
-            Grow with Jisnu Digital
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            We collaborate with forward-thinking companies to build scalable,
-            high-quality digital products.
-          </p>
-
-          <Link href="/companies/list-your-company">
-            <button className="px-8 py-4 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition">
-              List Your Company
-            </button>
-          </Link>
-        </div>
-      </section>
-
     </main>
   )
 }
