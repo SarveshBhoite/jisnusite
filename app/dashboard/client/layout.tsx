@@ -58,12 +58,16 @@ export default function ClientDashboardLayout({
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-border">
-          <button className="w-full flex items-center gap-2 px-4 py-2 rounded-md text-sm text-muted-foreground hover:bg-muted transition">
-            <LogOut className="w-4 h-4" />
-            Logout
-          </button>
-        </div>
+
+
+<div className="p-4 border-t border-border">
+  <Link href="/logout" className="w-full">
+    <button className="w-full flex items-center gap-2 px-4 py-2 rounded-md text-sm font-bold text-red-500 hover:bg-red-50 hover:text-red-600 transition group">
+      <LogOut className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+      Logout
+    </button>
+  </Link>
+</div>
       </aside>
 
       {/* ===== MAIN AREA ===== */}

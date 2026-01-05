@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { Upload, ArrowLeft, Plus, X, MessageSquare, Loader2, Check } from "lucide-react"
+import { Upload, ArrowLeft, Plus, X, MessageSquare, Loader2, Check, Sparkles } from "lucide-react"
 
 export default function ListYourCompanyPage() {
   const router = useRouter()
@@ -148,6 +148,24 @@ export default function ListYourCompanyPage() {
                       className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20 outline-none transition-all"
                     />
                   </div>
+
+                  <div className="space-y-4 pt-6 border-t border-slate-50">
+                  <h4 className="text-[10px] font-black uppercase text-slate-400 tracking-[0.2em] flex items-center gap-2">
+                    <Sparkles className="w-3 h-3 text-amber-500" /> Included Items / Amenities
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {includedItems && includedItems.length > 0 ? (
+                      includedItems.map((item: string, idx: number) => (
+                        <div key={idx} className="flex items-center gap-3 bg-slate-50/50 p-3 rounded-2xl border border-slate-100">
+                          <Check className="w-4 h-4 text-green-500 shrink-0" />
+                          <span className="text-sm font-bold text-slate-700">{item}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-xs text-slate-400 italic">No inclusions added yet.</p>
+                    )}
+                  </div>
+                </div>
                 </div>
 
                 <div className="space-y-2">
