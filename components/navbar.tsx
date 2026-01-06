@@ -83,7 +83,7 @@ export function Navbar() {
               </Link>
 
               <Link href="/companies/list-your-company">
-                <Button className="h-9 px-5 text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 transition-all">
+                <Button className="h-9 px-5 text-sm font-medium bg-primary text-white hover:bg-primary/90 transition-all">
                   List Company
                 </Button>
               </Link>

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Link from "next/link"
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Building2,
   CheckCircle,
@@ -10,7 +10,7 @@ import {
   Image,
   ClipboardList,
   Loader2,
-} from "lucide-react"
+} from "lucide-react";
 
 export default function AdminDashboardPage() {
   // Stats state - strictly matching your API response
@@ -19,33 +19,37 @@ export default function AdminDashboardPage() {
     paid: 0,
     free: 0,
     pending: 0,
-    requests: 0
-  })
-  const [loading, setLoading] = useState(true)
+    requests: 0,
+  });
+  const [loading, setLoading] = useState(true);
+  const [newRequestsOnly, setNewRequestsOnly] = useState(0);
 
   // Fetch stats from your API
   useEffect(() => {
     async function loadStats() {
       try {
-        const res = await fetch("/api/admin/stats")
-        if (!res.ok) throw new Error("Failed to fetch")
-        const data = await res.json()
-        setStats(data)
+        const res = await fetch("/api/admin/stats");
+        if (!res.ok) throw new Error("Failed to fetch");
+        const data = await res.json();
+        setStats(data);
+        // Calculate new requests from the fetched data
+        if (data.requests) {
+          setNewRequestsOnly(data.requests);
+        }
       } catch (err) {
-        console.error("Failed to load stats:", err)
+        console.error("Failed to load stats:", err);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    loadStats()
-  }, [])
+    loadStats();
+  }, []);
 
   return (
     <main className="pt-20 px-6 md:px-10 pb-20 bg-slate-50/30 min-h-screen">
-
       {/* ===== HEADER ===== */}
       <div className="mb-10">
-        <h1 className="font-display text-3xl md:text-4xl font-semibold mb-2 tracking-tight text-slate-900">
+        <h1 className="font-display text-3xl md:text-4xl font-semibold mb-2 pt-10 tracking-tight text-slate-900">
           Admin Dashboard
         </h1>
         <p className="text-slate-500 font-medium">
@@ -56,9 +60,14 @@ export default function AdminDashboardPage() {
       {/* ===== KPI CARDS ===== */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-14">
         {loading ? (
-          Array(5).fill(0).map((_, i) => (
-            <div key={i} className="h-28 bg-white animate-pulse rounded-2xl border border-slate-200 shadow-sm" />
-          ))
+          Array(5)
+            .fill(0)
+            .map((_, i) => (
+              <div
+                key={i}
+                className="h-28 bg-white animate-pulse rounded-2xl border border-slate-200 shadow-sm"
+              />
+            ))
         ) : (
           <>
             <KpiCard
@@ -86,8 +95,8 @@ export default function AdminDashboardPage() {
               accent="red"
             />
             <KpiCard
-              title="Service Requests"
-              value={stats.requests.toString()}
+              title="New Requests" // Title change kar dein taaki clear rahe
+              value={newRequestsOnly.toString()}
               icon={<ClipboardList className="w-6 h-6" />}
               accent="purple"
             />
@@ -100,63 +109,129 @@ export default function AdminDashboardPage() {
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
           Quick Actions
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <QuickAction title="Manage All" href="/dashboard/admin/manage-companies" icon={<Building2 />} />
-          <QuickAction title="New Requests" href="/dashboard/admin/approvals" icon={<Clock />} />
-          <QuickAction title="Service Logs" href="/dashboard/admin/service-requests" icon={<ClipboardList />} />
-          <QuickAction title="Media Assets" href="/dashboard/admin/media" icon={<Image />} />
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
+          <QuickAction
+            title="Manage All Companies"
+            href="/dashboard/admin/manage-companies"
+            icon={<Building2 />}
+          />
+          <QuickAction
+            title="New Company Requests"
+            href="/dashboard/admin/approvals"
+            icon={<Clock />}
+          />
+          <QuickAction
+            title=" Manage Service "
+            href="/dashboard/admin/services"
+            icon={<ClipboardList />}
+          />
+          <QuickAction
+            title="Service request"
+            href="/dashboard/admin/service-requests"
+            icon={<ClipboardList />}
+          />
+          <QuickAction
+            title="Manage Portfolio"
+            href="/dashboard/admin/portfolio"
+            icon={<Image />}
+          />
         </div>
       </section>
 
       {/* ===== ACTIVITY & STATUS SUMMARY ===== */}
       <section className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <h2 className="text-xl font-bold text-slate-800 mb-6">Recent Activity</h2>
-            <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-                <ActivityItem title="System Updated" subtitle="All company stats have been refreshed" time="Just Now" />
-                <ActivityItem title="TechStart Innovation" subtitle="Company listing pending review" time="2 hours ago" />
-                <ActivityItem title="Media assets added" subtitle="New gallery images uploaded" time="Yesterday" />
-            </div>
+        <div className="lg:col-span-2">
+          <h2 className="text-xl font-bold text-slate-800 mb-6">
+            Recent Activity
+          </h2>
+          <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-sm">
+            <ActivityItem
+              title="System Updated"
+              subtitle="All company stats have been refreshed"
+              time="Just Now"
+            />
+            <ActivityItem
+              title="TechStart Innovation"
+              subtitle="Company listing pending review"
+              time="2 hours ago"
+            />
+            <ActivityItem
+              title="Media assets added"
+              subtitle="New gallery images uploaded"
+              time="Yesterday"
+            />
           </div>
-          
-          <div className="space-y-6">
-            <h2 className="text-xl font-bold text-slate-800 mb-6">Live Status</h2>
-            <div className="space-y-4">
-                <StatusCard title="Revenue Generating" value={stats.paid} description="Approved paid accounts" />
-                <StatusCard title="Standard Tier" value={stats.free} description="Approved free accounts" />
-            </div>
-          </div>
-      </section>
+        </div>
 
+        <div className="space-y-6">
+          <h2 className="text-xl font-bold text-slate-800 mb-6">Live Status</h2>
+          <div className="space-y-4">
+            <StatusCard
+              title="Revenue Generating"
+              value={stats.paid}
+              description="Approved paid accounts"
+            />
+            <StatusCard
+              title="Standard Tier"
+              value={stats.free}
+              description="Approved free accounts"
+            />
+          </div>
+        </div>
+      </section>
     </main>
-  )
+  );
 }
 
 /* ===== REUSABLE UI COMPONENTS ===== */
 
-function KpiCard({ title, value, icon, accent }: { title: string; value: string; icon: React.ReactNode; accent: string }) {
+function KpiCard({
+  title,
+  value,
+  icon,
+  accent,
+}: {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+  accent: string;
+}) {
   const colors: any = {
     blue: "bg-blue-50 text-blue-600 border-blue-100",
     amber: "bg-amber-50 text-amber-600 border-amber-100",
     green: "bg-green-50 text-green-600 border-green-100",
     red: "bg-red-50 text-red-600 border-red-100",
     purple: "bg-purple-50 text-purple-600 border-purple-100",
-  }
+  };
 
   return (
     <div className="p-6 rounded-2xl border border-slate-200 bg-white flex items-center justify-between shadow-sm hover:shadow-md transition-all group">
       <div>
-        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{title}</p>
-        <p className="text-3xl font-black text-slate-900 group-hover:scale-110 transition-transform origin-left">{value}</p>
+        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">
+          {title}
+        </p>
+        <p className="text-3xl font-black text-slate-900 group-hover:scale-110 transition-transform origin-left">
+          {value}
+        </p>
       </div>
-      <div className={`w-12 h-12 rounded-xl flex items-center justify-center border shadow-inner ${colors[accent]}`}>
+      <div
+        className={`w-12 h-12 rounded-xl flex items-center justify-center border shadow-inner ${colors[accent]}`}
+      >
         {icon}
       </div>
     </div>
-  )
+  );
 }
 
-function QuickAction({ title, href, icon }: { title: string; href: string; icon: React.ReactNode }) {
+function QuickAction({
+  title,
+  href,
+  icon,
+}: {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+}) {
   return (
     <Link href={href}>
       <div className="p-5 rounded-2xl border border-slate-100 bg-white hover:border-blue-500/30 hover:bg-blue-50/20 transition-all cursor-pointer flex flex-col items-center gap-3 text-center shadow-sm hover:shadow-lg group">
@@ -166,27 +241,49 @@ function QuickAction({ title, href, icon }: { title: string; href: string; icon:
         <span className="font-bold text-sm text-slate-700">{title}</span>
       </div>
     </Link>
-  )
+  );
 }
 
-function ActivityItem({ title, subtitle, time }: { title: string; subtitle: string; time: string }) {
+function ActivityItem({
+  title,
+  subtitle,
+  time,
+}: {
+  title: string;
+  subtitle: string;
+  time: string;
+}) {
   return (
     <div className="flex items-start justify-between px-6 py-5 border-b last:border-b-0 border-slate-100 hover:bg-slate-50 transition-colors">
       <div>
         <p className="font-bold text-slate-900">{title}</p>
         <p className="text-sm text-slate-500 font-medium">{subtitle}</p>
       </div>
-      <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-full uppercase tracking-tighter">{time}</span>
+      <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-1 rounded-full uppercase tracking-tighter">
+        {time}
+      </span>
     </div>
-  )
+  );
 }
 
-function StatusCard({ title, value, description }: { title: string; value: number; description: string }) {
+function StatusCard({
+  title,
+  value,
+  description,
+}: {
+  title: string;
+  value: number;
+  description: string;
+}) {
   return (
     <div className="p-6 rounded-2xl border border-slate-200 bg-white shadow-sm hover:border-slate-300 transition-all">
-      <h3 className="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">{title}</h3>
-      <p className="text-2xl font-black text-slate-900 mb-1">{value} Companies</p>
+      <h3 className="text-[10px] font-black text-slate-400 uppercase mb-2 tracking-widest">
+        {title}
+      </h3>
+      <p className="text-2xl font-black text-slate-900 mb-1">
+        {value} Companies
+      </p>
       <p className="text-xs text-slate-500 font-medium">{description}</p>
     </div>
-  )
+  );
 }

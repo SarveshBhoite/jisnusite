@@ -1,164 +1,290 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useParams } from "next/navigation"
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import {
   ArrowLeft,
   Building2,
   CheckCircle,
   Clock,
-} from "lucide-react"
+  Loader2,
+  IndianRupee,
+  MessageSquare,
+} from "lucide-react";
 
-type Status = "New" | "In Progress" | "Completed"
-
-const requestData: Record<string, any> = {
-  "req-001": {
-    company: "TechStart Innovation",
-    date: "19 Jan 2025",
-    status: "In Progress" as Status,
-    message:
-      "We need branding creatives and a full website for product launch.",
-    services: [
-      { name: "Graphic Design", quantity: 5, price: 500 },
-      { name: "Video Editing", quantity: 2, price: 800 },
-      { name: "Website Development", quantity: 1, price: 15000 },
-    ],
-  },
-}
+type Status = "New" | "In Progress" | "Completed";
 
 export default function ServiceRequestDetailPage() {
-  const params = useParams()
-  const request = requestData[params.id as string]
+  const params = useParams();
+  const [request, setRequest] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!request) {
+  // 1. FETCH SPECIFIC REQUEST
+  const fetchRequestDetails = async () => {
+    try {
+      // Hum direct saare fetch karke filter kar sakte hain ya API ko query de sakte hain
+      const res = await fetch("/api/admin/services/request", {
+        cache: "no-store",
+      });
+      const allData = await res.json();
+      const single = allData.find((r: any) => r._id === params.id);
+      setRequest(single);
+    } catch (err) {
+      console.error("Error fetching request details:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (params.id) fetchRequestDetails();
+  }, [params.id]);
+
+  // 2. UPDATE STATUS FROM DETAIL PAGE
+  const updateStatus = async (newStatus: Status) => {
+    try {
+      const res = await fetch(`/api/admin/services/request?id=${params.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (res.ok) {
+        setRequest((prev: any) => ({ ...prev, status: newStatus }));
+      }
+    } catch (err) {
+      alert("Failed to update status");
+    }
+  };
+
+  if (loading)
     return (
-      <main className="pt-20 flex justify-center items-center">
-        <p>Request not found</p>
-      </main>
-    )
-  }
+      <div className="flex flex-col justify-center items-center h-screen gap-4">
+        <Loader2 className="animate-spin text-primary w-10 h-10" />
+        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+          Loading Details...
+        </p>
+      </div>
+    );
 
-  const subtotal = request.services.reduce(
-    (sum: number, s: any) => sum + s.quantity * s.price,
-    0
-  )
+  if (!request)
+    return (
+      <div className="pt-32 text-center">
+        <p className="text-slate-500 font-bold mb-4 text-xl tracking-tighter uppercase italic">
+          Request Not Found
+        </p>
+        <Link
+          href="/dashboard/admin/service-requests"
+          className="text-blue-600 font-black uppercase text-xs hover:underline"
+        >
+          Go Back to Dashboard
+        </Link>
+      </div>
+    );
 
   return (
-    <main className="pt-20 px-6 md:px-10 pb-20 max-w-6xl mx-auto">
-
-      {/* ===== BACK ===== */}
+    <main className="pt-24 px-6 md:px-10 pb-20 max-w-6xl mx-auto">
+      {/* BACK NAVIGATION */}
       <Link
         href="/dashboard/admin/service-requests"
-        className="flex items-center gap-2 text-primary font-medium mb-8"
+        className="flex items-center gap-2 text-slate-500 hover:text-slate-900 font-bold text-[10px] uppercase tracking-widest mb-10 transition-all"
       >
-        <ArrowLeft className="w-4 h-4" /> Back to Requests
+        <ArrowLeft className="w-4 h-4" /> Back to All Requests
       </Link>
 
-      {/* ===== HEADER ===== */}
-      <div className="mb-10">
-        <h1 className="font-display text-3xl font-semibold mb-2">
-          Service Request Details
-        </h1>
-        <p className="text-muted-foreground">
-          Submitted on {request.date}
-        </p>
-      </div>
-
-      {/* ===== COMPANY INFO ===== */}
-      <div className="p-6 rounded-xl border border-border bg-background mb-10">
-        <div className="flex items-center gap-3 mb-2">
-          <Building2 className="w-5 h-5 text-primary" />
-          <h2 className="font-semibold text-lg">
-            {request.company}
-          </h2>
+      {/* HEADER SECTION */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+        <div>
+          <h1 className="font-black text-4xl text-slate-900 uppercase italic leading-none mb-3">
+            Request Details
+          </h1>
+          <p className="text-slate-400 font-bold text-sm uppercase tracking-tight">
+            Submitted on{" "}
+            {new Date(request.createdAt).toLocaleDateString("en-GB", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
+          </p>
         </div>
 
-        <p className="text-sm text-muted-foreground max-w-3xl">
-          {request.message}
-        </p>
+        <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-3xl border border-slate-100">
+          <div className="flex items-center gap-3">
+            {request.status === "Completed" ? (
+              <CheckCircle className="w-6 h-6 text-emerald-500" />
+            ) : (
+              <Clock className="w-6 h-6 text-amber-500" />
+            )}
+            <div>
+              <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
+                Status
+              </p>
+              <p className="font-bold text-slate-900 leading-none">
+                {request.status}
+              </p>
+            </div>
+          </div>
+          <select
+            value={request.status}
+            onChange={(e) => updateStatus(e.target.value as Status)}
+            className="ml-4 px-4 py-2 rounded-xl border border-slate-200 bg-white text-xs font-bold uppercase outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+          >
+            <option value="New">New</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
       </div>
 
-      {/* ===== SERVICES TABLE ===== */}
-      <div className="p-6 rounded-xl border border-border bg-background mb-10">
-        <h3 className="font-semibold text-lg mb-4">
-          Requested Services
-        </h3>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* LEFT COLUMN: INFO & SERVICES */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* COMPANY CARD */}
+          <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center">
+                <Building2 className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
+                  Client / Company
+                </p>
+                <h2 className="font-black text-2xl text-slate-900 uppercase italic">
+                  {request.company || "Direct Client"}
+                </h2>
+              </div>
+            </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border text-muted-foreground">
-                <th className="text-left py-3">Service</th>
-                <th className="text-center py-3">Qty</th>
-                <th className="text-right py-3">Unit Price</th>
-                <th className="text-right py-3">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {request.services.map((s: any, i: number) => (
-                <tr key={i} className="border-b border-border">
-                  <td className="py-4 font-medium">
-                    {s.name}
-                  </td>
-                  <td className="py-4 text-center">
-                    {s.quantity}
-                  </td>
-                  <td className="py-4 text-right">
-                    ₹{s.price}
-                  </td>
-                  <td className="py-4 text-right font-semibold">
-                    ₹{s.quantity * s.price}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+            <div className="space-y-2">
+              <p className="text-[10px] font-black text-slate-400 uppercase flex items-center gap-2">
+                <MessageSquare className="w-3 h-3" /> Client Message
+              </p>
+              <p className="text-slate-600 font-medium italic leading-relaxed">
+                "{request.message || "No specific message provided."}"
+              </p>
+            </div>
+          </div>
+
+          {/* SERVICES TABLE CARD */}
+          <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm overflow-hidden">
+            <h3 className="font-black text-slate-900 uppercase tracking-tight mb-6 flex items-center gap-2 italic">
+              Requested Services
+            </h3>
+
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="border-b border-slate-50">
+                    <th className="pb-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      Service Item
+                    </th>
+                    <th className="pb-4 text-right text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                      Price
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-50">
+                  {request.services?.map((s: any, i: number) => (
+                    <tr key={i} className="group">
+                      <td className="py-5">
+                        <p className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                          {s.name}
+                        </p>
+                        
+                      </td>
+                      <td className="py-5 text-right font-black text-slate-900">
+                        ₹{s.price?.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* COMPANY & CONTACT CARD */}
+          <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center">
+                  <Building2 className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
+                    Client Name
+                  </p>
+                  <h2 className="font-black text-2xl text-slate-900 uppercase italic">
+                    {request.name || "Direct Client"}
+                  </h2>
+                </div>
+              </div>
+
+              {/* Phone Number Display & Action */}
+              <div className="flex items-center gap-4 border-l pl-6 border-slate-100">
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
+                    Contact Number
+                  </p>
+                 <p className="font-bold text-slate-900 text-lg">
+    {request.whatsapp || "Pending..."}
+  </p>
+                </div>
+               
+              </div>
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-slate-50">
+              <p className="text-[10px] font-black text-slate-400 uppercase flex items-center gap-2 mb-2">
+                <MessageSquare className="w-3 h-3 text-blue-500" /> Requirements
+              </p>
+              <p className="text-slate-600 font-medium italic leading-relaxed">
+                "{request.message || "No specific requirements provided."}"
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* TOTAL */}
-        <div className="flex justify-end mt-6">
-          <div className="text-right">
-            <p className="text-sm text-muted-foreground">
-              Total Amount
-            </p>
-            <p className="text-2xl font-semibold text-primary">
-              ₹{subtotal}
-            </p>
+        {/* RIGHT COLUMN: FINANCIAL SUMMARY */}
+        <div className="lg:col-span-1">
+          <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] sticky top-24 shadow-2xl shadow-slate-200">
+            <h3 className="text-xl font-bold mb-8 border-b border-white/10 pb-4 italic">
+              Billing Summary
+            </h3>
+
+            <div className="space-y-4 mb-8">
+              <div className="flex justify-between text-slate-400 font-bold text-xs uppercase tracking-tighter">
+                <span>Items Count</span>
+                <span>{request.services?.length} Services</span>
+              </div>
+              <div className="flex justify-between text-slate-400 font-bold text-xs uppercase tracking-tighter">
+                <span>Tax (GST)</span>
+                <span>Calculated at Billing</span>
+              </div>
+
+              <div className="pt-6 border-t border-white/10 flex justify-between items-end">
+                <div>
+                  <p className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">
+                    Total Amount
+                  </p>
+                  <p className="text-4xl font-black italic">
+                    ₹{request.totalAmount?.toLocaleString()}
+                  </p>
+                </div>
+                <div className="p-3 bg-white/10 rounded-2xl mb-1">
+                  <IndianRupee className="w-6 h-6 text-white" />
+                </div>
+              </div>
+            </div>
+
+            <button
+              onClick={() => window.print()}
+              className="w-full bg-white text-slate-900 py-4 rounded-2xl font-black uppercase text-xs tracking-widest hover:bg-blue-400 hover:text-white transition-all active:scale-95"
+            >
+              Print Details
+            </button>
           </div>
         </div>
       </div>
-
-      {/* ===== STATUS SECTION ===== */}
-      <div className="p-6 rounded-xl border border-border bg-background flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-
-        <div className="flex items-center gap-3">
-          {request.status === "Completed" ? (
-            <CheckCircle className="w-6 h-6 text-green-600" />
-          ) : (
-            <Clock className="w-6 h-6 text-yellow-600" />
-          )}
-
-          <div>
-            <p className="text-sm text-muted-foreground">
-              Current Status
-            </p>
-            <p className="font-semibold text-lg">
-              {request.status}
-            </p>
-          </div>
-        </div>
-
-        <select
-          defaultValue={request.status}
-          className="px-4 py-2 rounded-md border border-border bg-background focus:outline-none focus:border-primary"
-        >
-          <option>New</option>
-          <option>In Progress</option>
-          <option>Completed</option>
-        </select>
-
-      </div>
-
     </main>
-  )
+  );
 }

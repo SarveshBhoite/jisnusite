@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Company from "@/models/Company";
+import ServiceRequest from "@/models/ServiceRequest";
 
 export async function GET() {
   try {
     await connectDB();
 
-    const [totalVerified, paidCount, freeCount, pendingCount] = await Promise.all([
+    const [totalVerified, paidCount, freeCount, pendingCount, newRequestsCount] = await Promise.all([
       // Only count Verified companies for the main total
       Company.countDocuments({ status: "verified" }),
       
@@ -17,7 +18,10 @@ export async function GET() {
       Company.countDocuments({ status: "verified", planType: "free" }),
 
       // Strictly pending
-      Company.countDocuments({ status: "pending" })
+      Company.countDocuments({ status: "pending" }),
+
+      ServiceRequest.countDocuments({ status: "New" })
+
     ]);
 
     return NextResponse.json({
@@ -25,7 +29,7 @@ export async function GET() {
       paid: paidCount,
       free: freeCount,
       pending: pendingCount,
-      requests: 0
+      requests: newRequestsCount
     });
   } catch (error) {
     return NextResponse.json({ error: "Stats Error" }, { status: 500 });

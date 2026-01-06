@@ -1,100 +1,71 @@
 "use client"
 
-import { useState } from "react"
-import { X } from "lucide-react"
-
-const portfolioItems = [
-  {
-    id: 1,
-    title: "E-Commerce Platform",
-    category: "Web Development",
-    image: "/modern-ecommerce-platform.jpg",
-    description:
-      "A complete e-commerce solution with product catalog, shopping cart, and payment integration.",
-    client: "Fashion Retailer",
-    year: "2024",
-    result: "300% increase in online sales",
-  },
-  {
-    id: 2,
-    title: "SaaS Dashboard",
-    category: "UI/UX Design",
-    image: "/analytics-dashboard-interface.jpg",
-    description:
-      "Intuitive analytics dashboard for tracking business metrics and performance data.",
-    client: "Tech Startup",
-    year: "2024",
-    result: "User engagement up 85%",
-  },
-  {
-    id: 3,
-    title: "Mobile App",
-    category: "App Development",
-    image: "/mobile-application-design.jpg",
-    description:
-      "Cross-platform mobile application with real-time synchronization.",
-    client: "Health & Fitness",
-    year: "2023",
-    result: "1M+ downloads",
-  },
-  {
-    id: 4,
-    title: "Brand Identity",
-    category: "Branding",
-    image: "/brand-identity-design.jpg",
-    description:
-      "Complete brand identity system including logo, guidelines, and assets.",
-    client: "Digital Agency",
-    year: "2023",
-    result: "Brand recognition +150%",
-  },
-]
-
-const categories = [
-  "All",
-  "Web Development",
-  "UI/UX Design",
-  "App Development",
-  "Branding",
-]
+import { useState, useEffect } from "react"
+import { X, Loader2, AlertCircle, ArrowUpRight } from "lucide-react"
 
 export default function PortfolioPage() {
+  const [portfolioItems, setPortfolioItems] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedCategory, setSelectedCategory] = useState("All")
-  const [activeItem, setActiveItem] =
-    useState<(typeof portfolioItems)[0] | null>(null)
+  const [activeItem, setActiveItem] = useState<any | null>(null)
 
-  const filtered =
-    selectedCategory === "All"
-      ? portfolioItems
-      : portfolioItems.filter((p) => p.category === selectedCategory)
+  useEffect(() => {
+    const fetchPortfolio = async () => {
+      try {
+        const res = await fetch("/api/admin/portfolio", { cache: 'no-store' })
+        const data = await res.json()
+        const actualData = Array.isArray(data) ? data : (data.data || [])
+        setPortfolioItems(actualData)
+      } catch (err) {
+        console.error("Failed to fetch portfolio:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchPortfolio()
+  }, [])
+
+  const staticCategories = ["All", "Web Development", "App Development", "UI/UX Design", "Branding", "SEO"];
+  const dynamicCategories = portfolioItems.map((item: any) => item.category).filter(Boolean);
+  const categories = Array.from(new Set([...staticCategories, ...dynamicCategories]));
+
+  const filtered = selectedCategory === "All"
+    ? portfolioItems
+    : portfolioItems.filter((p) => p.category === selectedCategory)
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <Loader2 className="w-10 h-10 animate-spin text-black" />
+      </div>
+    )
+  }
 
   return (
-    <main className="pt-28">
-
+    <main className="pt-28 pb-20 bg-[#F8F9FA]">
       {/* ===== HERO ===== */}
-      <section className="pb-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <h1 className="font-display text-4xl md:text-5xl font-semibold mb-4">
+      <section className="mb-16">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <h1 className="font-display text-5xl md:text-7xl font-black mb-4 uppercase italic tracking-tighter text-black">
             Our Work
           </h1>
-          <p className="text-muted-foreground max-w-2xl">
-            A selection of projects showcasing how we help businesses
-            design, build, and grow digital products.
+          <p className="text-gray-500 max-w-xl mx-auto text-lg">
+            Showcasing real results delivered for our verified partners and clients.
           </p>
         </div>
       </section>
 
       {/* ===== FILTER ===== */}
-      <section className="sticky top-20 z-40 bg-background/80 backdrop-blur-md border-y border-border">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex gap-3 flex-wrap">
-          {categories.map((cat) => (
+      <section className="sticky top-20 z-40 bg-white/80 backdrop-blur-md border-y border-gray-200 mb-12">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex gap-3 justify-center flex-wrap">
+          {categories.map((cat: any) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition ${
+              className={`px-6 py-2 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all ${
                 selectedCategory === cat
-                  ? "bg-primary text-primary-foreground shadow-md"
-                  : "border border-border text-muted-foreground hover:text-foreground hover:border-primary/40"
+                  ? "bg-black text-white shadow-lg"
+                  : "bg-white text-gray-400 border border-gray-200 hover:border-black hover:text-black"
               }`}
             >
               {cat}
@@ -104,100 +75,74 @@ export default function PortfolioPage() {
       </section>
 
       {/* ===== GRID ===== */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => setActiveItem(item)}
-              className="group relative overflow-hidden rounded-xl border border-border bg-background text-left hover:border-primary/40 transition"
-            >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              </div>
+      <section className="max-w-7xl mx-auto px-4">
+        {filtered.length > 0 ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filtered.map((item) => (
+              <div
+                key={item._id}
+                onClick={() => setActiveItem(item)}
+                className="group cursor-pointer bg-white rounded-[2rem] overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500"
+              >
+                {/* 1. Image Section (Above) */}
+                <div className="relative aspect-[16/11] overflow-hidden bg-gray-100">
+                  <img
+                    src={item.image || "/project-placeholder.jpg"}
+                    alt={item.companyName}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="bg-white p-3 rounded-full shadow-lg">
+                      <ArrowUpRight className="w-5 h-5 text-black" />
+                    </div>
+                  </div>
+                </div>
 
-              <div className="p-5">
-                <p className="text-xs text-primary font-medium mb-1">
-                  {item.category}
-                </p>
-                <h3 className="font-display text-lg font-semibold">
-                  {item.title}
-                </h3>
+                {/* 2. Content Section (Below) */}
+                <div className="p-8">
+                  <div className="flex justify-between items-start mb-2">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">
+                      {item.category}
+                    </p>
+                  </div>
+                  <h3 className="text-2xl font-bold text-black uppercase italic mb-2 tracking-tight">
+                    {item.companyName}
+                  </h3>
+                  <p className="text-gray-500 text-sm font-medium line-clamp-1">
+                    {item.serviceName}
+                  </p>
+                </div>
               </div>
-            </button>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20 bg-gray-50 rounded-[3rem] border-2 border-dashed">
+            <AlertCircle className="w-10 h-10 mx-auto text-gray-300 mb-4" />
+            <p className="text-gray-500 font-bold uppercase tracking-widest">No projects found</p>
+          </div>
+        )}
       </section>
 
       {/* ===== MODAL ===== */}
       {activeItem && (
-        <div
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center px-4"
-          onClick={() => setActiveItem(null)}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="relative max-w-3xl w-full bg-background rounded-2xl overflow-hidden shadow-2xl animate-in zoom-in duration-200"
-          >
-            {/* Close */}
-            <button
-              onClick={() => setActiveItem(null)}
-              className="absolute top-4 right-4 p-2 rounded-md bg-black/60 text-white hover:bg-black/80"
-            >
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4" onClick={() => setActiveItem(null)}>
+          <div onClick={(e) => e.stopPropagation()} className="relative max-w-5xl w-full bg-white rounded-[3rem] overflow-hidden shadow-2xl animate-in zoom-in duration-300">
+            <button onClick={() => setActiveItem(null)} className="absolute top-6 right-6 z-10 p-3 rounded-full bg-gray-100 text-black hover:bg-black hover:text-white transition-colors">
               <X className="w-5 h-5" />
             </button>
-
-            {/* Image */}
-            <div className="aspect-[16/9]">
-              <img
-                src={activeItem.image}
-                alt={activeItem.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            {/* Content */}
-            <div className="p-8 space-y-6">
-              <div>
-                <p className="text-sm text-primary font-medium mb-1">
-                  {activeItem.category}
-                </p>
-                <h2 className="font-display text-3xl font-semibold mb-2">
-                  {activeItem.title}
-                </h2>
-                <p className="text-muted-foreground">
-                  {activeItem.description}
-                </p>
+            <div className="grid md:grid-cols-2">
+              <div className="bg-gray-100 aspect-square md:aspect-auto">
+                <img src={activeItem.image} className="w-full h-full object-cover" alt="" />
               </div>
-
-              <div className="grid grid-cols-3 gap-4 border-y border-border py-4 text-sm">
-                <div>
-                  <p className="text-muted-foreground">Client</p>
-                  <p className="font-medium">{activeItem.client}</p>
+              <div className="p-10 md:p-16 flex flex-col justify-center">
+                <p className="text-blue-600 font-black text-[10px] uppercase tracking-widest mb-4">{activeItem.category}</p>
+                <h2 className="text-5xl font-black uppercase italic tracking-tighter mb-6">{activeItem.companyName}</h2>
+                <p className="text-gray-500 mb-8 leading-relaxed">{activeItem.description}</p>
+                <div className="border-t pt-8 space-y-4 mb-10">
+                    <div className="flex justify-between text-sm"><span className="text-gray-400 uppercase font-bold">Service</span><span className="font-black italic uppercase">{activeItem.serviceName}</span></div>
                 </div>
-                <div>
-                  <p className="text-muted-foreground">Year</p>
-                  <p className="font-medium">{activeItem.year}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Result</p>
-                  <p className="font-medium text-primary">
-                    {activeItem.result}
-                  </p>
-                </div>
+                <button onClick={() => window.location.href='/contact'} className="bg-black text-white py-5 rounded-full font-black uppercase text-xs tracking-[0.2em] hover:bg-blue-600 transition-all">Start Project</button>
               </div>
-
-              <a
-                href="/contact"
-                className="inline-flex justify-center px-6 py-3 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition"
-              >
-                Start a Project
-              </a>
             </div>
           </div>
         </div>
