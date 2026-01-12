@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import "./globals.css"
+import AuthProvider from "@/components/SessionProvider"
 
 const sora = Sora({
   subsets: ["latin"],
@@ -51,10 +52,12 @@ export default function RootLayout({
       <body
         className={`${sora.variable} ${inter.variable} font-sans antialiased`}
       >
-        <Navbar />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
-        <Analytics />
+        <AuthProvider>
+          <Navbar />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <Analytics />
+        </AuthProvider>
       </body>
     </html>
   )

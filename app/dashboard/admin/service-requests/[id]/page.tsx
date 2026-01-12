@@ -140,27 +140,42 @@ export default function ServiceRequestDetailPage() {
         {/* LEFT COLUMN: INFO & SERVICES */}
         <div className="lg:col-span-2 space-y-6">
           {/* COMPANY CARD */}
-          <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center">
-                <Building2 className="w-6 h-6 text-white" />
+                   <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center">
+                  <Building2 className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
+                    Client Name
+                  </p>
+                  <h2 className="font-black text-2xl text-slate-900 uppercase italic">
+                    {request.name || "Direct Client"}
+                  </h2>
+                </div>
               </div>
-              <div>
-                <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
-                  Client / Company
-                </p>
-                <h2 className="font-black text-2xl text-slate-900 uppercase italic">
-                  {request.company || "Direct Client"}
-                </h2>
+
+              {/* Phone Number Display & Action */}
+              <div className="flex items-center gap-4 border-l pl-6 border-slate-100">
+                <div>
+                  <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
+                    Contact Number
+                  </p>
+                 <p className="font-bold text-slate-900 text-lg">
+    {request.whatsapp || "Pending..."}
+  </p>
+                </div>
+               
               </div>
             </div>
 
-            <div className="space-y-2">
-              <p className="text-[10px] font-black text-slate-400 uppercase flex items-center gap-2">
-                <MessageSquare className="w-3 h-3" /> Client Message
+            <div className="mt-8 pt-8 border-t border-slate-50">
+              <p className="text-[10px] font-black text-slate-400 uppercase flex items-center gap-2 mb-2">
+                <MessageSquare className="w-3 h-3 text-blue-500" /> Requirements
               </p>
               <p className="text-slate-600 font-medium italic leading-relaxed">
-                "{request.message || "No specific message provided."}"
+                "{request.message || "No specific requirements provided."}"
               </p>
             </div>
           </div>
@@ -203,45 +218,7 @@ export default function ServiceRequestDetailPage() {
           </div>
 
           {/* COMPANY & CONTACT CARD */}
-          <div className="p-8 rounded-[2.5rem] border border-slate-100 bg-white shadow-sm">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-slate-900 rounded-2xl flex items-center justify-center">
-                  <Building2 className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
-                    Client Name
-                  </p>
-                  <h2 className="font-black text-2xl text-slate-900 uppercase italic">
-                    {request.name || "Direct Client"}
-                  </h2>
-                </div>
-              </div>
 
-              {/* Phone Number Display & Action */}
-              <div className="flex items-center gap-4 border-l pl-6 border-slate-100">
-                <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase leading-none mb-1">
-                    Contact Number
-                  </p>
-                 <p className="font-bold text-slate-900 text-lg">
-    {request.whatsapp || "Pending..."}
-  </p>
-                </div>
-               
-              </div>
-            </div>
-
-            <div className="mt-8 pt-8 border-t border-slate-50">
-              <p className="text-[10px] font-black text-slate-400 uppercase flex items-center gap-2 mb-2">
-                <MessageSquare className="w-3 h-3 text-blue-500" /> Requirements
-              </p>
-              <p className="text-slate-600 font-medium italic leading-relaxed">
-                "{request.message || "No specific requirements provided."}"
-              </p>
-            </div>
-          </div>
         </div>
 
         {/* RIGHT COLUMN: FINANCIAL SUMMARY */}

@@ -28,6 +28,11 @@ const CompanySchema = new mongoose.Schema({
     enum: ['free', 'paid'], 
     default: 'free' 
   },
+  role: { 
+    type: String, 
+    enum: ['client', 'admin'], 
+    default: 'client' 
+  },
 }, { timestamps: true });
 
 export default mongoose.models.Company || mongoose.model("Company", CompanySchema);

@@ -36,7 +36,7 @@ export default function AdminPortfolio() {
   }
 
   return (
-    <div className="p-8 max-w-6xl mx-auto bg-white min-h-screen">
+    <div className="pt-25 max-w-6xl mx-auto bg-white min-h-screen">
       <h1 className="text-3xl font-black uppercase italic mb-8">Portfolio Manager</h1>
 
       {/* Add Project Form */}

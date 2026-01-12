@@ -1,14 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Phone } from "lucide-react"
+import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Lock } from "lucide-react"
 import Link from "next/link"
+import { useSession } from "next-auth/react" // Step 1: Session import karein
 
 export default function CartPage() {
+  const { data: session, status } = useSession() // Session status check karna
   const [cart, setCart] = useState<any[]>([])
   const [message, setMessage] = useState("")
-  const [customerName, setCustomerName] = useState("")
-  const [phone, setPhone] = useState("")
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -27,54 +27,50 @@ export default function CartPage() {
   const totalDiscounted = cart.reduce((acc, item) => acc + (item.discountPrice || 0), 0)
   const totalSavings = totalMRP - totalDiscounted
 
-  // API SUBMISSION LOGIC
-const submitRequest = async () => {
-  if (!customerName || !phone) {
-    alert("Please enter your Registered Name and WhatsApp Number");
-    return;
-  }
-
-  setLoading(true);
-
-  const payload = {
-    name: customerName,      // Aapke database field ke hisaab se
-    whatsapp: phone,         // Aapke database field ke hisaab se
-    services: cart.map(item => ({
-      id: item._id,
-      name: item.title,
-      price: item.discountPrice
-    })),
-    totalAmount: totalDiscounted,
-    message: message,
-    status: "New"
-  };
-
-  try {
-    const res = await fetch("/api/admin/services/request", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    const result = await res.json();
-
-    if (res.ok) {
-      alert("✅ Order Placed Successfully!");
-      localStorage.removeItem("cart");
-      setCart([]);
-      setCustomerName("");
-      setPhone("");
-      window.dispatchEvent(new Event("cartUpdated"));
-    } else {
-      // Yahan wahi error message dikhega jo humne API mein likha hai
-      alert(`❌ ${result.message}`);
+  const submitRequest = async () => {
+    if (status !== "authenticated") {
+      alert("Please login to place an order");
+      return;
     }
-  } catch (error) {
-    alert("System error. Please try again later.");
-  } finally {
-    setLoading(false);
-  }
-};
+
+    setLoading(true);
+
+    const payload = {
+      // Ab hum customerName aur phone ki jagah session ka email bhejenge
+      email: session.user?.email, 
+      name: session.user?.name,
+      services: cart.map(item => ({
+        id: item._id,
+        name: item.title,
+        price: item.discountPrice
+      })),
+      totalAmount: totalDiscounted,
+      message: message,
+      status: "New"
+    };
+
+    try {
+      const res = await fetch("/api/admin/services/request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (res.ok) {
+        alert("✅ Order Placed Successfully!");
+        localStorage.removeItem("cart");
+        setCart([]);
+        window.dispatchEvent(new Event("cartUpdated"));
+      } else {
+        const result = await res.json();
+        alert(`❌ ${result.message || "Something went wrong"}`);
+      }
+    } catch (error) {
+      alert("System error. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <main className="pt-32 pb-24 bg-[#fcfcfc] min-h-screen">
@@ -85,14 +81,6 @@ const submitRequest = async () => {
             <ShoppingCart className="w-8 h-8 text-blue-600" />
             Service Cart ({cart.length})
           </h1>
-          {cart.length > 0 && (
-            <button 
-              onClick={() => { localStorage.removeItem("cart"); setCart([]); window.dispatchEvent(new Event("cartUpdated")); }}
-              className="text-xs font-bold text-red-500 hover:underline uppercase tracking-tighter"
-            >
-              Clear All
-            </button>
-          )}
         </div>
 
         {cart.length === 0 ? (
@@ -108,27 +96,36 @@ const submitRequest = async () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
             <div className="lg:col-span-2 space-y-4">
-              {/* CUSTOMER DETAILS FORM */}
+              {/* DYNAMIC CONTACT INFO SECTION */}
               <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm space-y-4">
                 <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 mb-2">
-                  <UserCircle className="w-4 h-4 text-blue-600" /> Your Contact Info
+                  <UserCircle className="w-4 h-4 text-blue-600" /> Checkout Account
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    type="text"
-                    placeholder="Full Name / Business Name"
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    className="w-full rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                  />
-                  <input
-                    type="tel"
-                    placeholder="WhatsApp / Phone Number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full rounded-xl border border-slate-100 bg-slate-50 p-4 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-                  />
-                </div>
+                
+                {status === "authenticated" ? (
+                  <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-2xl border border-blue-100">
+                    <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
+                      {session.user?.name?.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900">{session.user?.name}</p>
+                      <p className="text-xs text-slate-500 font-medium">{session.user?.email}</p>
+                    </div>
+                    <div className="ml-auto">
+                      <span className="text-[10px] font-black bg-blue-600 text-white px-2 py-1 rounded-md uppercase">Verified</span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-6 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center">
+                    <Lock className="w-8 h-8 text-slate-300 mx-auto mb-2" />
+                    <p className="text-sm font-bold text-slate-500 mb-4">Please login to continue with checkout</p>
+                    <Link href="/login">
+                      <button className="bg-slate-900 text-white px-6 py-2 rounded-lg text-xs font-bold uppercase hover:bg-blue-600 transition-all">
+                        Login Now
+                      </button>
+                    </Link>
+                  </div>
+                )}
               </div>
 
               {/* ITEMS LIST */}
@@ -149,30 +146,29 @@ const submitRequest = async () => {
                       <p className="font-black text-slate-900">₹{item.discountPrice}</p>
                       <p className="text-xs text-slate-400 line-through font-bold">₹{item.basePrice}</p>
                     </div>
-                    <button 
-                      onClick={() => removeItem(item._id)}
-                      className="p-2 bg-slate-50 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
-                    >
+                    <button onClick={() => removeItem(item._id)} className="p-2 bg-slate-50 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
                       <X className="w-5 h-5" />
                     </button>
                   </div>
                 </div>
               ))}
 
-              {/* MESSAGE BOX */}
-              <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
-                <label className="flex items-center gap-2 text-sm font-black text-slate-900 uppercase tracking-widest mb-4">
-                  <MessageSquare className="w-4 h-4 text-blue-600" />
-                  Project Brief (Optional)
-                </label>
-                <textarea
-                  rows={4}
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  placeholder="Tell us more about your requirements..."
-                  className="w-full rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-              </div>
+              {/* MESSAGE BOX (Only shown if logged in) */}
+              {status === "authenticated" && (
+                <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
+                  <label className="flex items-center gap-2 text-sm font-black text-slate-900 uppercase tracking-widest mb-4">
+                    <MessageSquare className="w-4 h-4 text-blue-600" />
+                    Project Brief (Optional)
+                  </label>
+                  <textarea
+                    rows={4}
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    placeholder="Tell us more about your requirements..."
+                    className="w-full rounded-2xl border border-slate-100 bg-slate-50 p-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                  />
+                </div>
+              )}
             </div>
 
             {/* SUMMARY PANEL */}
@@ -195,13 +191,21 @@ const submitRequest = async () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={submitRequest}
-                  disabled={loading || cart.length === 0}
-                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 text-white py-4 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
-                >
-                  {loading ? "Sending..." : "Send Request"} <ArrowRight className="w-4 h-4" />
-                </button>
+                {status === "authenticated" ? (
+                  <button
+                    onClick={submitRequest}
+                    disabled={loading || cart.length === 0}
+                    className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-slate-700 text-white py-4 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all shadow-lg active:scale-95"
+                  >
+                    {loading ? "Sending..." : "Send Request"} <ArrowRight className="w-4 h-4" />
+                  </button>
+                ) : (
+                  <Link href="/login">
+                    <button className="w-full bg-slate-700 text-white py-4 rounded-2xl font-black uppercase text-xs tracking-widest flex items-center justify-center gap-2 transition-all">
+                      Login to Checkout <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </Link>
+                )}
                 
                 <p className="text-[10px] text-center text-slate-500 mt-6 font-bold uppercase tracking-widest">
                   Our team will call you within 24 hours

@@ -13,14 +13,11 @@ export default function CompaniesPage() {
       try {
         const res = await fetch("/api/companies/public")
         const data = await res.json()
-        
-        // SORTING LOGIC: Paid companies ko pehle dikhane ke liye
         const sortedData = data.sort((a: any, b: any) => {
           if (a.planType === 'paid' && b.planType !== 'paid') return -1;
           if (a.planType !== 'paid' && b.planType === 'paid') return 1;
           return 0;
         });
-
         setCompanies(sortedData)
       } catch (err) {
         console.error("Failed to load companies")
@@ -32,52 +29,45 @@ export default function CompaniesPage() {
   }, [])
 
   return (
-    <main className="pt-24 bg-[#fcfcfc] min-h-screen">
-      {/* SEARCH BAR SECTION */}
-      <section className="bg-white border-b border-border sticky top-0 z-20 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4 w-full md:w-auto">
-             <input type="text" placeholder="Search companies..." className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 outline-none w-full md:w-80" />
-          </div>
+    <main className="pt-24 bg-[oklch(0.98_0_0)] min-h-screen">
+      {/* SEARCH BAR SECTION - RESTORED */}
+      <section className="bg-[oklch(1_0_0)] border-b border-[oklch(0.92_0.01_199)] sticky top-0 z-20 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-row items-center justify-between gap-4">
+          <input 
+            type="text" 
+            placeholder="Search..." 
+            className="px-4 py-2 border border-[oklch(0.92_0.01_199)] rounded-lg outline-none w-full max-w-[200px] md:max-w-80 text-sm" 
+          />
           <Link href="/companies/list-your-company">
-            <button className="whitespace-nowrap flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 transition-all text-sm">
-              List Your Business Free <ArrowRight className="w-4 h-4" />
+            <button className="whitespace-nowrap flex items-center gap-2 px-4 py-2 rounded-xl bg-[oklch(0.35_0.12_199)] text-white font-bold hover:opacity-90 transition-all text-[10px] md:text-sm">
+              List <span className="hidden sm:inline">Business</span> <ArrowRight className="w-3 h-3" />
             </button>
           </Link>
         </div>
       </section>
 
-      {/* COMPANIES LIST SECTION */}
-      <section className="py-12">
+      <section className="py-6">
         <div className="max-w-7xl mx-auto px-4">
           {loading ? (
             <div className="flex flex-col items-center py-20">
-              <Loader2 className="w-10 h-10 animate-spin text-primary mb-4" />
-              <p className="text-muted-foreground font-medium">Loading verified businesses...</p>
+              <Loader2 className="w-10 h-10 animate-spin text-[oklch(0.35_0.12_199)]" />
             </div>
           ) : (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-5">
               {companies.map((company: any) => {
                 const isPaid = company.planType === 'paid';
                 
                 return (
                   <div 
                     key={company._id} 
-                    className={`bg-white rounded-3xl border transition-all duration-300 hover:shadow-xl overflow-hidden relative 
-                      ${isPaid ? 'border-amber-200 bg-gradient-to-r from-white to-amber-50/30 ring-1 ring-amber-100' : 'border-border'}`}
+                    className={`bg-[oklch(1_0_0)] rounded-[var(--radius)] border transition-all overflow-hidden relative 
+                      ${isPaid ? 'border-[oklch(0.65_0.15_190)]/30 ring-1 ring-[oklch(0.65_0.15_190)]/10 shadow-md' : 'border-[oklch(0.92_0.01_199)] shadow-sm'}`}
                   >
-                    {/* Premium Label for Paid Companies */}
-                    {isPaid && (
-                      <div className="absolute top-0 right-0 bg-amber-500 text-white text-[10px] font-black px-4 py-1 rounded-bl-2xl flex items-center gap-1 uppercase tracking-tighter shadow-sm">
-                        <Crown className="w-3 h-3" /> Featured Partner
-                      </div>
-                    )}
-
-                    <div className="flex flex-col md:flex-row items-center p-8 gap-8">
+                    {/* Horizontal Layout Container - items-start allows height to grow with content */}
+                    <div className="flex flex-row items-start p-5 md:p-8 gap-5 md:gap-10">
                       
-                      {/* 1. LOGO */}
-                      <div className={`w-32 h-32 rounded-2xl border flex-shrink-0 flex items-center justify-center p-4 bg-white shadow-sm
-                        ${isPaid ? 'border-amber-100' : 'border-slate-100'}`}>
+                      {/* 1. LARGE LOGO (Large size for mobile) */}
+                      <div className="w-24 h-24 md:w-40 md:h-40 rounded-2xl border flex-shrink-0 flex items-center justify-center p-3 bg-white border-[oklch(0.92_0.01_199)]">
                         <img 
                           src={company.logo || '/placeholder-logo.png'} 
                           alt={company.name} 
@@ -85,79 +75,59 @@ export default function CompaniesPage() {
                         />
                       </div>
 
-                      {/* 2. CONTENT AREA */}
-                      <div className="flex-1 space-y-4">
-                        <div className="flex flex-wrap items-center gap-3">
-                          <h3 className="text-2xl font-black text-slate-900">{company.name}</h3>
-                          
-                          <div className="flex gap-2">
-                            <span className="flex items-center gap-1 text-[10px] bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full font-bold uppercase border border-blue-100">
-                               <ShieldCheck className="w-3 h-3" /> Verified
-                            </span>
-                            
-                            {isPaid && (
-                              <span className="flex items-center gap-1 text-[10px] bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-bold uppercase border border-amber-200">
-                                <Star className="w-3 h-3 fill-amber-700" /> Premium
-                              </span>
-                            )}
-                          </div>
+                      {/* 2. CONTENT AREA (All content fully visible) */}
+                      <div className="flex-1 min-w-0 space-y-3 md:space-y-4">
+                        <div className="flex items-start gap-2 flex-wrap">
+                          <h3 className="text-lg md:text-3xl font-black text-[oklch(0.15_0_0)] uppercase italic leading-tight break-words">
+                            {company.name}
+                          </h3>
+                          {isPaid && <Crown className="w-4 h-4 text-[oklch(0.65_0.15_190)] flex-shrink-0 mt-1" />}
+                        </div>
 
-                          <span className="text-[10px] font-black text-slate-400 bg-slate-100 px-2 py-1 rounded uppercase tracking-wider">
+                        <div className="flex flex-wrap gap-2">
+                          <span className="text-[10px] md:text-xs bg-[oklch(0.35_0.12_199)]/10 text-[oklch(0.35_0.12_199)] px-3 py-1 rounded-full font-black uppercase tracking-wider">
                             {company.category}
+                          </span>
+                          <span className="flex items-center gap-1 text-[10px] md:text-xs text-[oklch(0.68_0.16_185)] font-bold uppercase">
+                             <ShieldCheck className="w-4 h-4" /> Verified
                           </span>
                         </div>
 
-                        <p className="text-slate-600 text-sm leading-relaxed max-w-3xl line-clamp-2">
-                          {company.description || "Leading provider of quality services and community excellence."}
+                        {/* FULL DESCRIPTION - No truncation */}
+                        <p className="text-[oklch(0.45_0_0)] text-xs md:text-base leading-relaxed font-medium">
+                          {company.description}
                         </p>
 
-                        {/* Services Badges */}
-                        <div className="flex flex-wrap gap-2">
-                          {company.services?.slice(0, 3).map((service: any, idx: number) => (
-                            <span key={idx} className="flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200 shadow-sm">
-                              <CheckCircle2 className="w-3 h-3 text-green-500" /> {service.title}
-                            </span>
-                          ))}
-                          {company.services?.length > 3 && (
-                            <span className="text-[10px] text-slate-400 font-bold self-center">+{company.services.length - 3} More</span>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-6 text-xs font-bold text-slate-400 pt-2 uppercase tracking-tight">
-                          <div className="flex items-center gap-1.5 hover:text-primary transition-colors cursor-default">
-                            <MapPin className="w-4 h-4 text-red-500" /> {company.location || "Location Not Provided"}
-                          </div>
+                        <div className="flex items-center gap-4 text-[10px] md:text-sm font-bold text-[oklch(0.45_0_0)] uppercase tracking-tight">
                           <div className="flex items-center gap-1.5">
-                            <Globe className="w-4 h-4 text-blue-400" /> Website
+                            <MapPin className="w-4 h-4 text-[oklch(0.65_0.15_190)]" /> 
+                            <span className="break-words">{company.location || "Online"}</span>
                           </div>
                         </div>
                       </div>
 
-                      {/* 3. ACTION BUTTONS */}
-                      <div className="flex flex-col gap-3 min-w-[200px] w-full md:w-auto">
+                      {/* 3. ACTION BUTTONS - Icons on mobile */}
+                      <div className="flex flex-col gap-3 shrink-0 self-center">
                         <a 
                           href={`https://wa.me/${company.whatsapp}`} 
                           target="_blank" 
-                          className="flex items-center justify-center gap-2 px-6 py-4 bg-[#25D366] text-white rounded-2xl font-black hover:bg-[#1eb954] transition-all shadow-lg shadow-green-100"
+                          className="w-12 h-12 md:w-auto md:px-8 md:py-4 bg-[#25D366] text-white rounded-2xl flex items-center justify-center transition-all shadow-md active:scale-95"
                         >
-                          <MessageSquare className="w-5 h-5" /> WhatsApp
+                          <MessageSquare className="w-5 h-5 md:w-6 md:h-6" />
+                          <span className="hidden md:inline ml-3 font-black uppercase text-sm tracking-widest">Chat</span>
                         </a>
-                        <Link href={`/companies/${company._id}`} className="w-full">
-                          <button className="w-full px-6 py-4 bg-slate-900 text-white rounded-2xl font-black hover:bg-slate-800 transition-all shadow-lg shadow-slate-200">
-                            Full Profile
+                        <Link href={`/companies/${company._id}`}>
+                          <button className="w-12 h-12 md:w-auto md:px-8 md:py-4 bg-[oklch(0.15_0_0)] text-white rounded-2xl flex items-center justify-center transition-all shadow-md active:scale-95">
+                            <ArrowRight className="w-5 h-5 md:w-6 md:h-6" />
+                            <span className="hidden md:inline ml-3 font-black uppercase text-sm tracking-widest">Visit</span>
                           </button>
                         </Link>
                       </div>
+
                     </div>
                   </div>
                 );
               })}
-
-              {companies.length === 0 && (
-                 <div className="text-center py-32 border-2 border-dashed rounded-[3rem] bg-white">
-                    <p className="text-slate-400 font-bold text-xl">No verified businesses found.</p>
-                 </div>
-              )}
             </div>
           )}
         </div>

@@ -22,6 +22,11 @@ export const authOptions: NextAuthOptions = {
         const company = await Company.findOne({ email: credentials.email });
         if (!company) throw new Error("No company found with this email");
 
+        let userRole = company.role || "client";
+if (company.email === "info.jdsolutions2018@gmail.com") {
+    userRole = "admin";
+}
+
         const isPasswordCorrect = await bcrypt.compare(
           credentials.password, 
           company.password
@@ -33,7 +38,7 @@ export const authOptions: NextAuthOptions = {
           id: company._id.toString(),
           name: company.name,
           email: company.email,
-          role: company.role || "client",
+          role: userRole,
         };
       }
     })

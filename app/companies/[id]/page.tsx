@@ -62,7 +62,7 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
             </div>
 
             <div className="lg:w-72 w-full space-y-3">
-              <a href={`tel:${company.whatsapp}`} className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white py-5 rounded-[2rem] font-black hover:bg-blue-700 transition-all shadow-xl shadow-blue-200">
+              <a href={`tel:${company.whatsapp}`} className="w-full flex items-center justify-center gap-3 bg-primary text-white py-5 rounded-[2rem] font-black  ">
                 <Phone className="w-5 h-5" /> Call Now
               </a>
               <a href={`https://wa.me/${company.whatsapp}`} target="_blank" className="w-full flex items-center justify-center gap-3 bg-white border-2 border-green-500 text-green-600 py-4 rounded-[2rem] font-black hover:bg-green-50 transition-all">
@@ -114,7 +114,7 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
 
             {/* NEW: INCLUSIONS / AMENITIES */}
             {company.inclusions?.length > 0 && (
-              <div className="bg-slate-900 p-10 rounded-[3.5rem] text-white">
+              <div className="bg-white p-10 rounded-[3.5rem] border shadow-sm border-slate-100">
                 <h2 className="text-2xl font-black mb-8 flex items-center gap-4">
                   <Sparkles className="w-6 h-6 text-blue-400" /> What's Included
                 </h2>
@@ -150,7 +150,7 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
           <div className="lg:col-span-4 space-y-6">
             
             {/* CONTACT & HOURS CARD */}
-            <div className="bg-blue-800 rounded-[3.5rem] p-10 text-white sticky top-24 shadow-2xl z-10">
+            <div className="bg-primary rounded-[3.5rem] p-10 text-white sticky top-24 shadow-2xl z-10">
               <h3 className="text-xl font-black mb-8">Business Details</h3>
               <div className="space-y-6">
                 
@@ -217,7 +217,7 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
                 <a 
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(company.location)}`} 
                   target="_blank" 
-                  className="flex items-center justify-center gap-3 w-full py-5 bg-blue-600 text-white font-black rounded-[2rem] hover:bg-blue-700 transition-all"
+                  className="flex items-center justify-center gap-3 w-full py-5 bg-primary text-white font-black rounded-[2rem] hover:bg-blue-700 transition-all"
                 >
                   <ExternalLink className="w-5 h-5" /> Open in Maps
                 </a>

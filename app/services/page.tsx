@@ -51,19 +51,16 @@ export default function ServicesFrontend() {
     <main className="pt-32 pb-20 bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
         
-        {/* HERO SECTION 
-        <div className="text-center mb-16">
-          <span className="bg-blue-100 text-blue-700 text-[10px] px-4 py-1.5 rounded-full font-black uppercase tracking-[0.2em]">
-            Our Solutions
-          </span>
-          <h1 className="text-4xl md:text-6xl font-black text-slate-900 mt-4 mb-6">
-            Scale Your Business <br /> <span className="text-blue-600">With Expert Services</span>
+        <section className="mb-16">
+        <div className="  px-4 text-center">
+          <h1 className="font-display text-5xl md:text-7xl font-black mb-4 uppercase italic tracking-tighter text-black">
+            Our Services
           </h1>
-          <p className="text-slate-500 max-w-2xl mx-auto font-medium">
-            Choose from our range of premium digital services designed to help your brand grow.
-            Professional execution with guaranteed results.
+          <p className="text-gray-500 max-w-xl mx-auto text-lg">
+            Showcasing real results delivered for our verified partners and clients.
           </p>
         </div>
+      </section>
 
         {/* SERVICES GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
