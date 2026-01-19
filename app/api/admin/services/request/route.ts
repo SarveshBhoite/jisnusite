@@ -2,6 +2,7 @@ import connectDB from "@/lib/mongodb";
 import ServiceRequest from "@/models/ServiceRequest";
 import { NextResponse } from "next/server";
 import Company from "@/models/Company";
+import dbConnect from "@/lib/mongodb";
 // GET: Admin requests fetch karega
 export async function GET() {
   try {
@@ -16,31 +17,22 @@ export async function GET() {
 // POST: Cart se naya request save hoga
 export async function POST(req: Request) {
   try {
-    await connectDB();
-    const data = await req.json();
+    await dbConnect();
+    const body = await req.json();
 
-    // 1. Database mein check karein ki ye name aur whatsapp listed hai ya nahi
-    const isListed = await Company.findOne({
-      name: { $regex: new RegExp(`^${data.name}$`, "i") },
-      whatsapp: data.whatsapp
-    });
-
-    if (!isListed) {
-      return NextResponse.json(
-        { success: false, message: "Company not found! Please list your company first." }, 
-        { status: 404 }
-      );
+    // Check if body has required fields
+    if (!body.email || !body.services) {
+      return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
-    // 2. Agar mil gayi, toh Request Save karein
-    const newRequest = await ServiceRequest.create(data);
-    return NextResponse.json({ success: true, data: newRequest });
+    const newRequest = await ServiceRequest.create(body);
 
+    return NextResponse.json({ message: "Success", data: newRequest }, { status: 201 });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error("API Error:", error);
+    return NextResponse.json({ message: error.message || "Server Error" }, { status: 500 });
   }
 }
-
 // PATCH: Status update karne ke liye (?id=... use hoga)
 export async function PATCH(req: Request) {
   try {

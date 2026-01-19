@@ -41,23 +41,23 @@ const [cartCount, setCartCount] = useState(0)
           <div className="flex h-16 md:h-20 items-center justify-between">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 group">
+            <Link href="/" className="flex items-center pr-4 group">
               <Image
                 src="/icon.jpeg"
                 alt="Jisnu Digital Solutions"
                 width={44}
                 height={44}
-                className="rounded-md transition-transform duration-300 group-hover:scale-105"
+                className="rounded-md transition-transform duration-300 group-hover:scale-105 "
                 priority
               />
-              <div className="hidden sm:flex flex-col leading-tight">
+              <div className="hidden sm:flex flex-col leading-tight ">
                 <span className="font-display text-base font-semibold tracking-tight">Jisnu Digital</span>
                 <span className="text-xs text-muted-foreground">Solutions</span>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-10">
+            <nav className="hidden lg:flex items-center gap-10 py-8">
               {navLinks.map((link) => (
                 <Link key={link.href} href={link.href} className="relative text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground group">
                   {link.label}

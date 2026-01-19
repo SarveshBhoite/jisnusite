@@ -1,76 +1,121 @@
 "use client"
 
-import { useState } from "react"
-import { User, Lock, Mail, Phone, Building } from "lucide-react"
+import { useState, useEffect } from "react"
+import { User, Lock, Mail, Phone, Building, Loader2 } from "lucide-react"
+import { useSession } from "next-auth/react"
 
 export default function ProfilePage() {
+  const { data: session, status } = useSession()
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [profile, setProfile] = useState({
-    name: "Raj Bhoite",
-    email: "raj@example.com",
+    name: "",
+    email: "",
     phone: "",
     company: "",
   })
 
+  // 1. Fetch Profile Data from DB
+  useEffect(() => {
+const fetchProfile = async () => {
+  try {
+
+    if (status !== "authenticated" || !session?.user?.email) return;
+    const res = await fetch(`/api/client/profile?email=${session.user.email}`);
+    
+    // Check if the response is actually JSON
+    const contentType = res.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await res.text();
+      console.error("Expected JSON but got HTML. This usually means a 404 or 500 error page.");
+      console.log("Response starts with:", text.substring(0, 100));
+      return;
+    }
+
+    const data = await res.json();
+    setProfile(data);
+  } catch (error) {
+    console.error("Fetch failed:", error);
+  }
+};
+    fetchProfile()
+  }, [session, status])
+
+  // 2. Handle Save Changes
+  const handleSaveProfile = async () => {
+    setSaving(true)
+    try {
+      const res = await fetch("/api/client/profile/", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile),
+      })
+      if (res.ok) {
+        alert("Profile updated successfully!")
+      }
+    } catch (error) {
+      alert("Failed to update profile")
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) return <div className="flex justify-center p-20"><Loader2 className="animate-spin" /></div>
+
   return (
     <div className="space-y-14">
-
-      {/* ===== PAGE HEADER ===== */}
+      {/* PAGE HEADER */}
       <div>
-        <h2 className="font-display text-2xl font-semibold mb-2">
-          Profile & Security
-        </h2>
-        <p className="text-muted-foreground">
-          Manage your personal details and account security.
-        </p>
+        <h2 className="font-display text-2xl font-semibold mb-2">Profile & Security</h2>
+        <p className="text-muted-foreground text-sm">Manage your personal details and account security.</p>
       </div>
 
-      {/* ===== PROFILE INFO ===== */}
-      <section className="p-8 rounded-xl border border-border bg-background">
+      {/* PROFILE INFO */}
+      <section className="p-8 rounded-xl border border-border bg-background shadow-sm">
         <div className="flex items-center gap-3 mb-8">
           <User className="w-6 h-6 text-primary" />
-          <h3 className="font-display text-xl font-semibold">
-            Profile Information
-          </h3>
+          <h3 className="font-display text-xl font-semibold">Profile Information</h3>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Full Name */}
           <InputField
-            icon={<User />}
+            icon={<User size={18} />}
             label="Full Name"
             value={profile.name}
             onChange={(v) => setProfile({ ...profile, name: v })}
           />
-
-          {/* Email */}
           <InputField
-            icon={<Mail />}
+            icon={<Mail size={18} />}
             label="Email Address"
             value={profile.email}
-            disabled
+            disabled // Email usually shouldn't be changeable for security
           />
-
-          {/* Phone */}
           <InputField
-            icon={<Phone />}
+            icon={<Phone size={18} />}
             label="Phone Number"
             value={profile.phone}
             onChange={(v) => setProfile({ ...profile, phone: v })}
           />
-
-          {/* Company */}
           <InputField
-            icon={<Building />}
+            icon={<Building size={18} />}
             label="Company Name"
             value={profile.company}
             onChange={(v) => setProfile({ ...profile, company: v })}
           />
         </div>
 
-        <button className="mt-8 px-6 py-3 rounded-md bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition">
-          Save Profile Changes
+        <button 
+          onClick={handleSaveProfile}
+          disabled={saving}
+          className="mt-8 px-6 py-3 rounded-md bg-primary text-white font-medium hover:bg-primary/90 transition disabled:opacity-50"
+        >
+          {saving ? "Saving..." : "Save Profile Changes"}
         </button>
       </section>
+
+      {/* SECURITY SECTION (Keep your existing UI) */}
+
+
 
       {/* ===== SECURITY ===== */}
       <section className="p-8 rounded-xl border border-border bg-background">

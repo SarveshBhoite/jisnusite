@@ -35,19 +35,21 @@ export default function CartPage() {
 
     setLoading(true);
 
-    const payload = {
-      // Ab hum customerName aur phone ki jagah session ka email bhejenge
-      email: session.user?.email, 
-      name: session.user?.name,
-      services: cart.map(item => ({
-        id: item._id,
-        name: item.title,
-        price: item.discountPrice
-      })),
-      totalAmount: totalDiscounted,
-      message: message,
-      status: "New"
-    };
+// Inside your submitRequest function
+const payload = {
+  email: session.user?.email, 
+  name: session.user?.name,
+  // Add this if your backend specifically looks for it:
+  companyName: "Individual Request", 
+  services: cart.map(item => ({
+    id: item._id,
+    name: item.title,
+    price: item.discountPrice
+  })),
+  totalAmount: totalDiscounted,
+  message: message,
+  status: "New"
+};
 
     try {
       const res = await fetch("/api/admin/services/request", {

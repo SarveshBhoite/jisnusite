@@ -135,6 +135,11 @@ export default function AdminDashboardPage() {
             href="/dashboard/admin/portfolio"
             icon={<Image />}
           />
+           <QuickAction
+            title="Manage Portfolio"
+            href="/dashboard/admin/ads"
+            icon={<Image />}
+          />
         </div>
       </section>
 

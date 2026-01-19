@@ -19,7 +19,8 @@ export const authOptions: NextAuthOptions = {
 
         await connectDB();
         
-        const company = await Company.findOne({ email: credentials.email });
+        // Change this line:
+        const company = await Company.findOne({ email: credentials.email }).select("+password");
         if (!company) throw new Error("No company found with this email");
 
         let userRole = company.role || "client";
