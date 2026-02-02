@@ -1,30 +1,51 @@
 import { notFound } from "next/navigation"
 import dbConnect from "@/lib/mongodb"
 import Company from "@/models/Company"
+import Link from "next/link"
+import ServiceRequest from "@/models/ServiceRequest" // 1. Import ServiceRequest
 import { 
   MapPin, Globe, ShieldCheck, Clock, 
   Phone, MessageSquare, Star, Info, 
   CheckCircle2, LayoutGrid, Smartphone,
   Instagram, Linkedin, Facebook, Twitter,
-  Share2, Sparkles, ExternalLink
+  Share2, Sparkles, ExternalLink, Crown,ArrowLeft
 } from "lucide-react"
 
 export default async function PublicCompanyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   await dbConnect()
-  const company = await Company.findById(id).lean()
 
+  // 2. Fetch the company
+  const company = await Company.findById(id).lean()
   if (!company) notFound()
+
+  // 3. Logic to check if they are "Paid" (Dynamic Verification)
+  const completedService = await ServiceRequest.findOne({ 
+    email: company.email, 
+    status: "Completed" 
+  }).lean()
+
+  const isPaid = company.planType === 'paid' || !!completedService;
 
   return (
     <main className="min-h-screen bg-[#F8FAFC]">
+
       {/* --- HERO SECTION --- */}
       <section className="bg-white border-b relative">
-        <div className="max-w-7xl mx-auto px-6 pt-32 pb-12">
+        <div className="max-w-7xl mx-auto px-6 pt-20 pb-16">
+           <Link
+                  href="/companies"
+                  className="flex items-center gap-1.5 text-slate-900 hover:text-cyan-600 transition-colors text-sm font-semibold group pb-5"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back</span>
+                </Link>
           <div className="flex flex-col lg:flex-row items-start gap-10">
             
             <div className="flex-shrink-0">
-              <div className="w-32 h-32 md:w-40 md:h-40 rounded-[2.5rem] bg-white border shadow-xl shadow-slate-100 p-4 flex items-center justify-center relative overflow-hidden group">
+              {/* Added dynamic ring color if Paid */}
+              <div className={`w-32 h-32 md:w-40 md:h-40 rounded-[2.5rem] bg-white border shadow-xl p-4 flex items-center justify-center relative overflow-hidden group transition-all
+                ${isPaid ? 'border-blue-400 blue-4 ring-blue-500/10 shadow-blue-100' : 'border-slate-100 shadow-slate-100'}`}>
                 <img src={company.logo || "/placeholder.png"} alt={company.name} className="w-full h-full object-contain transition-transform group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 to-transparent" />
               </div>
@@ -32,17 +53,33 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
 
             <div className="flex-1 space-y-4">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="px-4 py-1.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4" /> Verified Business
-                </span>
+                {/* 4. DYNAMIC BADGE: Show different badge if Paid */}
+                {isPaid ? (
+                  <span className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-orange-400 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-1.5 shadow-md">
+                    <Crown className="w-4 h-4 fill-white" /> Featured Partner
+                  </span>
+                ) : (
+                  <span className="px-4 py-1.5 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4" /> Verified Business
+                  </span>
+                )}
+                
                 <span className="px-4 py-1.5 bg-slate-100 text-slate-600 text-[10px] font-black uppercase tracking-[0.2em] rounded-full">
                   {company.category}
                 </span>
               </div>
 
-              <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
-                {company.name}
-              </h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
+                  {company.name}
+                </h1>
+                {/* 5. Add a checkmark next to the name for Paid users */}
+                {isPaid && (
+                  <div className="bg-blue-600 p-1.5 rounded-full mt-2">
+                    <CheckCircle2 className="w-6 h-6 text-white fill-blue-600" />
+                  </div>
+                )}
+              </div>
 
               <p className="text-xl text-blue-600 font-bold max-w-2xl leading-relaxed">
                 {company.description}
@@ -53,7 +90,9 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
                   <div className="flex bg-amber-400 text-white px-2 py-0.5 rounded text-xs font-black">
                     4.8 <Star className="w-3 h-3 fill-current ml-1" />
                   </div>
-                  <span className="text-sm font-bold underline decoration-slate-200 underline-offset-4">Top Rated Professional</span>
+                  <span className="text-sm font-bold underline decoration-slate-200 underline-offset-4">
+                    {isPaid ? "Premium Verified Partner" : "Top Rated Professional"}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2 text-sm font-medium">
                   <MapPin className="w-4 h-4 text-red-400" /> {company.location ? "View Location Below" : "Location Not Shared"}
@@ -62,7 +101,7 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
             </div>
 
             <div className="lg:w-72 w-full space-y-3">
-              <a href={`tel:${company.whatsapp}`} className="w-full flex items-center justify-center gap-3 bg-primary text-white py-5 rounded-[2rem] font-black  ">
+              <a href={`tel:${company.whatsapp}`} className="w-full flex items-center justify-center gap-3 bg-primary text-white py-5 rounded-[2rem] font-black hover:bg-black transition-all">
                 <Phone className="w-5 h-5" /> Call Now
               </a>
               <a href={`https://wa.me/${company.whatsapp}`} target="_blank" className="w-full flex items-center justify-center gap-3 bg-white border-2 border-green-500 text-green-600 py-4 rounded-[2rem] font-black hover:bg-green-50 transition-all">

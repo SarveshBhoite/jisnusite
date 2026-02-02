@@ -129,10 +129,13 @@ export default function ListYourCompanyPage() {
                     >
                       <option value="">Select a category</option>
                       <option>Technology</option>
-                      <option>Retail & E-commerce</option>
+                      <option>E-commerce</option>
                       <option>Health & Wellness</option>
                       <option>Manufacturing</option>
                       <option>Professional Services</option>
+                      <option>Education</option>
+                      <option>Hotels</option>
+                      <option>Decoration</option>
                     </select>
                   </div>
 

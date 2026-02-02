@@ -1,178 +1,175 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { Menu, X, ShoppingCart, LogOut, User, LayoutDashboard, ChevronDown } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useSession, signOut } from "next-auth/react" // NextAuth hooks
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
+import { 
+  Menu, X, Phone, ArrowRight, ShoppingBag, 
+  User, LogOut, ChevronDown, Building2, Mail 
+} from "lucide-react";
+import Image from "next/image";
 
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Portfolio", href: "/portfolio" },
-  { label: "Companies", href: "/companies" },
-  { label: "Blogs", href: "/blog" },
-  { label: "Contact", href: "/contact" },
-]
+export default function Navbar() {
+  const { data: session, status } = useSession();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
-export function Navbar() {
-  const [open, setOpen] = useState(false)
-  const { data: session, status } = useSession() // Session data fetch karna
-const [cartCount, setCartCount] = useState(0)
-
-  const updateCartCount = () => {
-    if (typeof window !== "undefined") {
-      const stored = JSON.parse(localStorage.getItem("cart") || "[]")
-      setCartCount(stored.length)
-    }
-  }
+  const isHomePage = pathname === "/";
+  const useWhiteNav = !isHomePage || isScrolled;
 
   useEffect(() => {
-    updateCartCount() // Initial check
-    window.addEventListener("cartUpdated", updateCartCount)
-    return () => window.removeEventListener("cartUpdated", updateCartCount)
-  }, [])
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "Services", href: "/services" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "Companies", href: "/companies" },
+    { name: "About Us", href: "/about" },
+     { name: "Blogs", href: "/blog" }
+  ];
+
   return (
-    <header className="fixed top-0 inset-x-0 z-50">
-      <div className="backdrop-blur-xl bg-background/75 border-b border-border/60">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 md:h-20 items-center justify-between">
+    <nav className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
+      useWhiteNav || isMobileMenuOpen ? "bg-white shadow-lg py-3" : "bg-transparent py-6"
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
+          
+          {/* Logo Section */}
+          <Link href="/" className="group flex items-center gap-2.5">
+            <div className="relative z-10 w-10 h-10 rounded-xl border-2 border-cyan-600/20 bg-white overflow-hidden shadow-lg transition-transform group-hover:rotate-0 rotate-3">
+              <Image src="/icon.jpeg" alt="Logo" fill className="object-cover" />
+            </div>
+            <span className={`text-xl font-black tracking-tighter ${useWhiteNav || isMobileMenuOpen ? "text-slate-900" : "text-white"}`}>
+              JISNU<span className="text-cyan-500">DIGITAL</span>
+            </span>
+          </Link>
 
-            {/* Logo */}
-            <Link href="/" className="flex items-center pr-4 group">
-              <Image
-                src="/icon.jpeg"
-                alt="Jisnu Digital Solutions"
-                width={44}
-                height={44}
-                className="rounded-md transition-transform duration-300 group-hover:scale-105 "
-                priority
-              />
-              <div className="hidden sm:flex flex-col leading-tight ">
-                <span className="font-display text-base font-semibold tracking-tight">Jisnu Digital</span>
-                <span className="text-xs text-muted-foreground">Solutions</span>
-              </div>
-            </Link>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center gap-10 py-8">
-              {navLinks.map((link) => (
-                <Link key={link.href} href={link.href} className="relative text-sm font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground group">
-                  {link.label}
-                  <span className="pointer-events-none absolute -bottom-1 left-0 h-[2px] w-0 bg-gradient-to-r from-primary to-accent transition-all duration-300 group-hover:w-full" />
-                </Link>
-              ))}
-            </nav>
-
-            {/* Right Actions */}
-            <div className="flex items-center gap-2 md:gap-3">
-              
-              {/* CART ICON - Now visible on all screens, but styled for mobile */}
-              <Link href="/cart" className="relative rounded-md p-2 hover:bg-muted transition group">
-                <ShoppingCart className="h-5 w-5 text-foreground" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white animate-in zoom-in duration-300">
-                    {cartCount}
-                  </span>
-                )}
-              </Link>
-
-              {/* Desktop Only Actions */}
-              <div className="hidden md:flex items-center gap-3">
-                {/* DYNAMIC AUTH SECTION */}
-                {status === "authenticated" ? (
-                  <div className="relative group ml-2">
-                    <button className="flex items-center gap-3 p-1 rounded-full hover:bg-muted transition-all">
-                      <div className="text-right hidden xl:block">
-                        <p className="text-sm font-bold text-foreground leading-none uppercase italic">
-                          {session.user?.name?.split(" ")[0]}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground font-medium">{session.user?.email}</p>
-                      </div>
-                      <div className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center font-black italic border border-primary/20">
-                        {session.user?.name?.charAt(0).toUpperCase()}
-                      </div>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:rotate-180 transition-transform" />
-                    </button>
-
-                    <div className="absolute right-0 top-full pt-2 w-56 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-2xl">
-                      <div className="bg-background border border-border rounded-xl p-2 space-y-1">
-                        <Link href="/dashboard/client" className="flex items-center gap-2 p-3 hover:bg-muted rounded-lg text-sm font-semibold transition">
-                          <LayoutDashboard className="w-4 h-4 text-primary" /> Dashboard
-                        </Link>
-                        <Link href="/dashboard/client/profile" className="flex items-center gap-2 p-3 hover:bg-muted rounded-lg text-sm font-semibold transition">
-                          <User className="w-4 h-4 text-primary" /> Profile
-                        </Link>
-                        <div className="h-px bg-border my-1" />
-                        <button 
-                          onClick={() => signOut({ callbackUrl: '/' })}
-                          className="w-full flex items-center gap-2 p-3 hover:bg-red-50 text-red-500 rounded-lg text-sm font-bold transition"
-                        >
-                          <LogOut className="w-4 h-4" /> Sign Out
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <Link href="/login">
-                    <Button variant="ghost" className="text-sm font-medium text-muted-foreground hover:text-foreground">
-                      Login
-                    </Button>
-                  </Link>
-                )}
-
-                <Link href="/companies/list-your-company">
-                  <Button className="h-9 px-5 text-sm font-medium bg-primary text-white hover:bg-primary/90 transition-all shadow-md">
-                    List Company
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Mobile Menu Button */}
-              <button onClick={() => setOpen(!open)} className="lg:hidden rounded-md p-2 hover:bg-muted transition">
-                {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
-         </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Menu */}
-      {open && (
-        <div className="lg:hidden backdrop-blur-xl bg-background/95 border-b border-border">
-          <div className="px-6 py-6 space-y-5">
+          {/* Desktop Navigation (Hidden on Mobile) */}
+          <div className={`hidden lg:flex items-center rounded-full px-6 py-2 border ${
+            useWhiteNav ? "bg-slate-100 border-slate-200" : "bg-white/10 border-white/10 backdrop-blur-sm"
+          }`}>
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href} onClick={() => setOpen(false)} className="block text-base font-medium text-foreground">
-                {link.label}
+              <Link 
+                key={link.name} 
+                href={link.href} 
+                className={`px-4 py-1 text-sm font-bold transition-all relative group ${
+                  pathname === link.href ? "text-cyan-600" : (useWhiteNav ? "text-slate-600 hover:text-cyan-600" : "text-slate-200 hover:text-white")
+                }`}
+              >
+                {link.name}
+                <span className={`absolute bottom-0 left-4 right-4 h-0.5 bg-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform ${pathname === link.href ? "scale-x-100" : ""}`} />
               </Link>
             ))}
+          </div>
 
-            <div className="pt-4 border-t border-border space-y-4">
+          {/* Action Area */}
+          <div className="flex items-center gap-2 md:gap-4">
+            {/* Cart Icon - ALWAYS VISIBLE */}
+            <Link href="/cart" className="relative p-2 rounded-full hover:bg-cyan-50 transition-colors">
+              <ShoppingBag className={`w-5 h-5 ${useWhiteNav || isMobileMenuOpen ? "text-slate-700" : "text-white"}`} />
+              <span className="absolute top-0 right-0 bg-cyan-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">0</span>
+            </Link>
+
+            {/* Desktop-Only Login/Quote Area */}
+            <div className="hidden md:flex items-center gap-4">
               {status === "authenticated" ? (
-                <>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-bold">
-                      {session.user?.name?.charAt(0).toUpperCase()}
+                <div className="relative">
+                  <button 
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className={`flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-full border transition-all ${
+                      useWhiteNav ? "bg-white border-slate-200" : "bg-white/10 border-white/20 text-white"
+                    }`}
+                  >
+                    <div className="w-7 h-7 rounded-full bg-cyan-600 flex items-center justify-center text-white text-xs font-bold uppercase">
+                      {session.user?.name?.charAt(0)}
                     </div>
-                    <div>
-                      <p className="text-sm font-bold">{session.user?.name}</p>
-                      <p className="text-xs text-muted-foreground">{session.user?.email}</p>
+                    <ChevronDown className="w-3.5 h-3.5" />
+                  </button>
+                  {isProfileOpen && (
+                    <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-slate-100 py-3">
+                        <div className="px-4 py-3 border-b border-slate-50 mb-2">
+                            <span className="block text-sm font-black text-cyan-600 uppercase">{session.user?.name}</span>
+                            <span className="block text-xs text-slate-500 truncate">{session.user?.email}</span>
+                        </div>
+                        <Link href="/dashboard/client" className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">
+                            <User className="w-4 h-4" /> Dashboard
+                        </Link>
+                        <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50">
+                            <LogOut className="w-4 h-4" /> Sign Out
+                        </button>
                     </div>
-                  </div>
-                  <Link href="/dashboard/client" onClick={() => setOpen(false)} className="block text-primary font-bold">My Dashboard</Link>
-                  <button onClick={() => signOut()} className="block text-red-500 font-bold">Logout</button>
-                </>
+                  )}
+                </div>
               ) : (
-                <Link href="/login" onClick={() => setOpen(false)}>
-                  <Button variant="outline" className="w-full">Login</Button>
+                <Link href="/login" className={`text-sm font-bold ${useWhiteNav ? "text-slate-700" : "text-white"}`}>
+                  Login
                 </Link>
               )}
+              <Link href="/contact" className="bg-cyan-700 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+                Get Quote <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
+
+            {/* Mobile Menu Toggle - ONLY VISIBLE ON MOBILE */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className={`p-2 rounded-lg lg:hidden transition-colors ${
+                useWhiteNav || isMobileMenuOpen ? "text-slate-900 hover:bg-slate-100" : "text-white hover:bg-white/10"
+              }`}
+            >
+              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
           </div>
         </div>
-      )}
-    </header>
-  )
+
+        {/* Mobile Dropdown Menu */}
+        {isMobileMenuOpen && (
+          <div className="lg:hidden mt-4 pb-6 animate-in slide-in-from-top duration-300">
+            <div className="flex flex-col gap-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={`px-4 py-3 rounded-xl text-base font-bold transition-colors ${
+                    pathname === link.href ? "bg-cyan-50 text-cyan-600" : "text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  {link.name}
+                </Link>
+              ))}
+              <hr className="my-2 border-slate-100" />
+              
+              {/* Mobile Auth/CTA */}
+              {status === "authenticated" ? (
+                 <Link href="/dashboard/client" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
+                    <User className="w-5 h-5" /> My Dashboard
+                 </Link>
+              ) : (
+                <Link href="/login" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
+                    <User className="w-5 h-5" /> Login to Account
+                </Link>
+              )}
+              
+              <Link href="/contact" className="mx-4 mt-2 bg-cyan-600 text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2">
+                Get Free Quote <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
 }

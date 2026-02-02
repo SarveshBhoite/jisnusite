@@ -1,190 +1,141 @@
 "use client"
 
-import { Mail, Phone, MapPin, Clock } from "lucide-react"
+import { useState } from "react"
+import { Mail, Phone, MapPin, Clock, Loader2, CheckCircle } from "lucide-react"
 
 export default function ContactPage() {
-  return (
-    <main className="min-h-screen pt-20">
+  const [loading, setLoading] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
-      {/* ===== HERO ===== */}
-      <section className="relative py-20 md:py-32 bg-gradient-to-br from-primary/5 to-accent/5">
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setLoading(true)
+
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData.entries())
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: { "Content-Type": "application/json" },
+      })
+
+      if (res.ok) setSubmitted(true)
+    } catch (err) {
+      alert("Something went wrong. Please try again.")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (submitted) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center text-center px-4">
+        <CheckCircle className="w-16 h-16 text-cyan-500 mb-4 animate-bounce" />
+        <h2 className="text-3xl font-bold">Message Sent!</h2>
+        <p className="text-slate-500 mt-2">Our team will get back to you shortly.</p>
+        <button onClick={() => setSubmitted(false)} className="mt-6 text-cyan-600 font-bold hover:underline">Send another message</button>
+      </div>
+    )
+  }
+
+  return (
+    <main className="min-h-screen pt-20 bg-[#F8FAFC]">
+      {/* HERO SECTION */}
+      <section className="relative py-20 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4">
           <div className="max-w-3xl">
-            <h1 className="font-display text-5xl md:text-6xl font-semibold mb-6">
-              Get In{" "}
-              <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                Touch
-              </span>
+            <h1 className="text-5xl md:text-6xl font-black tracking-tighter mb-6">
+              Get In <span className="text-cyan-600">Touch</span>
             </h1>
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              Have a question or general enquiry?  
-              Send us a message and our team will get back to you shortly.
+            <p className="text-lg text-slate-500">
+              Have a question or a digital project in mind? We're ready to help.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ===== MAIN CONTENT ===== */}
-      <section className="py-20 md:py-28">
+      {/* MAIN CONTENT */}
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-14">
-
-          {/* ===== CONTACT INFO ===== */}
+          {/* INFO COLUMN */}
           <div className="space-y-8">
-
-            <InfoItem
-              icon={<Mail />}
-              title="Email"
-              value={<a href="mailto:info@jisnu.com">info@jisnu.com</a>}
-            />
-
-            <InfoItem
-              icon={<Phone />}
-              title="Phone"
-              value={<a href="tel:+1234567890">+1 (234) 567-890</a>}
-            />
-
-            <InfoItem
-              icon={<MapPin />}
-              title="Address"
-              value={
-                <>
-                  123 Digital Street <br />
-                  Tech City, TC 12345
-                </>
-              }
-            />
-
-            <InfoItem
-              icon={<Clock />}
-              title="Business Hours"
-              value={
-                <>
-                  Mon – Fri: 9:00 AM – 6:00 PM <br />
-                  Sat: 10:00 AM – 4:00 PM
-                </>
-              }
-            />
+            <InfoItem icon={<Mail />} title="Email" value="info@jisnu.com" href="mailto:info@jisnu.com" />
+            <InfoItem icon={<Phone />} title="Phone" value="+91 98765 43210" href="tel:+919876543210" />
+            <InfoItem icon={<MapPin />} title="Office" value="123 Tech Park, Digital City" />
+            <InfoItem icon={<Clock />} title="Hours" value="Mon-Sat: 9AM - 6PM" />
           </div>
 
-          {/* ===== CONTACT FORM ===== */}
+          {/* FORM COLUMN */}
           <div className="md:col-span-2">
-            <div className="rounded-3xl border border-border bg-background p-8 md:p-12">
-              <form className="space-y-6">
-
+            <div className="bg-white rounded-3xl border border-slate-200 p-8 md:p-12 shadow-xl shadow-slate-200/50">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <Input label="First Name" placeholder="John" />
-                  <Input label="Last Name" placeholder="Doe" />
+                  <Input label="First Name" name="firstName" required placeholder="John" />
+                  <Input label="Last Name" name="lastName" required placeholder="Doe" />
                 </div>
-
-                <Input label="Email" type="email" placeholder="john@example.com" />
-
-                <Input label="Company (optional)" placeholder="Your Company" />
-
+                <Input label="Email Address" name="email" type="email" required placeholder="john@example.com" />
+                <Input label="Company Name" name="company" placeholder="Optional" />
+                
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Subject
-                  </label>
-                  <select className="w-full rounded-md border border-border bg-background px-4 py-3 focus:outline-none focus:border-primary">
-                    <option value="">Select a subject</option>
+                  <label className="block text-sm font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Subject</label>
+                  <select name="subject" required className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 focus:ring-2 ring-cyan-500/20 focus:border-cyan-500 outline-none transition-all">
+                    <option value="">Select a reason</option>
                     <option>General Enquiry</option>
-                    <option>Partnership</option>
-                    <option>Support</option>
+                    <option>Digital Marketing</option>
+                    <option>Web Development</option>
                     <option>Other</option>
                   </select>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    rows={6}
-                    placeholder="Write your message here..."
-                    className="w-full rounded-md border border-border bg-background px-4 py-3 resize-none focus:outline-none focus:border-primary"
-                  />
+                  <label className="block text-sm font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">Message</label>
+                  <textarea name="message" required rows={5} placeholder="How can we help you?" className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 focus:ring-2 ring-cyan-500/20 focus:border-cyan-500 outline-none transition-all resize-none" />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full rounded-md bg-primary px-6 py-4 font-medium text-primary-foreground hover:bg-primary/90 transition"
+                  disabled={loading}
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-cyan-700 py-4 font-bold text-white hover:bg-cyan-900 transition-all shadow-lg shadow-cyan-700/20 disabled:opacity-50"
                 >
-                  Send Message
+                  {loading ? <Loader2 className="animate-spin" /> : "Send Message"}
                 </button>
-
-                <p className="text-xs text-muted-foreground text-center">
-                  For service requests, please use the Services → Cart flow.
-                </p>
-
               </form>
             </div>
           </div>
-
         </div>
       </section>
-
-      {/* ===== MAP ===== */}
-      <section className="py-20 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="font-display text-3xl font-semibold mb-8">
-            Find Us
-          </h2>
-
-          <div className="h-96 overflow-hidden rounded-2xl border border-border">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3781.406203584183!2d73.77271787523874!3d18.600790682508364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b9a68125fa15%3A0x4ab3e638485e9d03!2sJISNU%20Digital%20Solutions%20PVT%20LTD!5e0!3m2!1sen!2sin!4v1766489139014!5m2!1sen!2sin"
-              width="100%"
-              height="100%"
-              loading="lazy"
-              style={{ border: 0 }}
-            />
-          </div>
-        </div>
-      </section>
-
     </main>
   )
 }
 
-/* ===== SMALL REUSABLE COMPONENTS ===== */
-
-function InfoItem({
-  icon,
-  title,
-  value,
-}: {
-  icon: React.ReactNode
-  title: string
-  value: React.ReactNode
-}) {
+function InfoItem({ icon, title, value, href }: { icon: any; title: string; value: string; href?: string }) {
   return (
-    <div className="flex gap-4">
-      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+    <div className="flex gap-4 items-start group">
+      <div className="h-12 w-12 rounded-2xl bg-cyan-50 flex items-center justify-center text-cyan-600 group-hover:bg-cyan-600 group-hover:text-white transition-all">
         {icon}
       </div>
       <div>
-        <p className="font-medium">{title}</p>
-        <p className="text-sm text-muted-foreground">{value}</p>
+        <p className="font-bold text-slate-800 text-sm uppercase tracking-tighter">{title}</p>
+        {href ? (
+          <a href={href} className="text-slate-500 hover:text-cyan-600 transition-colors">{value}</a>
+        ) : (
+          <p className="text-slate-500">{value}</p>
+        )}
       </div>
     </div>
   )
 }
 
-function Input({
-  label,
-  placeholder,
-  type = "text",
-}: {
-  label: string
-  placeholder?: string
-  type?: string
-}) {
+function Input({ label, name, ...props }: any) {
   return (
     <div>
-      <label className="block text-sm font-medium mb-2">{label}</label>
+      <label className="block text-sm font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">{label}</label>
       <input
-        type={type}
-        placeholder={placeholder}
-        className="w-full rounded-md border border-border bg-background px-4 py-3 focus:outline-none focus:border-primary"
+        name={name}
+        {...props}
+        className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 focus:ring-2 ring-cyan-500/20 focus:border-cyan-500 outline-none transition-all"
       />
     </div>
   )

@@ -10,10 +10,12 @@ import {
   Image,
   ClipboardList,
   Loader2,
+  Users,
+  ShieldCheck,
+  Zap
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
-  // Stats state - strictly matching your API response
   const [stats, setStats] = useState({
     total: 0,
     paid: 0,
@@ -22,20 +24,22 @@ export default function AdminDashboardPage() {
     requests: 0,
   });
   const [loading, setLoading] = useState(true);
-  const [newRequestsOnly, setNewRequestsOnly] = useState(0);
 
-  // Fetch stats from your API
   useEffect(() => {
     async function loadStats() {
       try {
         const res = await fetch("/api/admin/stats");
         if (!res.ok) throw new Error("Failed to fetch");
         const data = await res.json();
-        setStats(data);
-        // Calculate new requests from the fetched data
-        if (data.requests) {
-          setNewRequestsOnly(data.requests);
-        }
+        
+        // Ensure data mapping matches your API response fields
+        setStats({
+          total: data.total || 0,
+          paid: data.paid || 0,
+          free: data.free || 0,
+          pending: data.pending || 0,
+          requests: data.requests || 0,
+        });
       } catch (err) {
         console.error("Failed to load stats:", err);
       } finally {
@@ -48,68 +52,72 @@ export default function AdminDashboardPage() {
   return (
     <main className="pt-20 px-6 md:px-10 pb-20 bg-slate-50/30 min-h-screen">
       {/* ===== HEADER ===== */}
-      <div className="mb-10">
-        <h1 className="font-display text-3xl md:text-4xl font-semibold mb-2 pt-10 tracking-tight text-slate-900">
-          Admin Dashboard
+      <div className="mb-10 pt-10">
+        <h1 className="text-3xl md:text-4xl font-black tracking-tight text-slate-900 uppercase">
+          System Overview
         </h1>
-        <p className="text-slate-500 font-medium">
-          Real-time overview of approved businesses and pending requests.
+        <p className="text-slate-500 font-medium mt-1">
+          Managing <span className="text-blue-600 font-bold">{stats.total}</span> total businesses across all tiers.
         </p>
       </div>
 
-      {/* ===== KPI CARDS ===== */}
+      {/* ===== KPI CARDS - NOW WITH PAID & FREE LOGIC ===== */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-14">
         {loading ? (
-          Array(5)
-            .fill(0)
-            .map((_, i) => (
-              <div
-                key={i}
-                className="h-28 bg-white animate-pulse rounded-2xl border border-slate-200 shadow-sm"
-              />
-            ))
+          Array(5).fill(0).map((_, i) => (
+            <div key={i} className="h-28 bg-white animate-pulse rounded-2xl border border-slate-200 shadow-sm" />
+          ))
         ) : (
           <>
             <KpiCard
-              title="Total Database"
+              title="Total Companies"
               value={stats.total.toString()}
               icon={<Building2 className="w-6 h-6" />}
               accent="blue"
             />
             <KpiCard
-              title="Approved Paid"
+              title="Paid Partners"
               value={stats.paid.toString()}
-              icon={<DollarSign className="w-6 h-6" />}
+              icon={<ShieldCheck className="w-6 h-6" />}
               accent="amber"
+             
             />
             <KpiCard
-              title="Approved Free"
+              title="Free Listings"
               value={stats.free.toString()}
-              icon={<CheckCircle className="w-6 h-6" />}
+              icon={<Zap className="w-6 h-6" />}
               accent="green"
+              
             />
             <KpiCard
-              title="Pending Review"
+              title="Pending Companies request"
               value={stats.pending.toString()}
               icon={<Clock className="w-6 h-6" />}
               accent="red"
+              
             />
             <KpiCard
-              title="New Requests" // Title change kar dein taaki clear rahe
-              value={newRequestsOnly.toString()}
+              title="New service Requests"
+              value={stats.requests.toString()}
               icon={<ClipboardList className="w-6 h-6" />}
               accent="purple"
+              
             />
+
+            
           </>
         )}
       </section>
+
+
+
 
       {/* ===== QUICK ACTIONS ===== */}
       <section className="mb-16">
         <h2 className="text-xl font-bold text-slate-800 mb-6 flex items-center gap-2">
           Quick Actions
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <QuickAction
             title="Manage All Companies"
             href="/dashboard/admin/manage-companies"
@@ -136,8 +144,14 @@ export default function AdminDashboardPage() {
             icon={<Image />}
           />
            <QuickAction
-            title="Manage Portfolio"
+            title="Manage Ads"
             href="/dashboard/admin/ads"
+            icon={<Image />}
+          />
+
+            <QuickAction
+            title="Blogs Publish"
+            href="/dashboard/admin/blog"
             icon={<Image />}
           />
         </div>

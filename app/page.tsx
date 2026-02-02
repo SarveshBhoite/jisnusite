@@ -27,12 +27,17 @@ import {
   Headphones
 } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 
 export default function Home() {
   const [services, setServices] = useState<any[]>([]);
   const [portfolio, setPortfolio] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [ads, setAds] = useState<any[]>([]);
+  const [query, setQuery] = useState("");
+  const [location, setLocation] = useState("");
+  const router = useRouter();
 
   const categories = [
     { name: "Web Development", icon: "🌐", count: "500+" },
@@ -52,8 +57,19 @@ export default function Home() {
     { icon: Clock, value: "5+", label: "Years Exp." },
   ];
 
+const handleSearch = () => {
+  // If both are empty, we just go to the companies page to see all
+  const params = new URLSearchParams();
+  if (query) params.append("query", query);
+  if (location) params.append("location", location);
+
+  // Redirect to the companies page with the search parameters
+  router.push(`/companies?${params.toString()}`);
+};
+
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const [servRes, portRes, adsRes] = await Promise.all([
           fetch("/api/admin/services", { cache: "no-store" }),
@@ -65,11 +81,18 @@ export default function Home() {
           const adsData = await adsRes.json();
           setAds(Array.isArray(adsData) ? adsData : (adsData.data || []));
         }
-        const sData = await servRes.json();
-        const pData = await portRes.json();
-        setServices(sData.slice(0, 6));
-        const cleanPort = Array.isArray(pData) ? pData : (pData.data || []);
-        setPortfolio(cleanPort.slice(0, 4));
+
+        if (servRes.ok) {
+          const sData = await servRes.json();
+          const cleanServ = Array.isArray(sData) ? sData : (sData.data || []);
+          setServices(cleanServ.slice(0, 6));
+        }
+
+        if (portRes.ok) {
+          const pData = await portRes.json();
+          const cleanPort = Array.isArray(pData) ? pData : (pData.data || []);
+          setPortfolio(cleanPort.slice(0, 4));
+        }
       } catch (err) {
         console.error("Failed to fetch data", err);
       } finally {
@@ -82,18 +105,17 @@ export default function Home() {
   return (
     <main className="bg-slate-50 min-h-screen">
       
-      {/* ========== HERO SECTION - BRANDED COLOR THEME ========== */}
+      
+      {/* ========== HERO SECTION ========== */}
       <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
-          {/* Location Bar */}
           <div className="flex items-center gap-2 text-cyan-200 mb-6">
             <MapPin className="w-4 h-4" />
             <span className="text-sm font-medium">Serving All Over India</span>
             <ChevronRight className="w-4 h-4" />
           </div>
 
-          {/* Main Hero Content */}
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4">
@@ -106,21 +128,41 @@ export default function Home() {
               </p>
 
               {/* Search Bar */}
-              <div className="bg-white rounded-xl shadow-xl p-2 flex items-center gap-2 mb-6">
-                <div className="flex-1 flex items-center gap-3 px-4">
-                  <Search className="w-5 h-5 text-slate-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search for services..." 
+              <div className="bg-white rounded-xl shadow-xl p-2 flex flex-col md:flex-row items-center gap-2 mb-6 border border-slate-100">
+                <div className="flex-1 flex items-center gap-3 px-4 w-full">
+                  <Search className="w-5 h-5 text-slate-400 shrink-0" />
+                  <input
+                    type="text"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    placeholder="Search for services..."
                     className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
                   />
                 </div>
-                <button className="bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
+
+                <div className="hidden md:block w-px h-8 bg-slate-200 mx-2" />
+
+                <div className="flex-1 flex items-center gap-3 px-4 w-full border-t md:border-t-0 border-slate-100 pt-2 md:pt-0">
+                  <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
+                  <input
+                    type="text"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                    placeholder="Location (e.g. Mumbai)"
+                    className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
+                  />
+                </div>
+
+                <button 
+                  onClick={handleSearch}
+                  className="w-full md:w-auto bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
+                >
                   Search
                 </button>
               </div>
 
-              {/* Quick Stats */}
               <div className="flex flex-wrap gap-6">
                 {trustStats.map((stat, i) => (
                   <div key={i} className="flex items-center gap-2">
@@ -136,7 +178,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Side - Trust Badges */}
             <div className="hidden lg:block">
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500">
                 <div className="flex items-center gap-3 mb-4">
@@ -151,15 +192,15 @@ export default function Home() {
                 
                 <div className="space-y-3">
                   {[
-                    "✓ Government Registered Company",
-                    "✓ 5+ Years of Experience",
-                    "✓ 1000+ Satisfied Customers",
-                    "✓ 24/7 Customer Support",
-                    "✓ Money Back Guarantee"
+                    "Government Registered Company",
+                    "5+ Years of Experience",
+                    "1000+ Satisfied Customers",
+                    "24/7 Customer Support",
+                    "Money Back Guarantee"
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-2 text-slate-700 text-sm">
                       <CheckCircle2 className="w-4 h-4 text-cyan-500 flex-shrink-0" />
-                      {item.replace("✓ ", "")}
+                      {item}
                     </div>
                   ))}
                 </div>
@@ -180,28 +221,28 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* ========== CATEGORY GRID ========== */}
-      <section className="bg-white py-8 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
-            {categories.map((cat, i) => (
-              <Link 
-                href="/services" 
-                key={i}
-                className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
-              >
-                <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
-                  {cat.icon}
-                </div>
-                <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
-                  {cat.name}
-                </span>
-              </Link>
-            ))}
+{/* ========== CATEGORY GRID ========== */}
+<section className="bg-white py-8 border-b border-slate-200">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+      {categories.map((cat, i) => (
+        <Link 
+          // Match the URL parameter to "category"
+          href={`/services?category=${encodeURIComponent(cat.name)}`} 
+          key={i}
+          className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
+        >
+          <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
+            {cat.icon}
           </div>
-        </div>
-      </section>
+          <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
+            {cat.name}
+          </span>
+        </Link>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ========== OFFERS SECTION ========== */}
       {!loading && ads.length > 0 && (
@@ -251,8 +292,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Popular Services</h2>
-              <p className="text-sm text-slate-500">Top rated services near you</p>
+              <h2 className="text-xl font-bold text-slate-900">
+                {query || location ? "Search Results" : "Popular Services"}
+              </h2>
+              <p className="text-sm text-slate-500">
+                {query || location 
+                  ? `Showing results for "${query}" ${location ? `in ${location}` : ""}` 
+                  : "Top rated services near you"}
+              </p>
             </div>
             <Link href="/services" className="text-cyan-600 text-sm font-medium flex items-center gap-1">
               View All <ChevronRight className="w-4 h-4" />
@@ -260,10 +307,11 @@ export default function Home() {
           </div>
 
           {loading ? (
-            <div className="flex justify-center py-10">
-              <Loader2 className="w-8 h-8 animate-spin text-cyan-600" />
+            <div className="flex flex-col items-center justify-center py-20">
+              <Loader2 className="w-10 h-10 animate-spin text-cyan-600 mb-4" />
+              <p className="text-slate-500 animate-pulse">Searching for best services...</p>
             </div>
-          ) : (
+          ) : services.length > 0 ? (
             <div className="space-y-4">
               {services.map((s, index) => (
                 <div 
@@ -271,11 +319,11 @@ export default function Home() {
                   className="bg-white rounded-xl border border-slate-200 p-4 md:p-6 hover:shadow-lg transition-shadow"
                 >
                   <div className="flex flex-col md:flex-row gap-4">
-                    <div className="w-full md:w-40 h-32 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <div className="w-full md:w-40 h-32 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0 relative overflow-hidden">
                       {s.image ? (
                         <Image src={s.image} alt={s.title} fill className="object-cover" />
                       ) : (
-                        <span className="text-5xl font-black text-slate-200">{s.title.charAt(0)}</span>
+                        <span className="text-5xl font-black text-slate-200">{s.title?.charAt(0)}</span>
                       )}
                     </div>
 
@@ -330,9 +378,25 @@ export default function Home() {
                 </div>
               ))}
             </div>
+          ) : (
+            <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-slate-200">
+              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-8 h-8 text-slate-300" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900">No services found</h3>
+              <p className="text-slate-500 max-w-xs mx-auto text-sm">
+                We couldn&apos;t find anything matching your search. Try different keywords or check the location.
+              </p>
+              <button 
+                onClick={() => {setQuery(""); setLocation("");}} 
+                className="mt-4 text-cyan-600 font-bold text-sm underline"
+              >
+                Clear all filters
+              </button>
+            </div>
           )}
 
-          <div className="text-center mt-6">
+          <div className="text-center mt-8">
             <Link 
               href="/services"
               className="inline-flex items-center gap-2 px-8 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold transition-colors"
@@ -365,7 +429,7 @@ export default function Home() {
                 <div className="relative aspect-[4/3] overflow-hidden">
                   <Image 
                     src={project.image || "/project-placeholder.jpg"} 
-                    alt={project.companyName} 
+                    alt={project.companyName || "Project"} 
                     fill 
                     className="object-cover group-hover:scale-110 transition-transform duration-500" 
                   />
@@ -426,7 +490,6 @@ export default function Home() {
             ))}
           </div>
 
-          {/* Trust Banner */}
           <div className="mt-8 bg-gradient-to-r from-[#134e4a] to-[#0d9488] rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">

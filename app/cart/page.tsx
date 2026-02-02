@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Lock } from "lucide-react"
+import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Lock,ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "next-auth/react" // Step 1: Session import karein
 
@@ -75,9 +75,11 @@ const payload = {
   };
 
   return (
-    <main className="pt-32 pb-24 bg-[#fcfcfc] min-h-screen">
+    <main className="pt-28 pb-24 bg-[#fcfcfc] min-h-screen">
+       <Link href="/" className="md:hidden text-primary text-lg font-bold flex items-center gap-1 mb-5">
+                                 <ChevronLeft className="w-4 h-4" /> Back to Home
+                              </Link>
       <div className="max-w-5xl mx-auto px-4">
-        
         <div className="flex items-center justify-between mb-10">
           <h1 className="text-3xl font-black text-slate-900 flex items-center gap-3 italic uppercase">
             <ShoppingCart className="w-8 h-8 text-blue-600" />

@@ -68,7 +68,7 @@ export default function EditCompanyPage() {
     <main className="min-h-screen bg-[#F8FAFC] pb-20">
       {/* --- STICKY HEADER --- */}
       <div className="bg-white border-b sticky top-0 z-50 px-6 py-4 shadow-sm">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="max-w-7xl mx-auto flex justify-between items-center mt-20">
           <div className="flex items-center gap-4">
             <Link href="/dashboard/admin/manage-companies" className="p-2 hover:bg-slate-100 rounded-full transition">
               <ArrowLeft className="w-5 h-5" />
@@ -78,7 +78,7 @@ export default function EditCompanyPage() {
               <h1 className="text-xl font-black">{formData.name || "Loading..."}</h1>
             </div>
           </div>
-          <button onClick={handleUpdate} disabled={updating} className="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all active:scale-95">
+          <button onClick={handleUpdate} disabled={updating} className="bg-primary text-white px-8 py-3 rounded-2xl font-bold flex items-center gap-2  shadow-xl  transition-all active:scale-95">
             {updating ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
             Save Business Profile
           </button>
