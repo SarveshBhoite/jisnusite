@@ -82,7 +82,7 @@ export default function AdminBlogPage() {
             <input className="border p-3 rounded-lg bg-white" placeholder="Blog Title" value={form.title} onChange={e => setForm({...form, title: e.target.value})} required />
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <input className="border p-3 rounded-lg bg-white" placeholder="Category" value={form.category} onChange={e => setForm({...form, category: e.target.value})} required />
-              <input className="border p-3 rounded-lg bg-white" placeholder="Read Time (e.g. 5 min)" value={form.readTime} onChange={e => setForm({...form, readTime: e.target.value})} required />
+             
             </div>
             <input className="border p-3 rounded-lg bg-white" placeholder="Image URL" value={form.image} onChange={e => setForm({...form, image: e.target.value})} required />
             <textarea className="border p-3 rounded-lg bg-white" placeholder="Short Excerpt" value={form.excerpt} onChange={e => setForm({...form, excerpt: e.target.value})} required />

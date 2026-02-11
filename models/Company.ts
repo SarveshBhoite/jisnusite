@@ -9,7 +9,7 @@ const CompanySchema = new mongoose.Schema({
   website: { type: String },
   whatsapp: { type: String },
   email: { type: String },
-  password: { type: String, required: true },
+  password: { type: String, required: true ,select: false },
   logo: { type: String },
   gallery: [{ type: String }], // Array of Base64 strings
   services: [{ title: String, desc: String }], // Updated to include desc

@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
-import { Plus, Trash2, Image as ImageIcon, Loader2 } from "lucide-react"
+import Link from "next/link"
+import { Plus, Trash2, Image as ImageIcon, Loader2,ChevronLeft  } from "lucide-react"
 
 export default function AdminPortfolio() {
   const [projects, setProjects] = useState([])
@@ -37,6 +38,12 @@ export default function AdminPortfolio() {
 
   return (
     <div className="pt-25 max-w-6xl mx-auto bg-white min-h-screen">
+      <Link
+            href="/dashboard/admin"
+            className="text-slate-600 text-sm font-bold flex items-center gap-1 hover:text-blue-600 transition"
+          >
+            <ChevronLeft className="w-4 h-4" /> Back to Home
+          </Link>
       <h1 className="text-3xl font-black uppercase italic mb-8">Portfolio Manager</h1>
 
       {/* Add Project Form */}

@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Search, MapPin, Loader2, Crown, Building2, CheckCircle2 } from "lucide-react"
+import { Search, MapPin, Loader2, Crown, Building2, CheckCircle2, ChevronLeft } from "lucide-react"
 
 export default function ManageCompaniesPage() {
-  
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [filter, setFilter] = useState("All")
@@ -14,13 +13,9 @@ export default function ManageCompaniesPage() {
   useEffect(() => {
     const fetchVerifiedCompanies = async () => {
       try {
-        // We now call the optimized API that sends 'isActuallyPaid' directly
         const res = await fetch("/api/companies/all")
         const data = await res.json()
-        
-        if (Array.isArray(data)) {
-          setCompanies(data)
-        }
+        if (Array.isArray(data)) setCompanies(data)
       } catch (err) {
         console.error("Failed to load companies:", err)
       } finally {
@@ -30,57 +25,74 @@ export default function ManageCompaniesPage() {
     fetchVerifiedCompanies()
   }, [])
 
-  // ================= FILTER & SEARCH LOGIC =================
   const filteredCompanies = companies.filter((company: any) => {
-    // 1. Search by Name
     const matchesSearch = company.name?.toLowerCase().includes(search.toLowerCase())
-
-    // 2. Filter by Paid/Free Status
     const activeFilter = filter.toLowerCase()
     let matchesFilter = true
-    
     if (activeFilter === "paid") matchesFilter = company.isActuallyPaid === true
     if (activeFilter === "free") matchesFilter = company.isActuallyPaid !== true
-
     return matchesSearch && matchesFilter
   })
 
   if (loading) return (
     <div className="flex justify-center items-center h-screen bg-white">
-      <div className="flex flex-col items-center gap-4">
-        <Loader2 className="w-10 h-10 animate-spin text-slate-900" />
-        <p className="text-sm font-bold text-slate-400 uppercase tracking-widest text-center">
-          Synchronizing Business Directory...
+      <div className="flex flex-col items-center gap-4 px-6 text-center">
+        <Loader2 className="w-10 h-10 animate-spin text-blue-600" />
+        <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+          Synchronizing Directory...
         </p>
       </div>
     </div>
   )
 
   return (
-    <main className="pt-24 bg-[#fcfcfc] min-h-screen">
-      {/* ===== STICKY HEADER & FILTERS ===== */}
-      <section className="bg-white border-b sticky top-0 z-20 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
-             <div className="relative w-full md:w-64">
-               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-               <input 
-                  type="text" 
-                  placeholder="Search business name..." 
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl outline-none w-full text-sm focus:border-blue-500 transition-colors"
-               />
-             </div>
+    <main className="bg-[#fcfcfc] min-h-screen pb-20">
+      {/* ===== TOP NAV ===== */}
+      <div className="pt-20 px-4 max-w-7xl mx-auto">
+        <Link
+          href="/dashboard/admin"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-slate-600 text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition shadow-sm"
+        >
+          <ChevronLeft className="w-4 h-4" /> Back Home
+        </Link>
+      </div>
 
-             <div className="flex bg-slate-100 p-1 rounded-xl">
+      {/* ===== STICKY HEADER & FILTERS ===== */}
+      <section className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-30 mt-4 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4 space-y-4">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <h1 className="text-xl font-black text-slate-900 uppercase italic">Manage Directory</h1>
+            
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                {filteredCompanies.length} Active Records
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-3">
+            {/* Search Bar */}
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input 
+                type="text" 
+                placeholder="Search business name..." 
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl outline-none text-sm font-medium focus:bg-white focus:border-blue-500 transition-all shadow-inner"
+              />
+            </div>
+
+            {/* Segmented Filter */}
+            <div className="flex bg-slate-100 p-1.5 rounded-2xl overflow-x-auto no-scrollbar">
               {["All", "Paid", "Free"].map((type) => (
                 <button
                   key={type}
                   onClick={() => setFilter(type)}
-                  className={`px-6 py-2 rounded-lg text-xs font-black transition-all ${
+                  className={`flex-1 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
                     filter === type 
-                    ? "bg-white text-slate-900 shadow-sm" 
+                    ? "bg-white text-slate-900 shadow-md" 
                     : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
@@ -89,71 +101,77 @@ export default function ManageCompaniesPage() {
               ))}
             </div>
           </div>
-          
-          <div className="text-right">
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Platform Records</p>
-            <p className="text-sm font-bold text-slate-900">{filteredCompanies.length} Verified Businesses</p>
-          </div>
         </div>
       </section>
 
       {/* ===== LISTING SECTION ===== */}
-      <section className="py-10">
+      <section className="py-8">
         <div className="max-w-7xl mx-auto px-4 space-y-4">
           {filteredCompanies.map((company: any) => (
             <div 
               key={company._id} 
-              className={`p-5 bg-white rounded-[2rem] border transition-all hover:shadow-md ${
-                company.isActuallyPaid ? 'border-amber-200 bg-amber-50/10' : 'border-slate-100'
+              className={`group p-4 md:p-6 bg-white rounded-[2rem] border transition-all hover:shadow-xl hover:-translate-y-1 ${
+                company.isActuallyPaid ? 'border-amber-200 bg-amber-50/5' : 'border-slate-100'
               }`}
             >
-              <div className="flex flex-col md:flex-row items-center gap-6">
-                {/* Logo */}
-                <div className={`w-20 h-20 rounded-2xl bg-white flex-shrink-0 border p-2 shadow-sm ${
-                  company.isActuallyPaid ? 'border-amber-200' : 'border-slate-100'
+              <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-8">
+                {/* Logo with Status Ring */}
+                <div className={`relative w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-white flex-shrink-0 border-4 p-2 shadow-sm transition-transform group-hover:rotate-2 ${
+                  company.isActuallyPaid ? 'border-amber-100 shadow-amber-100' : 'border-slate-50'
                 }`}>
                   <img 
                     src={company.logo || '/placeholder.png'} 
                     className="w-full h-full object-contain" 
                     alt={company.name} 
                   />
+                  {company.isActuallyPaid && (
+                    <div className="absolute -top-2 -right-2 bg-amber-500 p-1.5 rounded-lg shadow-lg">
+                      <Crown className="w-3 h-3 text-white fill-white" />
+                    </div>
+                  )}
                 </div>
                 
                 {/* Business Info */}
-                <div className="flex-1 text-center md:text-left">
-                  <div className="flex flex-col md:flex-row items-center gap-3 mb-2">
-                    <h3 className="text-lg font-bold text-slate-900">{company.name}</h3>
-                    {company.isActuallyPaid ? (
-                      <span className="bg-amber-500 text-white text-[9px] px-2.5 py-1 rounded-full font-black uppercase flex items-center gap-1 shadow-sm">
-                        <Crown className="w-3 h-3 fill-white" /> Featured Partner
+                <div className="flex-1 text-center sm:text-left space-y-3">
+                  <div className="space-y-1">
+                    <h3 className="text-xl font-black text-slate-900 leading-tight uppercase tracking-tight">
+                      {company.name}
+                    </h3>
+                    <div className="flex flex-wrap justify-center sm:justify-start items-center gap-2">
+                      <span className="bg-blue-600 text-white text-[8px] px-2 py-1 rounded-md font-black uppercase tracking-tighter">
+                        {company.category}
                       </span>
-                    ) : (
-                      <span className="bg-slate-100 text-slate-400 text-[9px] px-2.5 py-1 rounded-full font-black uppercase border border-slate-200">
-                        Standard Listing
-                      </span>
-                    )}
+                      {company.isActuallyPaid ? (
+                        <span className="bg-emerald-50 text-emerald-600 text-[8px] px-2 py-1 rounded-md font-black uppercase tracking-tighter border border-emerald-100">
+                          Active Premium
+                        </span>
+                      ) : (
+                        <span className="bg-slate-100 text-slate-400 text-[8px] px-2 py-1 rounded-md font-black uppercase tracking-tighter border border-slate-200">
+                          Basic Tier
+                        </span>
+                      )}
+                    </div>
                   </div>
                   
-                  <div className="flex flex-wrap justify-center md:justify-start items-center gap-4 text-xs font-bold">
-                    <span className="flex items-center gap-1 text-slate-600">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400" /> {company.location || "Location Pending"}
-                    </span>
-                    <span className="text-blue-600 px-2 py-0.5 bg-blue-50 rounded-md uppercase text-[10px]">
-                      {company.category}
-                    </span>
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-[11px] font-bold text-slate-500">
+                    <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-red-400" />
+                      <span className="truncate max-w-[200px]">{company.location || "Unspecified"}</span>
+                    </div>
                     {company.isActuallyPaid && (
-                      <span className="text-emerald-600 flex items-center gap-1 text-[10px] uppercase tracking-tighter">
-                        <CheckCircle2 className="w-3 h-3" /> Active Paid Status
-                      </span>
+                      <div className="hidden sm:flex items-center gap-1.5 text-emerald-600">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Verified Billing</span>
+                      </div>
                     )}
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-3">
-                  <Link href={`/dashboard/admin/manage-companies/${company._id}`}>
-                    <button className="px-8 py-3.5 bg-slate-900 text-white rounded-2xl text-sm font-bold hover:bg-blue-600 transition-all shadow-lg active:scale-95">
-                      Edit Profile
+                {/* Mobile Optimized Actions */}
+                <div className="w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-none">
+                  <Link href={`/dashboard/admin/manage-companies/${company._id}`} className="block">
+                    <button className="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 group-hover:gap-4">
+                      Modify <ChevronLeft className="w-4 h-4 rotate-180" />
                     </button>
                   </Link>
                 </div>
@@ -163,12 +181,14 @@ export default function ManageCompaniesPage() {
 
           {/* Empty State */}
           {filteredCompanies.length === 0 && (
-            <div className="text-center py-20 bg-white border border-dashed border-slate-200 rounded-[3rem]">
-              <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Building2 className="w-8 h-8 text-slate-300" />
+            <div className="text-center py-20 bg-white border-2 border-dashed border-slate-200 rounded-[3rem] px-6">
+              <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                <Building2 className="w-10 h-10 text-slate-300" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">No results match your criteria</h3>
-              <p className="text-slate-400 text-sm mt-2">Try adjusting your search or filters.</p>
+              <h3 className="text-xl font-black text-slate-900 uppercase">No Data Found</h3>
+              <p className="text-slate-400 text-sm mt-2 max-w-xs mx-auto font-medium leading-relaxed italic">
+                Try adjusting your filters or checking the spelling of the business name.
+              </p>
             </div>
           )}
         </div>

@@ -16,30 +16,42 @@ export default function ProfilePage() {
   })
 
   // 1. Fetch Profile Data from DB
-  useEffect(() => {
-const fetchProfile = async () => {
-  try {
+ useEffect(() => {
+  const fetchProfile = async () => {
+    // If we don't have a session yet, keep waiting
+    if (status === "loading") return;
 
-    if (status !== "authenticated" || !session?.user?.email) return;
-    const res = await fetch(`/api/client/profile?email=${session.user.email}`);
-    
-    // Check if the response is actually JSON
-    const contentType = res.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      const text = await res.text();
-      console.error("Expected JSON but got HTML. This usually means a 404 or 500 error page.");
-      console.log("Response starts with:", text.substring(0, 100));
+    // If no one is logged in, stop loading and show empty state
+    if (status === "unauthenticated") {
+      setLoading(false);
       return;
     }
 
-    const data = await res.json();
-    setProfile(data);
-  } catch (error) {
-    console.error("Fetch failed:", error);
-  }
-};
-    fetchProfile()
-  }, [session, status])
+    try {
+      if (!session?.user?.email) return;
+      
+      const res = await fetch(`/api/client/profile?email=${session.user.email}`);
+      
+      if (res.ok) {
+        const data = await res.json();
+        // Update profile state with DB data
+        setProfile({
+          name: data.name || "",
+          email: data.email || session.user.email,
+          phone: data.phone || "",
+          company: data.company || "",
+        });
+      }
+    } catch (error) {
+      console.error("Fetch failed:", error);
+    } finally {
+      // THIS IS THE FIX: This runs whether the fetch succeeds or fails
+      setLoading(false);
+    }
+  };
+
+  fetchProfile();
+}, [session, status]);
 
   // 2. Handle Save Changes
   const handleSaveProfile = async () => {

@@ -154,9 +154,11 @@ export default function Navbar() {
               
               {/* Mobile Auth/CTA */}
               {status === "authenticated" ? (
-                 <Link href="/dashboard/client" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
-                    <User className="w-5 h-5" /> My Dashboard
-                 </Link>
+                 <><Link href="/dashboard/client" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
+                  <User className="w-5 h-5" /> My Dashboard
+                </Link><button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50">
+                    <LogOut className="w-4 h-4" /> Sign Out
+                  </button></>
               ) : (
                 <Link href="/login" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
                     <User className="w-5 h-5" /> Login to Account

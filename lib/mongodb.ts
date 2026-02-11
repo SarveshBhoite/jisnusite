@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 // 1. Get the URI from your .env file
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://SiddhiBhoite:Siddhi2003@cluster0.nbnwzkr.mongodb.net/jisnudb?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI || '';
 
 if (!MONGODB_URI) {
   throw new Error(
@@ -10,11 +10,7 @@ if (!MONGODB_URI) {
 }
 
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
+
 let cached = (global as any).mongoose;
 
 if (!cached) {

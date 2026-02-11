@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { Calendar, User } from "lucide-react";
+import { Calendar, ChevronLeft, User } from "lucide-react";
 import Blog from "@/models/Blog";
 import dbConnect from "@/lib/mongodb";
+
 
 export default async function BlogPage() {
   await dbConnect();
@@ -15,6 +16,12 @@ export default async function BlogPage() {
   return (
     <main className="pt-28">
       <section className="pb-10 max-w-7xl mx-auto px-4">
+         <Link
+            href="/"
+            className="text-slate-600 text-sm font-bold flex items-center gap-1 hover:text-blue-600 transition mb-3"
+          >
+            <ChevronLeft className="w-4 h-4" /> Back to Home
+          </Link>
         <h1 className="text-4xl font-bold mb-4">Insights & Articles</h1>
         <p className="text-slate-500">Thoughts on digital growth from our team.</p>
       </section>

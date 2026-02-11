@@ -135,7 +135,7 @@ export default function ListYourCompanyPage() {
                       <option>Professional Services</option>
                       <option>Education</option>
                       <option>Hotels</option>
-                      <option>Decoration</option>
+                      <option>Hotels</option>
                     </select>
                   </div>
 

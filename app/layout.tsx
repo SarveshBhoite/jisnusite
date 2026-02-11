@@ -6,6 +6,8 @@ import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer"
 import "./globals.css"
 import AuthProvider from "@/components/SessionProvider"
+// Import the new component (assuming you save it in components/PricingPopup.tsx)
+import PricingPopup from "@/components/PricingPopup"
 
 const sora = Sora({
   subsets: ["latin"],
@@ -21,25 +23,8 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Jisnu Digital Solutions - Premium Digital Services",
-  description:
-    "Professional digital solutions for modern businesses. Web development, design, SEO, and digital strategy.",
-  icons: {
-    icon: [
-      {
-        url: "/icon.jpeg",
-        media: "(prefers-color-scheme: light)",
-      },
-      {
-        url: "/icon.jpeg",
-        media: "(prefers-color-scheme: dark)",
-      },
-      {
-        url: "/icon.jpeg",
-        type: "image/svg+xml",
-      },
-    ],
-    apple: "/icon.jpeg",
-  },
+  description: "Professional digital solutions for modern businesses.",
+  icons: { icon: "/icon.jpeg", apple: "/icon.jpeg" },
 }
 
 export default function RootLayout({
@@ -49,11 +34,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${sora.variable} ${inter.variable} font-sans antialiased`}
-      >
+      <body className={`${sora.variable} ${inter.variable} font-sans antialiased`}>
         <AuthProvider>
           <Navbar />
+          {/* The Popup lives here, it will handle its own "show/hide" logic */}
+          <PricingPopup /> 
           <main className="min-h-screen">{children}</main>
           <Footer />
           <Analytics />

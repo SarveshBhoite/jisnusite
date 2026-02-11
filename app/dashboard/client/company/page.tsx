@@ -19,7 +19,6 @@ export default function ClientCompanyPage() {
     social: { instagram: "", facebook: "", linkedin: "", twitter: "" }
   })
 
-  // State for Time Picker UI
   const [tempSlot, setTempSlot] = useState({ days: "Mon - Fri", time: "09:00 AM - 06:00 PM" })
 
   useEffect(() => {
@@ -69,30 +68,35 @@ export default function ClientCompanyPage() {
 
   return (
     <main className="min-h-screen bg-[#F8FAFC] pb-20">
-      {/* STICKY HEADER */}
-      <div className="bg-white border-b sticky top-0 z-50 px-6 py-4 flex justify-between items-center shadow-sm">
-        <div>
-          <h1 className="text-xl font-black text-slate-800">Edit Listing</h1>
-          <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">Model-Sync Enabled</p>
+      {/* STICKY HEADER - Mobile Responsive */}
+      <div className="bg-white border-b sticky top-0 md:top-[64px] z-30 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center shadow-sm">
+        <div className="min-w-0">
+          <h1 className="text-lg md:text-xl font-black text-slate-800 truncate">Edit Listing</h1>
+          <p className="text-[9px] md:text-[10px] font-bold text-blue-600 uppercase tracking-widest">Model-Sync Enabled</p>
         </div>
-        <button onClick={handleUpdate} disabled={updating} className="bg-blue-600 text-white px-8 py-3 rounded-2xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">
+        <button 
+          onClick={handleUpdate} 
+          disabled={updating} 
+          className="bg-blue-600 text-white px-4 md:px-8 py-2.5 md:py-3 rounded-xl md:rounded-2xl text-sm md:text-base font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
+        >
           {updating ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
-          Update Changes
+          <span className="hidden sm:inline">Update Changes</span>
+          <span className="sm:hidden">Save</span>
         </button>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-10 grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 mt-6 md:mt-10 grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="lg:col-span-2 space-y-6 md:space-y-8">
           
           {/* 1. BASIC IDENTITY */}
-          <div className="bg-white p-8 rounded-[2.5rem] border shadow-sm space-y-6">
+          <div className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border shadow-sm space-y-6">
             <div className="flex flex-col md:flex-row gap-6 items-center">
-               <div className="relative group">
-                  <div className="w-32 h-32 rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden">
+                <div className="relative group shrink-0">
+                  <div className="w-28 h-28 md:w-32 md:h-32 rounded-3xl border-2 border-dashed border-slate-200 bg-slate-50 flex items-center justify-center overflow-hidden">
                     {formData.logo ? <img src={formData.logo} className="w-full h-full object-contain p-2" /> : <ImageIcon className="text-slate-300 w-8 h-8" />}
                   </div>
-                  <label className="absolute inset-0 bg-black/40 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-all rounded-3xl">
-                    UPLOAD LOGO
+                  <label className="absolute inset-0 bg-black/40 text-white text-[10px] font-bold opacity-100 md:opacity-0 group-hover:opacity-100 flex items-center justify-center cursor-pointer transition-all rounded-3xl">
+                    CHANGE LOGO
                     <input type="file" hidden accept="image/*" onChange={(e:any) => {
                       const file = e.target.files[0];
                       const reader = new FileReader();
@@ -100,30 +104,30 @@ export default function ClientCompanyPage() {
                       reader.readAsDataURL(file);
                     }} />
                   </label>
-               </div>
-               <div className="flex-1 w-full space-y-4">
+                </div>
+                <div className="flex-1 w-full space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] font-black text-slate-400">BUSINESS NAME</label>
-                      <input value={formData.name} onChange={(e)=>setFormData({...formData, name: e.target.value})} className="w-full p-3 rounded-xl border bg-slate-50 outline-none focus:border-blue-500" />
+                      <input value={formData.name} onChange={(e)=>setFormData({...formData, name: e.target.value})} className="w-full p-3 rounded-xl border bg-slate-50 outline-none focus:border-blue-500 text-sm" />
                     </div>
                     <div className="space-y-1">
                       <label className="text-[10px] font-black text-slate-400">CATEGORY</label>
-                      <input value={formData.category} onChange={(e)=>setFormData({...formData, category: e.target.value})} className="w-full p-3 rounded-xl border bg-slate-50 outline-none focus:border-blue-500" />
+                      <input value={formData.category} onChange={(e)=>setFormData({...formData, category: e.target.value})} className="w-full p-3 rounded-xl border bg-slate-50 outline-none focus:border-blue-500 text-sm" />
                     </div>
                   </div>
                   <div className="space-y-1">
                     <label className="text-[10px] font-black text-slate-400">TAGLINE</label>
-                    <input value={formData.description} onChange={(e)=>setFormData({...formData, description: e.target.value})} className="w-full p-3 rounded-xl border bg-slate-50 outline-none focus:border-blue-500" />
+                    <input value={formData.description} onChange={(e)=>setFormData({...formData, description: e.target.value})} className="w-full p-3 rounded-xl border bg-slate-50 outline-none focus:border-blue-500 text-sm" />
                   </div>
-               </div>
+                </div>
             </div>
 
-            {/* GALLERY */}
+            {/* GALLERY - Responsive Grid */}
             <div className="pt-6 border-t space-y-4">
               <div className="flex justify-between items-center">
-                <h3 className="font-black text-slate-900 flex items-center gap-2"><LayoutGrid className="w-5 h-5 text-blue-600" /> Gallery</h3>
-                <label className="text-xs font-bold text-blue-600 cursor-pointer bg-blue-50 px-3 py-1 rounded-full">
+                <h3 className="font-black text-slate-900 flex items-center gap-2 text-sm md:text-base"><LayoutGrid className="w-4 md:w-5 h-4 md:h-5 text-blue-600" /> Gallery</h3>
+                <label className="text-[10px] md:text-xs font-bold text-blue-600 cursor-pointer bg-blue-50 px-3 py-1.5 rounded-full">
                   + Add Photos
                   <input type="file" multiple hidden onChange={(e:any)=>{
                     const files = Array.from(e.target.files);
@@ -135,11 +139,11 @@ export default function ClientCompanyPage() {
                   }} />
                 </label>
               </div>
-              <div className="grid grid-cols-5 gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 md:gap-3">
                 {formData.gallery?.map((img:string, i:number) => (
                   <div key={i} className="aspect-square rounded-xl border relative group">
                     <img src={img} className="w-full h-full object-cover rounded-xl" />
-                    <button onClick={() => setFormData({...formData, gallery: formData.gallery.filter((_:any,idx:number)=>idx!==i)})} className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-all"><X className="w-3 h-3" /></button>
+                    <button onClick={() => setFormData({...formData, gallery: formData.gallery.filter((_:any,idx:number)=>idx!==i)})} className="absolute -top-1.5 -right-1.5 bg-red-500 text-white rounded-full p-1 shadow-md"><X className="w-3 h-3" /></button>
                   </div>
                 ))}
               </div>
@@ -147,75 +151,75 @@ export default function ClientCompanyPage() {
           </div>
 
           {/* 2. OVERVIEW & INCLUSIONS */}
-          <div className="bg-white p-8 rounded-[2.5rem] border shadow-sm space-y-6">
-            <h3 className="font-black text-lg flex items-center gap-2"><Info className="w-5 h-5 text-blue-600" /> Detailed Overview</h3>
-            <textarea rows={5} value={formData.detailedOverview} onChange={(e)=>setFormData({...formData, detailedOverview: e.target.value})} className="w-full p-4 rounded-2xl bg-slate-50 border outline-none resize-none" placeholder="Explain your business in depth..." />
+          <div className="bg-white p-5 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border shadow-sm space-y-6">
+            <h3 className="font-black text-base md:text-lg flex items-center gap-2"><Info className="w-5 h-5 text-blue-600" /> Detailed Overview</h3>
+            <textarea rows={5} value={formData.detailedOverview} onChange={(e)=>setFormData({...formData, detailedOverview: e.target.value})} className="w-full p-4 rounded-2xl bg-slate-50 border outline-none resize-none text-sm" placeholder="Explain your business in depth..." />
             
             <div className="space-y-4 pt-6 border-t">
-              <h3 className="font-black flex items-center gap-2"><Sparkles className="w-5 h-5 text-blue-600" /> Inclusions / Amenities</h3>
-              <div className="flex flex-wrap gap-2 p-4 bg-slate-50 rounded-2xl border border-dashed">
+              <h3 className="font-black text-sm md:text-base flex items-center gap-2"><Sparkles className="w-5 h-5 text-blue-600" /> Inclusions / Amenities</h3>
+              <div className="flex flex-wrap gap-2 p-3 md:p-4 bg-slate-50 rounded-2xl border border-dashed">
                 {formData.inclusions?.map((inc: string, i: number) => (
-                  <div key={i} className="flex items-center gap-2 bg-white border border-blue-100 text-blue-700 px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
+                  <div key={i} className="flex items-center gap-2 bg-white border border-blue-100 text-blue-700 px-3 md:px-4 py-1.5 md:py-2 rounded-xl text-[10px] md:text-xs font-bold shadow-sm">
                     {inc}
                     <X className="w-3 h-3 cursor-pointer hover:text-red-500" onClick={() => setFormData({...formData, inclusions: formData.inclusions.filter((_:any, idx:number) => idx !== i)})} />
                   </div>
                 ))}
-                <input onKeyDown={(e: any) => { if (e.key === 'Enter' && e.target.value) { setFormData({...formData, inclusions: [...formData.inclusions, e.target.value]}); e.target.value = ''; } }} placeholder="Add and press Enter..." className="text-xs p-2 bg-transparent outline-none focus:border-blue-500 ml-2" />
+                <input onKeyDown={(e: any) => { if (e.key === 'Enter' && e.target.value) { setFormData({...formData, inclusions: [...formData.inclusions, e.target.value]}); e.target.value = ''; } }} placeholder="Add and press Enter..." className="text-[10px] md:text-xs p-2 bg-transparent outline-none focus:border-blue-500 flex-1 min-w-[120px]" />
               </div>
             </div>
           </div>
         </div>
 
-        {/* SIDEBAR */}
-        <div className="space-y-8">
+        {/* SIDEBAR - Stacks below on mobile */}
+        <div className="space-y-6 md:space-y-8">
           {/* SOCIAL MEDIA */}
-          <div className="bg-white p-8 rounded-[2.5rem] border shadow-sm space-y-4">
-            <h3 className="font-black">Social Media</h3>
-            <div className="space-y-3">
+          <div className="bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border shadow-sm space-y-4">
+            <h3 className="font-black text-sm md:text-base">Social Media</h3>
+            <div className="grid grid-cols-1 gap-3">
               {[
                 { icon: <Instagram className="w-4 h-4 text-pink-500" />, key: "instagram" },
                 { icon: <Facebook className="w-4 h-4 text-blue-600" />, key: "facebook" },
                 { icon: <Linkedin className="w-4 h-4 text-blue-700" />, key: "linkedin" },
                 { icon: <Twitter className="w-4 h-4 text-sky-500" />, key: "twitter" }
               ].map((item) => (
-                <div key={item.key} className="flex items-center gap-3 p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                <div key={item.key} className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl md:rounded-2xl border border-slate-100">
                   {item.icon}
-                  <input value={formData.social?.[item.key]} onChange={(e)=>setFormData({...formData, social: {...formData.social, [item.key]: e.target.value}})} placeholder={`${item.key.charAt(0).toUpperCase() + item.key.slice(1)} URL`} className="bg-transparent text-[11px] w-full outline-none" />
+                  <input value={formData.social?.[item.key]} onChange={(e)=>setFormData({...formData, social: {...formData.social, [item.key]: e.target.value}})} placeholder={`${item.key.charAt(0).toUpperCase() + item.key.slice(1)} URL`} className="bg-transparent text-[10px] md:text-[11px] w-full outline-none" />
                 </div>
               ))}
             </div>
           </div>
 
-          {/* WORKING HOURS (TIME PICKER) */}
-          <div className="bg-white p-8 rounded-[2.5rem] border shadow-sm space-y-4">
-            <h3 className="font-black flex items-center gap-2"><Clock className="w-5 h-5 text-green-600" /> Working Hours</h3>
+          {/* WORKING HOURS */}
+          <div className="bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border shadow-sm space-y-4">
+            <h3 className="font-black text-sm md:text-base flex items-center gap-2"><Clock className="w-5 h-5 text-green-600" /> Working Hours</h3>
             <div className="space-y-2">
               {formData.workingHours?.map((hour: string, i: number) => (
-                <div key={i} className="flex items-center justify-between bg-green-50 p-3 rounded-xl border border-green-100">
-                  <span className="text-[11px] font-bold text-green-700">{hour}</span>
+                <div key={i} className="flex items-center justify-between bg-green-50 p-2.5 md:p-3 rounded-xl border border-green-100">
+                  <span className="text-[10px] md:text-[11px] font-bold text-green-700">{hour}</span>
                   <X className="w-4 h-4 text-red-400 cursor-pointer" onClick={() => setFormData({...formData, workingHours: formData.workingHours.filter((_:any, idx:number) => idx !== i)})} />
                 </div>
               ))}
             </div>
             <div className="p-4 bg-slate-50 rounded-2xl border space-y-3">
-              <select value={tempSlot.days} onChange={(e)=>setTempSlot({...tempSlot, days: e.target.value})} className="w-full p-2 rounded-lg border text-[11px] font-bold">
+              <select value={tempSlot.days} onChange={(e)=>setTempSlot({...tempSlot, days: e.target.value})} className="w-full p-2.5 rounded-lg border text-[11px] font-bold bg-white">
                 <option value="Mon - Fri">Mon - Fri</option>
                 <option value="Sat - Sun">Sat - Sun</option>
                 <option value="All Week">All Week (24/7)</option>
                 <option value="Mon - Sat">Mon - Sat</option>
               </select>
-              <input value={tempSlot.time} onChange={(e)=>setTempSlot({...tempSlot, time: e.target.value})} placeholder="09:00 AM - 06:00 PM" className="w-full p-2 rounded-lg border text-[11px]" />
-              <button onClick={addTimeSlot} className="w-full py-2 bg-slate-900 text-white rounded-xl text-[10px] font-bold">Add Slot</button>
+              <input value={tempSlot.time} onChange={(e)=>setTempSlot({...tempSlot, time: e.target.value})} placeholder="09:00 AM - 06:00 PM" className="w-full p-2.5 rounded-lg border text-[11px] bg-white" />
+              <button onClick={addTimeSlot} className="w-full py-2.5 bg-slate-900 text-white rounded-xl text-[10px] font-bold">Add Slot</button>
             </div>
           </div>
 
           {/* CONTACT */}
-          <div className="bg-white p-8 rounded-[2.5rem] border shadow-sm space-y-4">
-            <h3 className="font-black flex items-center gap-2"><Smartphone className="w-5 h-5 text-blue-600" /> Contact Info</h3>
+          <div className="bg-white p-6 md:p-8 rounded-[1.5rem] md:rounded-[2.5rem] border shadow-sm space-y-4">
+            <h3 className="font-black text-sm md:text-base flex items-center gap-2"><Smartphone className="w-5 h-5 text-blue-600" /> Contact Info</h3>
             <div className="space-y-3">
               <input value={formData.whatsapp} onChange={(e)=>setFormData({...formData, whatsapp: e.target.value})} placeholder="WhatsApp Number" className="w-full p-3 rounded-xl border bg-slate-50 text-xs" />
               <input value={formData.website} onChange={(e)=>setFormData({...formData, website: e.target.value})} placeholder="Website Link" className="w-full p-3 rounded-xl border bg-slate-50 text-xs" />
-              <textarea value={formData.location} onChange={(e)=>setFormData({...formData, location: e.target.value})} placeholder="Google Maps Embed URL / Address" className="w-full p-3 rounded-xl border bg-slate-50 text-xs h-20 resize-none" />
+              <textarea value={formData.location} onChange={(e)=>setFormData({...formData, location: e.target.value})} placeholder="Address / Location" className="w-full p-3 rounded-xl border bg-slate-50 text-xs h-20 resize-none" />
             </div>
           </div>
         </div>

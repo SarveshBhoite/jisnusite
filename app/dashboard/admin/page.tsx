@@ -154,6 +154,12 @@ export default function AdminDashboardPage() {
             href="/dashboard/admin/blog"
             icon={<Image />}
           />
+
+            <QuickAction
+            title="Publish banner"
+            href="/dashboard/admin/banner"
+            icon={<Image />}
+          />
         </div>
       </section>
 
