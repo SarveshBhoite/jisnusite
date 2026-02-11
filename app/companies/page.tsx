@@ -231,66 +231,117 @@ useEffect(() => {
       </section>
 
       {/* MAIN LIST */}
-      <section className="py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="mb-6">
-            <h2 className="text-xl font-bold text-slate-800">
-              {filteredCompanies.length}{" "}
-              <span className="text-slate-400 font-medium lowercase">
-                {activeFilter} listings found
-              </span>
-            </h2>
+<div className="grid grid-cols-1 gap-5 mt-8">
+  {filteredCompanies.map((company: any) => {
+    const isPaid = company.isActuallyPaid || company.planType === "paid";
+    
+    const displayWebsite = company.website 
+      ? company.website.replace(/^https?:\/\/(www\.)?/, "").split('/')[0] 
+      : "Website";
+
+    return (
+      <div
+        key={company._id}
+        className={`group bg-white rounded-2xl border transition-all duration-300 relative overflow-hidden mx-auto w-full max-w-7xl ${
+          isPaid ? "border-cyan-100 shadow-md ring-1 ring-cyan-500/5" : "border-slate-100 shadow-sm"
+        }`}
+      >
+        {/* Premium Badge */}
+        {isPaid && (
+          <div className="absolute top-0 right-0 z-10">
+            <div className="bg-cyan-600 text-white px-2.5 py-1 rounded-bl-lg text-[9px] md:text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+              <Crown className="w-3 h-3" /> Premium
+            </div>
+          </div>
+        )}
+
+        {/* 🚀 CENTERED ROW LAYOUT */}
+        <div className="flex flex-row p-4 md:p-6 gap-4 md:gap-10 items-center justify-center">
+          
+          {/* LEFT: LOGO */}
+          <div className="flex shrink-0 items-center justify-center">
+            <div className={`w-20 h-20 md:w-32 md:h-32 rounded-xl md:rounded-2xl border flex items-center justify-center p-2.5 md:p-4 bg-white shadow-sm ${
+              isPaid ? "border-cyan-50" : "border-slate-50"
+            }`}>
+              <img
+                src={company.logo || "/placeholder-logo.png"}
+                alt={company.name}
+                className="w-full h-full object-contain"
+              />
+            </div>
           </div>
 
-          {loading ? (
-            <div className="flex flex-col items-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-cyan-600" />
+          {/* 🚀 CENTER: TEXT CONTENT (Size increased for mobile) */}
+          <div className="flex-1 min-w-0 flex flex-col justify-center"> 
+            <div className="mb-1.5 md:mb-2">
+              <div className="flex items-center gap-2 mb-0.5">
+                <h3 className="text-base md:text-2xl font-extrabold text-slate-900 truncate leading-tight">
+                  {company.name}
+                </h3>
+                {(company.isVerified || isPaid) && (
+                  <ShieldCheck className="w-4 h-4 md:w-6 md:h-6 text-cyan-500 shrink-0" />
+                )}
+              </div>
+              <span className="inline-block text-[9px] md:text-xs font-black text-cyan-700 bg-cyan-50/50 px-2 py-0.5 rounded-md uppercase tracking-widest border border-cyan-100/50">
+                {company.category}
+              </span>
             </div>
-          ) : filteredCompanies.length > 0 ? (
-            <div className="grid grid-cols-1 gap-5">
-              {filteredCompanies.map((company: any) => {
-                const isPaid = company.isActuallyPaid || company.planType === "paid";
-                return (
-                  <div key={company._id} className={`group bg-white rounded-2xl border transition-all duration-300 relative ${isPaid ? "border-cyan-100 shadow-md ring-1 ring-cyan-500/5" : "border-slate-100 shadow-sm"}`}>
-                     {/* ... (Keep your existing card JSX exactly as it was) ... */}
-                     <div className="absolute top-0 right-0 z-10">
-                      {isPaid ? (
-                        <div className="bg-cyan-600 text-white px-3 py-1 rounded-bl-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                          <Crown className="w-3 h-3" /> Premium
-                        </div>
-                      ) : null}
-                    </div>
-                    <div className="flex flex-col md:flex-row p-5 md:p-6 gap-6">
-                        {/* Company content here */}
-                        <div className="flex-1 min-w-0 space-y-3">
-                            <div className="flex items-center gap-2 mb-1">
-                                <h3 className="text-lg md:text-xl font-bold text-slate-800 truncate">{company.name}</h3>
-                                {(company.isVerified || isPaid) && <ShieldCheck className="w-4 h-4 text-cyan-500" />}
-                            </div>
-                            <span className="inline-block text-[10px] font-black text-cyan-700 bg-cyan-50 px-2 py-0.5 rounded-md uppercase tracking-wide">
-                                {company.category}
-                            </span>
-                            <p className="text-slate-500 text-sm leading-relaxed line-clamp-2 italic">"{company.description}"</p>
-                        </div>
-                        <div className="flex flex-row md:flex-col gap-2 md:border-l md:pl-6 border-slate-100 justify-center">
-                            <Link href={`/companies/${company._id}`} className="flex-1">
-                                <button className="w-full md:w-36 flex items-center justify-center gap-2 py-3 bg-slate-900 text-white rounded-xl text-[11px] font-black uppercase shadow-lg">
-                                    View Profile
-                                </button>
-                            </Link>
-                        </div>
-                    </div>
-                  </div>
-                );
-              })}
+
+            {/* Description - Desktop only */}
+            <p className="hidden md:block text-slate-500 text-base leading-relaxed line-clamp-2 italic mb-3">
+              "{company.description || "No description provided."}"
+            </p>
+
+            {/* METADATA ROW (Increased text size) */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1">
+              <div className="flex items-center gap-1.5 text-[11px] md:text-sm font-bold text-slate-500 uppercase tracking-tight">
+                <MapPin className="w-3.5 h-3.5 md:w-4 md:h-4 text-cyan-500 shrink-0" />
+                <span className="truncate max-w-[120px] md:max-w-none">
+                   {company.location || "Online"}
+                </span>
+              </div>
+              
+              {company.website && (
+                <a
+                  href={company.website.startsWith("http") ? company.website : `https://${company.website}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-[11px] md:text-sm font-bold text-slate-500 hover:text-cyan-600 transition-colors uppercase tracking-tight"
+                >
+                  <Globe className="w-3.5 h-3.5 md:w-4 md:h-4 text-slate-400 shrink-0" />
+                  <span className="lowercase truncate max-w-[90px] md:max-w-none">
+                    {displayWebsite}
+                  </span>
+                </a>
+              )}
             </div>
-          ) : (
-            <div className="text-center py-24 bg-white rounded-3xl border-2 border-dashed border-slate-200">
-              <p className="text-slate-500 font-bold">No {activeFilter} businesses found.</p>
-            </div>
-          )}
+          </div>
+
+          {/* RIGHT: BUTTONS (Fixed width to maintain center alignment) */}
+          <div className="flex flex-col gap-2 md:gap-3 pl-4 md:pl-10 border-l border-slate-100 shrink-0 justify-center">
+            {company.whatsapp && (
+              <a
+                href={`https://wa.me/${company.whatsapp.replace(/\D/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="w-24 md:w-40 py-2.5 md:py-3.5 bg-emerald-500 text-white rounded-xl text-[10px] md:text-xs font-black uppercase shadow-md shadow-emerald-500/20 hover:bg-emerald-600 transition-all active:scale-95">
+                  WhatsApp
+                </button>
+              </a>
+            )}
+            <Link href={`/companies/${company._id}`}>
+              <button className="w-24 md:w-40 py-2.5 md:py-3.5 bg-slate-900 text-white rounded-xl text-[10px] md:text-xs font-black uppercase shadow-md shadow-slate-900/10 hover:bg-black transition-all active:scale-95">
+                View Profile
+              </button>
+            </Link>
+          </div>
+
         </div>
-      </section>
+      </div>
+    );
+  })}
+</div>
     </main>
   );
 }

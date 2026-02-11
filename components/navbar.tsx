@@ -15,10 +15,34 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // 🚀 Step 1: Add cartCount state
+  const [cartCount, setCartCount] = useState(0);
+  
   const pathname = usePathname();
 
   const isHomePage = pathname === "/";
   const useWhiteNav = !isHomePage || isScrolled;
+
+  // 🚀 Step 2: Logic to update count from localStorage
+  useEffect(() => {
+    const updateCount = () => {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      setCartCount(cart.length);
+    };
+
+    updateCount(); // Initial load
+
+    // Listen for custom event 'cartUpdated'
+    window.addEventListener("cartUpdated", updateCount);
+    // Listen for storage changes in other tabs
+    window.addEventListener("storage", updateCount);
+
+    return () => {
+      window.removeEventListener("cartUpdated", updateCount);
+      window.removeEventListener("storage", updateCount);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -26,7 +50,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
@@ -37,7 +60,7 @@ export default function Navbar() {
     { name: "Portfolio", href: "/portfolio" },
     { name: "Companies", href: "/companies" },
     { name: "About Us", href: "/about" },
-     { name: "Blogs", href: "/blog" }
+    { name: "Blogs", href: "/blog" }
   ];
 
   return (
@@ -47,7 +70,6 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between">
           
-          {/* Logo Section */}
           <Link href="/" className="group flex items-center gap-2.5">
             <div className="relative z-10 w-10 h-10 rounded-xl border-2 border-cyan-600/20 bg-white overflow-hidden shadow-lg transition-transform group-hover:rotate-0 rotate-3">
               <Image src="/icon.jpeg" alt="Logo" fill className="object-cover" />
@@ -57,7 +79,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Navigation (Hidden on Mobile) */}
           <div className={`hidden lg:flex items-center rounded-full px-6 py-2 border ${
             useWhiteNav ? "bg-slate-100 border-slate-200" : "bg-white/10 border-white/10 backdrop-blur-sm"
           }`}>
@@ -75,15 +96,17 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Action Area */}
           <div className="flex items-center gap-2 md:gap-4">
-            {/* Cart Icon - ALWAYS VISIBLE */}
+            {/* 🚀 Step 3: Shopping Cart Icon with dynamic count */}
             <Link href="/cart" className="relative p-2 rounded-full hover:bg-cyan-50 transition-colors">
               <ShoppingBag className={`w-5 h-5 ${useWhiteNav || isMobileMenuOpen ? "text-slate-700" : "text-white"}`} />
-              <span className="absolute top-0 right-0 bg-cyan-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white">0</span>
+              {cartCount > 0 && (
+                <span className="absolute top-0 right-0 bg-cyan-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white animate-in zoom-in">
+                  {cartCount}
+                </span>
+              )}
             </Link>
 
-            {/* Desktop-Only Login/Quote Area */}
             <div className="hidden md:flex items-center gap-4">
               {status === "authenticated" ? (
                 <div className="relative">
@@ -123,7 +146,6 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Mobile Menu Toggle - ONLY VISIBLE ON MOBILE */}
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className={`p-2 rounded-lg lg:hidden transition-colors ${
@@ -135,7 +157,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Mobile Dropdown Menu */}
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-6 animate-in slide-in-from-top duration-300">
             <div className="flex flex-col gap-1">
@@ -152,7 +173,6 @@ export default function Navbar() {
               ))}
               <hr className="my-2 border-slate-100" />
               
-              {/* Mobile Auth/CTA */}
               {status === "authenticated" ? (
                  <><Link href="/dashboard/client" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
                   <User className="w-5 h-5" /> My Dashboard

@@ -62,10 +62,10 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* ===== KPI CARDS - NOW WITH PAID & FREE LOGIC ===== */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-14">
+      <section className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-5 gap-2 mb-14">
         {loading ? (
           Array(5).fill(0).map((_, i) => (
-            <div key={i} className="h-28 bg-white animate-pulse rounded-2xl border border-slate-200 shadow-sm" />
+            <div key={i} className="h-28 bg-white animate-pulse rounded-2xl border border-slate-200 shadow-sm " />
           ))
         ) : (
           <>

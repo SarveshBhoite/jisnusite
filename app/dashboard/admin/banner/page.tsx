@@ -101,9 +101,9 @@ export default function AdminBannerPage() {
       
       {/* HEADER & FORM SECTION */}
       <section className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-black text-slate-900 uppercase italic">Ad Banner Manager</h1>
-          <p className="text-slate-500 text-sm">Add or update banners for specific search categories.</p>
+        <div className="mt-12 mb-3">
+          <h1 className="text-3xl font-black text-slate-900 uppercase italic text-center">Add Banner </h1>
+         
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded-[2.5rem] border-2 border-slate-100 shadow-sm space-y-6">

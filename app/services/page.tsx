@@ -72,7 +72,7 @@ function ServicesContent() {
     );
 
   return (
-    <main className="pt-32 pb-20 bg-slate-50 min-h-screen">
+    <main className="pt-20 pb-20 bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4">
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">

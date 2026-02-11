@@ -1,25 +1,35 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Lock,ChevronLeft } from "lucide-react"
+import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Lock, ChevronLeft } from "lucide-react"
 import Link from "next/link"
-import { useSession } from "next-auth/react" // Step 1: Session import karein
+import { useSession } from "next-auth/react"
 
 export default function CartPage() {
-  const { data: session, status } = useSession() // Session status check karna
+  const { data: session, status } = useSession()
   const [cart, setCart] = useState<any[]>([])
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
 
+  // 🚀 Logic to load cart and listen for updates
   useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("cart") || "[]")
-    setCart(stored)
+    const loadCart = () => {
+      const stored = JSON.parse(localStorage.getItem("cart") || "[]")
+      setCart(stored)
+    }
+
+    loadCart() // Initial load
+
+    // Listen for the custom event you dispatched in removeItem
+    window.addEventListener("cartUpdated", loadCart)
+    return () => window.removeEventListener("cartUpdated", loadCart)
   }, [])
 
   const removeItem = (id: string) => {
     const updated = cart.filter(item => item._id !== id)
     setCart(updated)
     localStorage.setItem("cart", JSON.stringify(updated))
+    // This triggers the listener above
     window.dispatchEvent(new Event("cartUpdated"))
   }
 
@@ -35,21 +45,19 @@ export default function CartPage() {
 
     setLoading(true);
 
-// Inside your submitRequest function
-const payload = {
-  email: session.user?.email, 
-  name: session.user?.name,
-  // Add this if your backend specifically looks for it:
-  companyName: "Individual Request", 
-  services: cart.map(item => ({
-    id: item._id,
-    name: item.title,
-    price: item.discountPrice
-  })),
-  totalAmount: totalDiscounted,
-  message: message,
-  status: "New"
-};
+    const payload = {
+      email: session.user?.email,
+      name: session.user?.name,
+      companyName: "Individual Request",
+      services: cart.map(item => ({
+        id: item._id,
+        name: item.title,
+        price: item.discountPrice
+      })),
+      totalAmount: totalDiscounted,
+      message: message,
+      status: "New"
+    };
 
     try {
       const res = await fetch("/api/admin/services/request", {
@@ -76,13 +84,22 @@ const payload = {
 
   return (
     <main className="pt-28 pb-24 bg-[#fcfcfc] min-h-screen">
-       <Link href="/" className="md:hidden text-primary text-lg font-bold flex items-center gap-1 mb-5">
-                                 <ChevronLeft className="w-4 h-4" /> Back to Home
-                              </Link>
+      <Link href="/" className="md:hidden text-primary text-lg font-bold flex items-center gap-1 mb-5 px-4">
+        <ChevronLeft className="w-4 h-4" /> Back to Home
+      </Link>
+      
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between mb-10">
           <h1 className="text-3xl font-black text-slate-900 flex items-center gap-3 italic uppercase">
-            <ShoppingCart className="w-8 h-8 text-blue-600" />
+            <div className="relative">
+              <ShoppingCart className="w-8 h-8 text-blue-600" />
+              {/* 🚀 ADDED: Visual Count Badge on Icon */}
+              {cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white animate-in zoom-in">
+                  {cart.length}
+                </span>
+              )}
+            </div>
             Service Cart ({cart.length})
           </h1>
         </div>
@@ -98,9 +115,7 @@ const payload = {
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
             <div className="lg:col-span-2 space-y-4">
-              {/* DYNAMIC CONTACT INFO SECTION */}
               <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm space-y-4">
                 <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 mb-2">
                   <UserCircle className="w-4 h-4 text-blue-600" /> Checkout Account
@@ -132,7 +147,6 @@ const payload = {
                 )}
               </div>
 
-              {/* ITEMS LIST */}
               {cart.map((item) => (
                 <div key={item._id} className="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm flex items-center justify-between group">
                   <div className="flex items-center gap-4">
@@ -157,7 +171,6 @@ const payload = {
                 </div>
               ))}
 
-              {/* MESSAGE BOX (Only shown if logged in) */}
               {status === "authenticated" && (
                 <div className="bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm">
                   <label className="flex items-center gap-2 text-sm font-black text-slate-900 uppercase tracking-widest mb-4">
@@ -175,7 +188,6 @@ const payload = {
               )}
             </div>
 
-            {/* SUMMARY PANEL */}
             <div className="lg:col-span-1">
               <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-xl sticky top-32 border border-white/5">
                 <h2 className="text-xl font-bold mb-6 pb-4 border-b border-white/10 italic uppercase">Summary</h2>
@@ -216,7 +228,6 @@ const payload = {
                 </p>
               </div>
             </div>
-
           </div>
         )}
       </div>
