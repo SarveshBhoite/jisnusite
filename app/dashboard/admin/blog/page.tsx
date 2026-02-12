@@ -5,7 +5,7 @@ import { Trash2, Edit3, Plus, X } from "lucide-react";
 
 export default function AdminBlogPage() {
   const [posts, setPosts] = useState([]);
-  const [form, setForm] = useState({ title: "", excerpt: "", content: "", category: "", image: "", readTime: "" });
+  const [form, setForm] = useState({ title: "", excerpt: "", content: "", category: "", image: "",  });
   const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -38,7 +38,7 @@ export default function AdminBlogPage() {
 
     if (res.ok) {
       alert(editingId ? "Blog Updated!" : "Blog Published!");
-      setForm({ title: "", excerpt: "", content: "", category: "", image: "", readTime: "" });
+      setForm({ title: "", excerpt: "", content: "", category: "", image: "",  });
       setEditingId(null);
       setShowForm(false);
       fetchPosts();

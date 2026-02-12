@@ -12,12 +12,43 @@ export async function POST(req: Request) {
   await dbConnect();
   try {
     const body = await req.json();
-    const slug = body.title.toLowerCase().replace(/[^\w ]+/g, "").replace(/ +/g, "-");
-    const date = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-    
-    const newPost = await Blog.create({ ...body, slug, date });
+
+    // 1. Validation Check
+    if (!body.title) {
+      return NextResponse.json({ error: "Title is required" }, { status: 400 });
+    }
+
+    // 2. Robust Slug Generation
+    const slug = body.title
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "") 
+      .replace(/[\s_-]+/g, "-") 
+      .replace(/^-+|-+$/g, ""); 
+
+    // 3. Format Date (Better to use ISO string or specific format)
+    const date = new Date().toLocaleDateString("en-US", { 
+      month: "short", 
+      day: "numeric", 
+      year: "numeric" 
+    });
+
+    const newPost = await Blog.create({ 
+      ...body, 
+      slug, 
+      date 
+    });
+
     return NextResponse.json(newPost, { status: 201 });
   } catch (error: any) {
+    // 🚀 LOG THE ACTUAL ERROR TO CONSOLE
+    console.error("BLOG_POST_ERROR:", error);
+    
+    // Check for duplicate key (Slug already exists)
+    if (error.code === 11000) {
+      return NextResponse.json({ error: "A blog with this title/slug already exists" }, { status: 400 });
+    }
+
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

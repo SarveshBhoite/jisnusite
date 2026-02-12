@@ -8,7 +8,7 @@ const BlogSchema = new Schema({
   author: { type: String, default: "Jisnu Digital Team" },
   category: { type: String, required: true },
   image: { type: String, required: true },
-  readTime: { type: String, required: true },
+
   date: { type: String },
 }, { timestamps: true });
 
