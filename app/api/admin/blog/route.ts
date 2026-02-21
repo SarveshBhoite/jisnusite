@@ -41,7 +41,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newPost, { status: 201 });
   } catch (error: any) {
-    // 🚀 LOG THE ACTUAL ERROR TO CONSOLE
+    // 🚀 LOG THE ACTUAL EROR TO CONSOLE
     console.error("BLOG_POST_ERROR:", error);
     
     // Check for duplicate key (Slug already exists)

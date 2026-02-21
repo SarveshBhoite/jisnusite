@@ -7,6 +7,14 @@ const CompanySchema = new mongoose.Schema({
   detailedOverview: { type: String }, // The long textarea
   location: { type: String },
   website: { type: String },
+  rating: {
+    type: Number,
+    default: 4.5, // Your default starting rating
+  },
+  totalReviews: {
+    type: Number,
+    default: 1, // Start with 1 to avoid division by zero
+  },
   whatsapp: { type: String },
   email: { type: String },
   password: { type: String, required: true ,select: false },

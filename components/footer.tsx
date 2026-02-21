@@ -82,6 +82,7 @@ export function Footer() {
                 { label: "Portfolio", href: "/portfolio" },
                 { label: "Blogs", href: "/blog" },
                 { label: "Contact", href: "/contact" },
+                { label: "Sitemap", href: "/site-map" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link
@@ -107,7 +108,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 mt-0.5" />
-                +91 XXXXX XXXXX
+               +91 7709936965 /  020 47246321
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-0.5" />
@@ -132,9 +133,9 @@ export function Footer() {
           {/* Social Icons */}
           <div className="flex items-center gap-4">
             {[
-              { icon: Facebook, href: "#" },
-              { icon: Linkedin, href: "#" },
-              { icon: Instagram, href: "#" },
+              { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61571480567573" },
+              { icon: Linkedin, href: "https://x.com/Jisnudigital018" },
+              { icon: Instagram, href: "https://www.instagram.com/jisnu_digitalsolution_pvt_ltd/" },
             ].map((social, i) => (
               <a
                 key={i}

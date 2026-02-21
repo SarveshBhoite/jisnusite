@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { 
   Menu, X, Phone, ArrowRight, ShoppingBag, 
-  User, LogOut, ChevronDown, Building2, Mail 
+  User, LogOut, ChevronDown, Building2, Mail, Facebook, Instagram, Linkedin, Youtube
 } from "lucide-react";
 import Image from "next/image";
 
@@ -35,7 +35,6 @@ export default function Navbar() {
 
     // Listen for custom event 'cartUpdated'
     window.addEventListener("cartUpdated", updateCount);
-    // Listen for storage changes in other tabs
     window.addEventListener("storage", updateCount);
 
     return () => {
@@ -60,7 +59,15 @@ export default function Navbar() {
     { name: "Portfolio", href: "/portfolio" },
     { name: "Companies", href: "/companies" },
     { name: "About Us", href: "/about" },
-    { name: "Blogs", href: "/blog" }
+    { name: "Blogs", href: "/blog" },
+    
+  ];
+
+  const socialLinks = [
+    { name: "Facebook", href: "https://facebook.com", icon: Facebook, hoverClass: "hover:bg-blue-600" },
+    { name: "Instagram", href: "https://instagram.com", icon: Instagram, hoverClass: "hover:bg-pink-600" },
+    { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin, hoverClass: "hover:bg-sky-700" },
+    { name: "YouTube", href: "https://youtube.com", icon: Youtube, hoverClass: "hover:bg-red-600" },
   ];
 
   return (
@@ -97,8 +104,27 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-2 md:gap-4">
+            <div className="hidden xl:flex items-center gap-2">
+              {socialLinks.map((social) => (
+                <Link
+                  key={social.name}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.name}
+                  className={`w-8 h-8 rounded-full border flex items-center justify-center transition-all duration-300 ${
+                    useWhiteNav || isMobileMenuOpen
+                      ? "bg-white border-slate-200 text-slate-700"
+                      : "bg-white/10 border-white/20 text-white"
+                  } ${social.hoverClass} hover:text-white hover:border-transparent`}
+                >
+                  <social.icon className="w-3.5 h-3.5" />
+                </Link>
+              ))}
+            </div>
+
             {/* 🚀 Step 3: Shopping Cart Icon with dynamic count */}
-            <Link href="/cart" className="relative p-2 rounded-full hover:bg-cyan-50 transition-colors">
+            <Link href="/cart" className="relative p-2 rounded-full hover:bg-black transition-colors">
               <ShoppingBag className={`w-5 h-5 ${useWhiteNav || isMobileMenuOpen ? "text-slate-700" : "text-white"}`} />
               {cartCount > 0 && (
                 <span className="absolute top-0 right-0 bg-cyan-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white animate-in zoom-in">
@@ -172,6 +198,23 @@ export default function Navbar() {
                 </Link>
               ))}
               <hr className="my-2 border-slate-100" />
+
+              <div className="px-4 py-2">
+                <div className="flex items-center gap-2">
+                  {socialLinks.map((social) => (
+                    <Link
+                      key={social.name}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.name}
+                      className={`w-9 h-9 rounded-full border border-slate-200 bg-white text-slate-700 flex items-center justify-center transition-all duration-300 ${social.hoverClass} hover:text-white hover:border-transparent`}
+                    >
+                      <social.icon className="w-4 h-4" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
               
               {status === "authenticated" ? (
                  <><Link href="/dashboard/client" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">

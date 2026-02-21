@@ -22,7 +22,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Jisnu Digital Solutions - Premium Digital Services",
+  title: "Best Digital Marketing Agency in Pune Jisnu DigitalsFF",
   description: "Professional digital solutions for modern businesses.",
   icons: { icon: "/icon.jpeg", apple: "/icon.jpeg" },
 }

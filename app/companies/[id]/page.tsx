@@ -2,24 +2,23 @@ import { notFound } from "next/navigation"
 import dbConnect from "@/lib/mongodb"
 import Company from "@/models/Company"
 import Link from "next/link"
-import ServiceRequest from "@/models/ServiceRequest" // 1. Import ServiceRequest
+import ServiceRequest from "@/models/ServiceRequest"
+import RatingSystem from "@/components/RatingSystem" // Import naya component
 import { 
   MapPin, Globe, ShieldCheck, Clock, 
   Phone, MessageSquare, Star, Info, 
   CheckCircle2, LayoutGrid, Smartphone,
   Instagram, Linkedin, Facebook, Twitter,
-  Share2, Sparkles, ExternalLink, Crown,ArrowLeft
+  Share2, Sparkles, ExternalLink, Crown, ArrowLeft
 } from "lucide-react"
 
 export default async function PublicCompanyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   await dbConnect()
 
-  // 2. Fetch the company
   const company = await Company.findById(id).lean()
   if (!company) notFound()
 
-  // 3. Logic to check if they are "Paid" (Dynamic Verification)
   const completedService = await ServiceRequest.findOne({ 
     email: company.email, 
     status: "Completed" 
@@ -29,8 +28,6 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
 
   return (
     <main className="min-h-screen bg-[#F8FAFC]">
-
-      {/* --- HERO SECTION --- */}
       <section className="bg-white border-b relative">
         <div className="max-w-7xl mx-auto px-6 pt-20 pb-16">
            <Link
@@ -41,11 +38,9 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
                   <span>Back</span>
                 </Link>
           <div className="flex flex-col lg:flex-row items-start gap-10">
-            
             <div className="flex-shrink-0">
-              {/* Added dynamic ring color if Paid */}
               <div className={`w-32 h-32 md:w-40 md:h-40 rounded-[2.5rem] bg-white border shadow-xl p-4 flex items-center justify-center relative overflow-hidden group transition-all
-                ${isPaid ? 'border-blue-400 blue-4 ring-blue-500/10 shadow-blue-100' : 'border-slate-100 shadow-slate-100'}`}>
+                ${isPaid ? 'border-blue-400 ring-blue-500/10 shadow-blue-100' : 'border-slate-100 shadow-slate-100'}`}>
                 <img src={company.logo || "/placeholder.png"} alt={company.name} className="w-full h-full object-contain transition-transform group-hover:scale-110" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/5 to-transparent" />
               </div>
@@ -53,7 +48,6 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
 
             <div className="flex-1 space-y-4">
               <div className="flex flex-wrap items-center gap-3">
-                {/* 4. DYNAMIC BADGE: Show different badge if Paid */}
                 {isPaid ? (
                   <span className="px-4 py-1.5 bg-gradient-to-r from-blue-500 to-orange-400 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-1.5 shadow-md">
                     <Crown className="w-4 h-4 fill-white" /> Featured Partner
@@ -73,7 +67,6 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
                 <h1 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tight leading-tight">
                   {company.name}
                 </h1>
-                {/* 5. Add a checkmark next to the name for Paid users */}
                 {isPaid && (
                   <div className="bg-blue-600 p-1.5 rounded-full mt-2">
                     <CheckCircle2 className="w-6 h-6 text-white fill-blue-600" />
@@ -86,10 +79,9 @@ export default async function PublicCompanyPage({ params }: { params: Promise<{ 
               </p>
 
               <div className="flex flex-wrap items-center gap-6 pt-4 text-slate-500">
+                {/* 🚀 UPDATED RATING SECTION */}
                 <div className="flex items-center gap-2">
-                  <div className="flex bg-amber-400 text-white px-2 py-0.5 rounded text-xs font-black">
-                    4.8 <Star className="w-3 h-3 fill-current ml-1" />
-                  </div>
+                  <RatingSystem companyId={id} initialRating={company.rating} />
                   <span className="text-sm font-bold underline decoration-slate-200 underline-offset-4">
                     {isPaid ? "Premium Verified Partner" : "Top Rated Professional"}
                   </span>

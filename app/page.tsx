@@ -4,28 +4,20 @@ import Link from "next/link";
 import Image from "next/image";
 import { 
   ArrowRight, 
-  Loader2, 
-  Sparkles, 
-  CheckCircle2, 
   Mail, 
-  Phone, 
-  Send, 
-  Star,
   MapPin,
-  Shield,
-  Clock,
+ Clock,
   ThumbsUp,
   Users,
   Award,
   ChevronRight,
   PhoneCall,
-  MessageCircle,
   Search,
   BadgeCheck,
-  Zap,
-  TrendingUp,
-  Headphones,Briefcase,Plane,HeartPulse,Laptop,ShoppingBag,Utensils,Car} from "lucide-react";
-import { useEffect, useState } from "react";
+  Headphones,
+  Send,
+Shield, CheckCircle2, Star, Image as ImageIcon, Zap, Trophy, TrendingUp} from "lucide-react";
+import { useEffect, useState, useRef } from "react"; 
 import { useRouter } from "next/navigation";
 
 
@@ -38,6 +30,10 @@ export default function Home() {
   const [location, setLocation] = useState("");
   const router = useRouter();
 
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const suggestionRef = useRef<HTMLDivElement>(null);
+
   const categories = [
     { name: "Web Development", icon: "🌐", count: "500+" },
     { name: "App Development", icon: "📱", count: "350+" },
@@ -48,18 +44,34 @@ export default function Home() {
     { name: "UI/UX Design", icon: "✨", count: "280+" },
     { name: "Content Writing", icon: "✍️", count: "180+" },
   ];
-const companyCategories = [
-  { name: "E-commerce", icon: "🛍️", color: "from-blue-400 to-blue-600" },
-  { name: "Hotels", icon: "🏨", color: "from-orange-400 to-orange-600" },
-  { name: "Energy", icon: "⚡", color: "from-yellow-400 to-yellow-600" },
-  { name: "Education", icon: "🎓", color: "from-indigo-400 to-indigo-600" },
-  { name: "Manufacturing", icon: "🏭", color: "from-slate-500 to-slate-700" },
-  { name: "Technology", icon: "💻", color: "from-cyan-400 to-cyan-600" },
-  { name: "Health & Wellness", icon: "🏥", color: "from-emerald-400 to-emerald-600" },
-  { name: "Professional Services", icon: "💼", color: "from-purple-400 to-purple-600" },
-  { name: "Real Estate", icon: "🏠", color: "from-rose-400 to-rose-600" },
-  { name: "Decoration", icon: "✨", color: "from-amber-400 to-amber-600" },
-];
+
+  const companyCategories = [
+    { name: "E-commerce", icon: "🛍️", color: "from-blue-400 to-blue-600" },
+    { name: "Hotels", icon: "🏨", color: "from-orange-400 to-orange-600" },
+    { name: "Energy", icon: "⚡", color: "from-yellow-400 to-yellow-600" },
+    { name: "Education", icon: "🎓", color: "from-indigo-400 to-indigo-600" },
+    { name: "Manufacturing", icon: "🏭", color: "from-slate-500 to-slate-700" },
+    { name: "Technology", icon: "💻", color: "from-cyan-400 to-cyan-600" },
+    { name: "Health & Wellness", icon: "🏥", color: "from-emerald-400 to-emerald-600" },
+    { name: "Professional Services", icon: "💼", color: "from-purple-400 to-purple-600" },
+    { name: "Real Estate", icon: "🏠", color: "from-rose-400 to-rose-600" },
+    { name: "Decoration", icon: "✨", color: "from-amber-400 to-amber-600" },
+    { name: "Restaurants", icon: "🍴", color: "from-red-400 to-red-600" },
+    { name: "Beauty Spa", icon: "💆‍♀️", color: "from-pink-400 to-pink-600" },
+    { name: "Home Decor", icon: "🛋️", color: "from-orange-300 to-orange-500" },
+    { name: "Wedding Planning", icon: "💍", color: "from-fuchsia-400 to-fuchsia-600" },
+    { name: "Rent & Hire", icon: "🚜", color: "from-yellow-500 to-yellow-700" },
+    { name: "Hospitals", icon: "🚑", color: "from-red-500 to-red-700" },
+    { name: "Contractors", icon: "👷", color: "from-amber-600 to-amber-800" },
+    { name: "Pet Shops", icon: "🐾", color: "from-brown-400 to-brown-600" },
+    { name: "PG/Hostels", icon: "🏢", color: "from-violet-400 to-violet-600" },
+    { name: "Estate Agent", icon: "🏘️", color: "from-emerald-500 to-emerald-700" },
+    { name: "Dentists", icon: "🦷", color: "from-sky-300 to-sky-500" },
+    { name: "Gym", icon: "🏋️‍♂️", color: "from-zinc-600 to-zinc-800" },
+    { name: "Loans", icon: "💰", color: "from-green-500 to-green-700" },
+    { name: "Event Organiser", icon: "🎉", color: "from-indigo-500 to-indigo-700" },
+    {name:"Resort", icon:"🏝️", color:"from-cyan-400 to-cyan-600"},
+  ];
 
   const trustStats = [
     { icon: Users, value: "50+", label: "Happy Clients" },
@@ -68,15 +80,39 @@ const companyCategories = [
     { icon: Clock, value: "5+", label: "Years Exp." },
   ];
 
-const handleSearch = () => {
-  // If both are empty, we just go to the companies page to see all
-  const params = new URLSearchParams();
-  if (query) params.append("query", query);
-  if (location) params.append("location", location);
+  useEffect(() => {
+    const q = query.trim().toLowerCase();
+    if (q.length > 0) {
+      const allPossibleCats = [
+        ...categories.map(c => c.name),
+        ...companyCategories.map(c => c.name)
+      ];
+      const uniqueCats = Array.from(new Set(allPossibleCats));
+      const filtered = uniqueCats.filter(cat => 
+        cat.toLowerCase().startsWith(q)
+      );
+      setSuggestions(filtered);
+    } else {
+      setSuggestions([]);
+    }
+  }, [query]);
 
-  // Redirect to the companies page with the search parameters
-  router.push(`/companies?${params.toString()}`);
-};
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionRef.current && !suggestionRef.current.contains(event.target as Node)) {
+        setShowSuggestions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (query) params.append("query", query);
+    if (location) params.append("location", location);
+    router.push(`/companies?${params.toString()}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,9 +149,67 @@ const handleSearch = () => {
     fetchData();
   }, []);
 
+  
+  const [index, setIndex] = useState(0);
+
+  // Define the 3 different "views" for the card
+  const cards = [
+    // 1. Trust & Verification (Your original card)
+    {
+      type: "trust",
+      title: "Verified & Trusted",
+      subtitle: "100% Secure Services",
+      icon: <Shield className="w-6 h-6 text-cyan-600" />,
+      items: [
+        "Government Registered Company",
+        "5+ Years of Experience",
+        "1000+ Satisfied Customers",
+        "24/7 Customer Support",
+      ],
+      footer: "4.9 Rating (500+ reviews)"
+    },
+    // 2. Portfolio / Images Card
+    {
+      type: "image",
+      title: "Recent Projects",
+      subtitle: "See our latest work",
+      icon: <Trophy className="w-6 h-6 text-amber-600" />,
+      // Using placeholder images for the "2 images in card" requirement
+      images: [
+        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=300&q=80"
+      ],
+      items: ["UI/UX Optimization", "E-commerce Solutions"],
+      footer: "View Full Portfolio"
+    },
+    // 3. Growth / Stats Card
+    {
+      type: "growth",
+      title: "Business Growth",
+      subtitle: "Scaling your brand",
+      icon: <TrendingUp className="w-6 h-6 text-emerald-600" />,
+      items: [
+        "SEO Ranking Improvement",
+        "Social Media Management",
+        "Lead Generation Funnels",
+        "Brand Strategy"
+      ],
+      footer: "Trusted by Top Brands"
+    }
+  ];
+
+  // Logic to rotate index every 4 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % cards.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const current = cards[index];
+
   return (
-    <main className="bg-slate-50 min-h-screen">
-      
+    <main className="bg-slate-50 min-h-screen relative">
       
       {/* ========== HERO SECTION ========== */}
       <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white">
@@ -138,18 +232,41 @@ const handleSearch = () => {
                 Get the best digital services for your business. Web development, SEO, marketing & more at affordable prices.
               </p>
 
-              {/* Search Bar */}
-              <div className="bg-white rounded-xl shadow-xl p-2 flex flex-col md:flex-row items-center gap-2 mb-6 border border-slate-100">
-                <div className="flex-1 flex items-center gap-3 px-4 w-full">
+              <div className="bg-white rounded-xl shadow-xl p-2 flex flex-col md:flex-row items-center gap-2 mb-6 border border-slate-100 relative">
+                <div className="flex-1 flex items-center gap-3 px-4 w-full relative" ref={suggestionRef}>
                   <Search className="w-5 h-5 text-slate-400 shrink-0" />
                   <input
                     type="text"
                     value={query}
-                    onChange={(e) => setQuery(e.target.value)}
+                    onFocus={() => setShowSuggestions(true)}
+                    onChange={(e) => {
+                      setQuery(e.target.value);
+                      setShowSuggestions(true);
+                    }}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    placeholder="Search for services..."
+                    placeholder="Search for services (e.g. H for Hotels)..."
                     className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
                   />
+
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl z-[100] overflow-hidden">
+                      <div className="max-h-60 overflow-y-auto">
+                        {suggestions.map((cat, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setQuery(cat);
+                              setShowSuggestions(false);
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 text-left transition-colors border-b border-slate-50 last:border-0"
+                          >
+                            <Search className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-sm font-bold text-slate-700">{cat}</span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <div className="hidden md:block w-px h-8 bg-slate-200 mx-2" />
@@ -189,71 +306,101 @@ const handleSearch = () => {
               </div>
             </div>
 
-            <div className="hidden lg:block">
-              <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-12 h-12 bg-cyan-50 rounded-full flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-cyan-600" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-slate-900">Verified & Trusted</div>
-                    <div className="text-sm text-slate-500">100% Secure Services</div>
-                  </div>
-                </div>
-                
-                <div className="space-y-3">
-                  {[
-                    "Government Registered Company",
-                    "5+ Years of Experience",
-                    "1000+ Satisfied Customers",
-                    "24/7 Customer Support",
-                    "Money Back Guarantee"
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-2 text-slate-700 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-cyan-500 flex-shrink-0" />
-                      {item}
-                    </div>
-                  ))}
-                </div>
+ {/* Changed max-w-sm to max-w-md for more width */}
+<div className="hidden lg:block w-full max-w-650px"> 
+  <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500 transition-all duration-500 ease-in-out min-h-[380px] flex flex-col justify-between">
+    
+    {/* Header Section */}
+    <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+      <div className="flex items-center gap-3 mb-4">
+        <div className={`w-12 h-12 rounded-full flex items-center justify-center ${index === 0 ? 'bg-cyan-50' : index === 1 ? 'bg-amber-50' : 'bg-emerald-50'}`}>
+          {current.icon}
+        </div>
+        <div>
+          <div className="font-bold text-slate-900">{current.title}</div>
+          <div className="text-sm text-slate-500">{current.subtitle}</div>
+        </div>
+      </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-100">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1">
-                      {[1,2,3,4,5].map(i => (
-                        <Star key={i} className="w-5 h-5 fill-cyan-500 text-cyan-500" />
-                      ))}
-                      <span className="ml-2 font-bold text-slate-900">4.9</span>
-                    </div>
-                    <span className="text-sm text-slate-500">Based on 500+ reviews</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+      {/* Content Logic */}
+      <div className="space-y-3">
+        {current.type === "image" && (
+          <div className="grid grid-cols-2 gap-2 mb-4">
+            {current.images?.map((img, i) => (
+              <img 
+                key={i} 
+                src={img} 
+                alt="work" 
+                
+                className="rounded-lg h-32 w-full object-cover border border-slate-100" 
+              />
+            ))}
+          </div>
+        )}
+
+        {current.items.map((item, i) => (
+          <div key={i} className="flex items-center gap-2 text-slate-700 text-sm">
+            <CheckCircle2 className={`w-4 h-4 flex-shrink-0 ${index === 0 ? 'text-cyan-500' : index === 1 ? 'text-amber-500' : 'text-emerald-500'}`} />
+            {item}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Footer Section */}
+    <div className="mt-6 pt-4 border-t border-slate-100">
+      <div className="flex items-center justify-between">
+        {current.type === "trust" ? (
+          <div className="flex items-center gap-1">
+            {[1, 2, 3, 4, 5].map(i => (
+              <Star key={i} className="w-4 h-4 fill-cyan-500 text-cyan-500" />
+            ))}
+            <span className="ml-2 font-bold text-slate-900 text-sm">4.9</span>
+          </div>
+        ) : (
+          <span className="text-sm font-bold text-cyan-600 cursor-pointer hover:underline flex items-center gap-1">
+            {current.footer} <Zap className="w-3 h-3" />
+          </span>
+        )}
+        {current.type === "trust" && (
+          <span className="text-xs text-slate-500">500+ reviews</span>
+        )}
+      </div>
+      
+      {/* Simple Pagination Dots */}
+      <div className="flex gap-1.5 mt-4 justify-center">
+        {cards.map((_, i) => (
+          <div key={i} className={`h-1.5 rounded-full transition-all ${index === i ? 'w-4 bg-cyan-500' : 'w-1.5 bg-slate-200'}`} />
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </section>
-{/* ========== CATEGORY GRID ========== */}
-<section className="bg-white py-8 border-b border-slate-200">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
-      {categories.map((cat, i) => (
-        <Link 
-          // Match the URL parameter to "category"
-          href={`/services?category=${encodeURIComponent(cat.name)}`} 
-          key={i}
-          className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
-        >
-          <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
-            {cat.icon}
+      
+      {/* Category Grid Section */}
+      <section className="bg-white py-8 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+            {categories.map((cat, i) => (
+              <Link 
+                href={`/services?category=${encodeURIComponent(cat.name)}`} 
+                key={i}
+                className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
+              >
+                <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
+                  {cat.icon}
+                </div>
+                <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
+                  {cat.name}
+                </span>
+              </Link>
+            ))}
           </div>
-          <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
-            {cat.name}
-          </span>
-        </Link>
-      ))}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* ========== OFFERS SECTION ========== */}
       {!loading && ads.length > 0 && (
@@ -298,39 +445,52 @@ const handleSearch = () => {
         </section>
       )}
 
-      {/* ==========Companies SECTION ========== */}
-     <section className="bg-white py-12 border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="mb-8 text-center md:text-left">
-          <h2 className="text-2xl font-black text-slate-900 uppercase italic tracking-tight">
-            Browse Categories
-          </h2>
-          <p className="text-slate-500 text-sm font-medium">Find the best businesses by industry</p>
-        </div>
-
-        {/* Grid: 4 columns on mobile, 8 on desktop */}
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
-          {companyCategories.map((cat, i) => (
-            <Link 
-              key={i}
-              href={`/companies?query=${encodeURIComponent(cat.name)}`} 
-              className="group flex flex-col items-center gap-3"
-            >
-              {/* Icon Container */}
-              <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 transition-all duration-300 group-hover:bg-cyan-600 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
-                {cat.icon}
-              </div>
-              
-              {/* Category Name */}
-              <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors">
-                {cat.name}
-              </span>
-            </Link>
-          ))}
-        </div>
+     {/* ========== Companies SECTION (Home Page) ========== */}
+<section className="bg-white py-12 border-b border-slate-100">
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="flex justify-between items-end mb-8">
+      <div className="text-left">
+        <h2 className="text-2xl font-black text-slate-900 uppercase italic tracking-tight">
+          Browse Categories
+        </h2>
+        <p className="text-slate-500 text-sm font-medium">Find the best businesses by industry</p>
       </div>
-    </section>
+      
+      <Link 
+        href="/categories" 
+        className="hidden md:flex items-center gap-2 text-cyan-600 font-bold text-xs uppercase tracking-widest hover:gap-3 transition-all"
+      >
+        Explore All <ArrowRight className="w-4 h-4" />
+      </Link>
+    </div>
+
+    <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
+      {companyCategories.slice(0, 16).map((cat, i) => (
+        <Link 
+          key={i}
+          href={`/companies?query=${encodeURIComponent(cat.name)}`} 
+          className="group flex flex-col items-center gap-3"
+        >
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
+            {cat.icon}
+          </div>
+          
+          <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors line-clamp-1">
+            {cat.name}
+          </span>
+        </Link>
+      ))}
+    </div>
+
+    <div className="mt-8 md:hidden">
+       <Link href="/categories">
+          <button className="w-full py-3 bg-slate-50 text-slate-600 text-xs font-bold uppercase rounded-xl border border-slate-100">
+            View All Categories
+          </button>
+       </Link>
+    </div>
+  </div>
+</section>
 
       {/* ========== PORTFOLIO SECTION ========== */}
       <section className="py-8 bg-white">
@@ -414,23 +574,6 @@ const handleSearch = () => {
               </div>
             ))}
           </div>
-
-          <div className="mt-8 bg-gradient-to-r from-[#134e4a] to-[#0d9488] rounded-xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-lg">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-                <Award className="w-8 h-8 text-white" />
-              </div>
-              <div className="text-white">
-                <div className="font-bold text-lg">Rated 4.9/5 by 500+ Customers</div>
-                <div className="text-cyan-100 text-sm">India&apos;s Most Trusted Digital Agency</div>
-              </div>
-            </div>
-            <div className="flex gap-2">
-              {[1,2,3,4,5].map(i => (
-                <Star key={i} className="w-6 h-6 fill-cyan-400 text-cyan-400" />
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
@@ -444,7 +587,6 @@ const handleSearch = () => {
                 <h2 className="text-xl font-bold text-slate-900">Get Free Quote</h2>
               </div>
               <p className="text-slate-500 text-sm mb-6">Fill the form and get callback within 30 minutes</p>
-              
               <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
                 <input type="text" placeholder="Your Name *" className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all" />
                 <div className="grid grid-cols-2 gap-4">
@@ -471,7 +613,7 @@ const handleSearch = () => {
                   </div>
                   <div>
                     <div className="font-bold text-lg mb-1">Call Us Now</div>
-                    <div className="text-xl font-bold">+91 98765 43210</div>
+                    <div className="text-xl font-bold">+91 7709936965 </div>
                   </div>
                 </div>
               </div>
@@ -482,18 +624,7 @@ const handleSearch = () => {
                   </div>
                   <div>
                     <div className="font-bold text-lg mb-1">Email Us</div>
-                    <div className="text-lg font-bold">hello@jisnudigital.com</div>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-emerald-600 rounded-xl p-6 text-white">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MessageCircle className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="font-bold text-lg mb-1">WhatsApp</div>
-                    <button className="px-6 py-2 bg-white text-emerald-600 rounded-lg font-bold text-sm mt-2">Chat Now</button>
+                    <div className="text-lg font-bold">info@jisnudigital.com</div>
                   </div>
                 </div>
               </div>
@@ -521,6 +652,34 @@ const handleSearch = () => {
           </div>
         </div>
       </section>
+
+      {/* ========== VERTICAL FLOATING SIDEBAR (JUSTDIAL STYLE) ========== */}
+      <div className="fixed right-0 top-[40%] z-[999] flex flex-col items-end pointer-events-none">
+        
+        {/* Advertise Button (Vertical) */}
+        <Link 
+          href="/companies/list-your-company" 
+          className="pointer-events-auto w-[34px] bg-[#df4f2d] text-white py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-10"
+          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+        >
+          <div className="flex items-center gap-2 transform rotate-180">
+            <span className="text-[11px] font-bold uppercase tracking-wider">Paid Listing</span>
+            <Zap className="w-3 h-3 text-white fill-current transform rotate-180" />
+          </div>
+        </Link>
+
+        {/* Free Listing Button (Vertical) */}
+        <Link 
+          href="/companies/list-your-company" 
+          className="pointer-events-auto w-[34px] bg-[#0076d7] text-white py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
+          style={{ writingMode: 'vertical-rl', textOrientation: 'mixed' }}
+        >
+          <div className="flex items-center gap-2 transform rotate-180">
+            <span className="text-[11px] font-bold uppercase tracking-wider">Free Listing</span>
+            <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />
+          </div>
+        </Link>
+      </div>
 
     </main>
   );
