@@ -6,7 +6,11 @@ import { NextResponse } from "next/server";
 export async function GET() {
   await dbConnect();
   try {
-    const banners = await Banner.find({}).sort({ createdAt: -1 });
+    const banners = await Banner.find({})
+      .select("category bannerImage")
+      .limit(10)
+      .lean();
+
     return NextResponse.json(banners);
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 500 });

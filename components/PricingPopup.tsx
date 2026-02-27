@@ -16,16 +16,24 @@ export default function PricingPopup() {
     setIsClient(true);
   }, []);
 
-useEffect(() => {
-  if (status === "authenticated" && pathname.includes("/dashboard")) {
-    // Show every time they land on dashboard while logged in
-    const timer = setTimeout(() => setShow(true), 2000);
-    return () => clearTimeout(timer);
-  } else {
-    // Hide if they log out
-    setShow(false);
-  }
-}, [status, pathname]);
+  useEffect(() => {
+    if (status === "authenticated" && pathname.includes("/dashboard")) {
+      // Check if user has already seen the popup in this browser
+      const hasSeenPopup = localStorage.getItem("hasSeenPricingPopup");
+
+      if (!hasSeenPopup) {
+        const timer = setTimeout(() => {
+          setShow(true);
+          // Mark as seen immediately when shown
+          localStorage.setItem("hasSeenPricingPopup", "true");
+        }, 2000);
+        return () => clearTimeout(timer);
+      }
+    } else {
+      // Hide if they log out
+      setShow(false);
+    }
+  }, [status, pathname]);
 
   if (!show || !isClient) return null;
 
@@ -48,7 +56,7 @@ useEffect(() => {
           <X className="w-6 h-6 text-slate-500" />
         </button>
 
-        {/* Left Side: Branding (Flyer Content) */}
+        {/* Left Side: Branding */}
         <div className="lg:w-1/4 bg-slate-900 p-10 text-white flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-slate-800">
           <h2 className="text-4xl font-black italic leading-tight tracking-tighter">
             DIGITAL <br /> MARKETING <br /> 
@@ -59,10 +67,9 @@ useEffect(() => {
           </p>
         </div>
 
-        {/* Right Side: Packages (Flyer Data) */}
+        {/* Right Side: Packages */}
         <div className="lg:w-3/4 p-8 md:p-12 bg-slate-50 overflow-y-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* PLATINUM (Best Value from your flyer) */}
             <PackageCard 
               name="Platinum" 
               icon={<Crown className="text-amber-500" />} 
@@ -70,7 +77,6 @@ useEffect(() => {
               color="border-amber-400"
               btn="bg-amber-600"
             />
-            {/* GOLD */}
             <PackageCard 
               name="Gold" 
               icon={<Zap className="text-cyan-500" />} 
@@ -79,7 +85,6 @@ useEffect(() => {
               btn="bg-cyan-600"
               popular
             />
-            {/* SILVER */}
             <PackageCard 
               name="Silver" 
               icon={<Star className="text-slate-400" />} 

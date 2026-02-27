@@ -40,24 +40,43 @@ export async function POST(req: Request) {
 export async function GET(req: Request) {
   try {
     await dbConnect();
+
     const { searchParams } = new URL(req.url);
-    
-    const category = searchParams.get("query"); // Matches 'query' from frontend
+
+    const category = searchParams.get("query");
     const loc = searchParams.get("location");
 
-    // Create a dynamic filter object
-    let filter: any = { status: 'approved' }; // Optional: only show approved companies
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const skip = (page - 1) * limit;
+
+    let filter: any = { status: "approved" };
 
     if (category) {
-      filter.category = { $regex: category, $options: "i" }; // Case-insensitive search
+      filter.category = { $regex: category, $options: "i" };
     }
+
     if (loc) {
       filter.location = { $regex: loc, $options: "i" };
     }
 
-    const companies = await Company.find(filter).sort({ createdAt: -1 });
-    return NextResponse.json({ success: true, data: companies });
+    const companies = await Company.find(filter)
+      .select(
+        "name category description location whatsapp logo website rating isVerified planType isActuallyPaid"
+      )
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    return NextResponse.json({
+      success: true,
+      data: companies,
+    });
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }

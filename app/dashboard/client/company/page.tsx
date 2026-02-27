@@ -69,7 +69,7 @@ export default function ClientCompanyPage() {
   return (
     <main className="min-h-screen bg-[#F8FAFC] pb-20">
       {/* STICKY HEADER - Mobile Responsive */}
-      <div className="bg-white border-b sticky top-0 md:top-[64px] z-30 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center shadow-sm">
+      <div className="bg-white border-b sticky  z-30 p-4 md:p-6  flex justify-between items-center shadow-sm">
         <div className="min-w-0">
           <h1 className="text-lg md:text-xl font-black text-slate-800 truncate">Edit Listing</h1>
           <p className="text-[9px] md:text-[10px] font-bold text-blue-600 uppercase tracking-widest">Model-Sync Enabled</p>
