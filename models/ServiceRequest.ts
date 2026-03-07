@@ -18,6 +18,10 @@ const ServiceRequestSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now }
 }, { timestamps: true, strict: false });
 
+// Add indexes for performance
+ServiceRequestSchema.index({ email: 1 });
+ServiceRequestSchema.index({ status: 1 });
+
 if (mongoose.models.ServiceRequest) {
   delete mongoose.models.ServiceRequest;
 }

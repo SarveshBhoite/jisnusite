@@ -19,8 +19,11 @@ import Image from "next/image";
 function CompaniesList() {
   const searchParams = useSearchParams();
   const [companies, setCompanies] = useState<any[]>([]);
-  const [filteredCompanies, setFilteredCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [selectedLocation, setSelectedLocation] = useState("All Locations");
   const [searchQuery, setSearchQuery] = useState(
@@ -38,6 +41,9 @@ function CompaniesList() {
   const [matchingBanners, setMatchingBanners] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // For category suggestions, we'll keep a list of all unique categories
+  const [allCategories, setAllCategories] = useState<string[]>([]);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -54,17 +60,14 @@ function CompaniesList() {
   useEffect(() => {
     const query = searchQuery.trim().toLowerCase();
     if (query.length > 0) {
-      const uniqueCategories: string[] = Array.from(
-        new Set(companies.map((c) => c.category).filter(Boolean)),
-      );
-      const filtered = uniqueCategories.filter((cat) =>
+      const filtered = allCategories.filter((cat) =>
         cat.toLowerCase().startsWith(query),
       );
       setSuggestions(filtered);
     } else {
       setSuggestions([]);
     }
-  }, [searchQuery, companies]);
+  }, [searchQuery, allCategories]);
 
   const fetchBannersForCategory = async (targetCategory: string) => {
     const target = targetCategory.toLowerCase().trim();
@@ -101,66 +104,82 @@ function CompaniesList() {
     return () => clearInterval(interval);
   }, [matchingBanners]);
 
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const res = await fetch("/api/companies/public");
-        const data = await res.json();
-        const rawData = data.data || data;
-        const sortedData = rawData.sort((a: any, b: any) => {
-          const aPaid = a.isActuallyPaid || a.planType === "paid";
-          const bPaid = b.isActuallyPaid || b.planType === "paid";
-          if (aPaid && !bPaid) return -1;
-          if (!aPaid && bPaid) return 1;
-          return 0;
-        });
-        setCompanies(sortedData);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+  const fetchCompanies = async (
+    pageNum: number,
+    isNewSearch: boolean = false
+  ) => {
+    try {
+      if (isNewSearch) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
       }
-    };
-    fetchCompanies();
-  }, []);
 
-  useEffect(() => {
-    let filtered = companies.filter((company) => {
-      const isPaid = company.isActuallyPaid || company.planType === "paid";
-      const matchesSearch =
-        company.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        company.category?.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesLocationQuery =
-        !locationQuery ||
-        company.location?.toLowerCase().includes(locationQuery.toLowerCase());
-      const matchesCategoryFilter =
-        selectedCategory === "All Categories" ||
-        company.category === selectedCategory;
+      const params = new URLSearchParams({
+        page: pageNum.toString(),
+        limit: "10",
+      });
 
-      let matchesTab = true;
-      if (activeFilter === "paid") matchesTab = isPaid;
-      if (activeFilter === "free") matchesTab = !isPaid;
-      if (activeFilter === "verified")
-        matchesTab = company.isVerified || isPaid;
+      if (searchQuery) params.append("query", searchQuery);
+      if (locationQuery) params.append("location", locationQuery);
+      if (selectedCategory !== "All Categories")
+        params.append("category", selectedCategory);
 
-      // UPDATED: Rating filter logic (Shows companies with 4.0 or higher)
-      if (activeFilter === "rating") matchesTab = (company.rating || 0) >= 4.0;
+      const res = await fetch(`/api/companies/public?${params.toString()}`);
+      const result = await res.json();
 
-      return (
-        matchesSearch &&
-        matchesLocationQuery &&
-        matchesTab &&
-        matchesCategoryFilter
-      );
-    });
+      if (result.success) {
+        const newData = result.data || [];
 
-    // UPDATED: If Top Rated is active, sort by highest rating first
-    if (activeFilter === "rating") {
-      filtered = filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+        setCompanies((prev) => (isNewSearch ? newData : [...prev, ...newData]));
+        setHasMore(newData.length === 10);
+
+        // Update all categories for suggestions if we don't have them all yet
+        if (isNewSearch || allCategories.length === 0) {
+          const catSet = new Set(allCategories);
+          newData.forEach((c: any) => {
+            if (c.category) catSet.add(c.category);
+          });
+          setAllCategories(Array.from(catSet));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
     }
+  };
 
-    setFilteredCompanies(filtered);
-  }, [searchQuery, locationQuery, companies, activeFilter, selectedCategory]);
+  // Initial fetch and fetch on filter change
+  useEffect(() => {
+    setPage(1);
+    fetchCompanies(1, true);
+  }, [searchQuery, locationQuery, selectedCategory]);
+
+  const loadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchCompanies(nextPage, false);
+  };
+
+  // Client-side filtering only for special tabs (Verified, Top Rated, Premium)
+  const filteredCompanies = companies.filter((company) => {
+    const isPaid = company.isActuallyPaid || company.planType === "paid";
+    let matchesTab = true;
+    if (activeFilter === "paid") matchesTab = isPaid;
+    if (activeFilter === "verified") matchesTab = company.isVerified || isPaid;
+    if (activeFilter === "rating") matchesTab = (company.rating || 0) >= 4.0;
+    return matchesTab;
+  });
+
+  // Sort if Top Rated is active
+  const displayedCompanies =
+    activeFilter === "rating"
+      ? [...filteredCompanies].sort(
+          (a, b) => (b.rating || 0) - (a.rating || 0)
+        )
+      : filteredCompanies;
 
   const filterTabs = [
     { id: "all", label: "All", icon: <LayoutGrid className="w-3.5 h-3.5" /> },
@@ -293,8 +312,8 @@ function CompaniesList() {
       </section>
 
       {/* MAIN LIST */}
-      <div className="grid grid-cols-1 gap-5 mt-6 px-4 pb-20">
-        {filteredCompanies.map((company: any) => {
+      <div className="grid grid-cols-1 gap-5 mt-6 px-4 pb-10">
+        {displayedCompanies.map((company: any) => {
           const isPaid = company.isActuallyPaid || company.planType === "paid";
           const displayWebsite = company.website
             ? company.website.replace(/^https?:\/\/(www\.)?/, "").split("/")[0]
@@ -435,7 +454,37 @@ function CompaniesList() {
             </div>
           );
         })}
+
+        {!loading && displayedCompanies.length === 0 && (
+          <div className="text-center py-20 bg-white rounded-3xl border border-dashed border-slate-200">
+             <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Search className="w-10 h-10 text-slate-300" />
+             </div>
+             <h3 className="text-lg font-bold text-slate-900">No Companies Found</h3>
+             <p className="text-sm text-slate-500">Try adjusting your search or filters.</p>
+          </div>
+        )}
+
+        {hasMore && (
+          <div className="flex justify-center mt-8 pb-10">
+            <button
+              onClick={loadMore}
+              disabled={loadingMore}
+              className="px-10 py-3.5 bg-white border-2 border-slate-200 rounded-2xl text-slate-900 text-xs font-black uppercase tracking-widest hover:border-cyan-500 hover:text-cyan-600 transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3"
+            >
+              {loadingMore ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-cyan-500 border-t-transparent animate-spin rounded-full"></div>
+                  Loading More...
+                </>
+              ) : (
+                "Load More Companies"
+              )}
+            </button>
+          </div>
+        )}
       </div>
+
     </main>
   );
 }

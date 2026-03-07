@@ -43,4 +43,11 @@ const CompanySchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
+// Add indexes for performance
+CompanySchema.index({ status: 1 });
+CompanySchema.index({ email: 1 });
+CompanySchema.index({ category: 1 });
+CompanySchema.index({ location: 1 });
+CompanySchema.index({ planType: 1, createdAt: -1 });
+
 export default mongoose.models.Company || mongoose.model("Company", CompanySchema);
