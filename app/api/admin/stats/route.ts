@@ -7,22 +7,30 @@ export async function GET() {
   try {
     await connectDB();
 
-    const [totalVerified, paidCount, freeCount, pendingCount, newRequestsCount] = await Promise.all([
-      // Only count Verified companies for the main total
-      Company.countDocuments({ status: "verified" }),
-      
-      // Verified AND paid
-      Company.countDocuments({ status: "verified", planType: "paid" }),
-
-      // Verified AND free
-      Company.countDocuments({ status: "verified", planType: "free" }),
-
-      // Strictly pending
+    const [verifiedCompanies, completedServices, pendingCount, newRequestsCount] = await Promise.all([
+      Company.find({ status: "verified" }).select("email planType plan").lean(),
+      ServiceRequest.find({ status: "Completed" }).select("email").lean(),
       Company.countDocuments({ status: "pending" }),
-
-      ServiceRequest.countDocuments({ status: "New" })
-
+      ServiceRequest.countDocuments({ status: "New" }),
     ]);
+
+    const paidEmails = new Set(
+      completedServices
+        .map((s: any) => s.email?.toLowerCase().trim())
+        .filter(Boolean)
+    );
+
+    const paidCount = verifiedCompanies.filter((company: any) => {
+      const email = (company.email || "").toLowerCase().trim();
+      return (
+        company.planType === "paid" ||
+        company.plan === "paid" ||
+        paidEmails.has(email)
+      );
+    }).length;
+
+    const totalVerified = verifiedCompanies.length;
+    const freeCount = totalVerified - paidCount;
 
     return NextResponse.json({
       total: totalVerified,

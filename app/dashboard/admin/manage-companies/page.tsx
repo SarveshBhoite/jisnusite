@@ -34,6 +34,16 @@ export default function ManageCompaniesPage() {
     return matchesSearch && matchesFilter
   })
 
+  const allCount = companies.length
+  const paidCount = companies.filter((company: any) => company.isActuallyPaid === true).length
+  const freeCount = companies.filter((company: any) => company.isActuallyPaid !== true).length
+
+  const filterTabs = [
+    { key: "All", label: "All", count: allCount },
+    { key: "Paid", label: "Paid", count: paidCount },
+    { key: "Free", label: "Free", count: freeCount },
+  ]
+
   if (loading) return (
     <div className="flex justify-center items-center h-screen bg-white">
       <div className="flex flex-col items-center gap-4 px-6 text-center">
@@ -86,17 +96,17 @@ export default function ManageCompaniesPage() {
 
             {/* Segmented Filter */}
             <div className="flex bg-slate-100 p-1.5 rounded-2xl overflow-x-auto no-scrollbar">
-              {["All", "Paid", "Free"].map((type) => (
+              {filterTabs.map((tab) => (
                 <button
-                  key={type}
-                  onClick={() => setFilter(type)}
+                  key={tab.key}
+                  onClick={() => setFilter(tab.key)}
                   className={`flex-1 px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap ${
-                    filter === type 
+                    filter === tab.key 
                     ? "bg-white text-slate-900 shadow-md" 
                     : "text-slate-500 hover:text-slate-800"
                   }`}
                 >
-                  {type}
+                  {tab.label} ({tab.count})
                 </button>
               ))}
             </div>
