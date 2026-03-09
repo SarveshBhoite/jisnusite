@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   Building2,
@@ -16,6 +18,8 @@ import {
 } from "lucide-react";
 
 export default function AdminDashboardPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [stats, setStats] = useState({
     total: 0,
     paid: 0,
@@ -26,6 +30,15 @@ export default function AdminDashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    } else if (status === "authenticated" && session?.user?.role !== "admin") {
+      router.push("/dashboard/client");
+    }
+  }, [session, status, router]);
+
+  useEffect(() => {
+    if (status !== "authenticated" || session?.user?.role !== "admin") return;
     async function loadStats() {
       try {
         const res = await fetch("/api/admin/stats");
@@ -47,7 +60,7 @@ export default function AdminDashboardPage() {
       }
     }
     loadStats();
-  }, []);
+  }, [session, status]);
 
   return (
     <main className="pt-20 px-6 md:px-10 pb-20 bg-slate-50/30 min-h-screen">

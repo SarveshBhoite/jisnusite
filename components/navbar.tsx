@@ -49,6 +49,8 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const dashboardHref = session?.user?.role === "admin" ? "/dashboard/admin" : "/dashboard/client";
+
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
@@ -153,7 +155,7 @@ export default function Navbar() {
                             <span className="block text-sm font-black text-cyan-600 uppercase">{session.user?.name}</span>
                             <span className="block text-xs text-slate-500 truncate">{session.user?.email}</span>
                         </div>
-                        <Link href="/dashboard/client" className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">
+                        <Link href={dashboardHref} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50">
                             <User className="w-4 h-4" /> Dashboard
                         </Link>
                         <button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50">
@@ -217,7 +219,7 @@ export default function Navbar() {
               </div>
               
               {status === "authenticated" ? (
-                 <><Link href="/dashboard/client" className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
+                 <><Link href={dashboardHref} className="px-4 py-3 flex items-center gap-3 text-slate-700 font-bold">
                   <User className="w-5 h-5" /> My Dashboard
                 </Link><button onClick={() => signOut()} className="w-full flex items-center gap-3 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50">
                     <LogOut className="w-4 h-4" /> Sign Out

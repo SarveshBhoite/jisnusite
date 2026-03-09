@@ -169,7 +169,7 @@ function CompaniesList() {
     let matchesTab = true;
     if (activeFilter === "paid") matchesTab = isPaid;
     if (activeFilter === "verified") matchesTab = company.isVerified || isPaid;
-    if (activeFilter === "rating") matchesTab = (company.rating || 0) >= 4.0;
+    if (activeFilter === "rating") matchesTab = (company.rating || 0) ;
     return matchesTab;
   });
 

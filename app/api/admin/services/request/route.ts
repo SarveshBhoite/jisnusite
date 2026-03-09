@@ -19,8 +19,10 @@ export async function GET() {
       return NextResponse.json({ message: "Not Authenticated" }, { status: 401 });
     }
 
-   
-    const requests = await ServiceRequest.find({ email: session.user.email }).sort({ createdAt: -1 });
+    const isAdmin = session.user.role === "admin";
+    
+    const query = isAdmin ? {} : { email: session.user.email };
+    const requests = await ServiceRequest.find(query).sort({ createdAt: -1 });
     
     return NextResponse.json(requests);
   } catch (error) {

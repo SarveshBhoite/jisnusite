@@ -48,21 +48,14 @@ export default function CombinedLoginPage() {
         setError("Invalid password. Please try again.");
         setLoading(false);
       } else {
-        // 3. AUTH SUCCESS: Check role and redirect
-       // login/page.tsx check
-const session = await getSession();
-
-if (session?.user?.role === "admin") {
-  console.log("Redirecting to Admin...");
-  router.push("/dashboard/admin");
-  window.location.href = "/dashboard/admin";
-} else {
-  console.log("Redirecting to Client...");
-  router.push("/dashboard/client");
-  window.location.href = "/dashboard/client";
-}
+        // 3. AUTH SUCCESS: Fetch session to get the role
+        const session = await getSession();
         
-        router.refresh();
+        if (session?.user?.role === "admin") {
+          window.location.href = "/dashboard/admin";
+        } else {
+          window.location.href = "/dashboard/client";
+        }
       }
     } catch (err) {
       setError("An error occurred. Please try again later.");

@@ -1,10 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { Building2, ImageIcon, FileText, CheckCircle, Loader2 } from "lucide-react"
 
 
 export default function ClientDashboardPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
   const [stats, setStats] = useState({
     status: "Checking...",
     mediaCount: 0,
@@ -14,6 +18,13 @@ export default function ClientDashboardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
+
+  useEffect(() => {
+    if (status !== "authenticated") return;
     async function fetchClientStats() {
       try {
         const res = await fetch("/api/client/stats")
@@ -27,7 +38,7 @@ export default function ClientDashboardPage() {
       }
     }
     fetchClientStats()
-  }, [])
+  }, [status])
 
   return (
     // Added horizontal padding for mobile view compat

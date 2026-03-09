@@ -9,7 +9,7 @@ const CompanySchema = new mongoose.Schema({
   website: { type: String },
   rating: {
     type: Number,
-    default: 4.5, // Your default starting rating
+    default:0, // Your default starting rating
   },
   totalReviews: {
     type: Number,
