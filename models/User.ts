@@ -4,6 +4,7 @@ const UserSchema = new mongoose.Schema({
   name: String,
   email: { type: String, unique: true },
   phone: { type: String, default: "" },
+  whatsapp: { type: String, default: "" },
   company: { type: String, default: "" },
   password: { type: String, select: false },
 });

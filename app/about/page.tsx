@@ -1,13 +1,12 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import Image from "next/image"
-import { ArrowRight, Users, Lightbulb, Target, Award } from "lucide-react"
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowRight, Users, Lightbulb, Target, Award } from "lucide-react";
 
 export default function AboutPage() {
   return (
     <main className="pt-24">
-
       {/* ================= HERO ================= */}
       <section className="py-24 bg-muted/40">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,44 +24,43 @@ export default function AboutPage() {
       {/* ================= STORY ================= */}
       <section className="py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-2 gap-16 items-center">
-
           <div className="space-y-6">
             <h2 className="font-display text-3xl md:text-4xl font-semibold">
               Our Story
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Jisnu Digital Solutions was founded with a simple goal — to help
-              businesses build digital products that are practical, scalable,
-              and built for long-term growth.
+              Welcome to <b>Jisnu Digital Solutions Pvt. Ltd.</b>, your trusted partner
+              in the digital world. <b>Established in 2018,</b> we are recognized as
+              one of the top digital marketing companies in Pune, known for
+              delivering innovative and result-driven digital solutions. Based
+              in Pune, Maharashtra, our expert team is committed to helping
+              businesses grow online using cutting-edge technology and proven
+              strategies.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              Over the years, we’ve worked with startups, small businesses, and
-              growing organizations across different industries, delivering
-              websites, platforms, and digital strategies that solve real
-              business problems.
-            </p>
-            <p className="text-muted-foreground leading-relaxed">
-              We focus on clarity, collaboration, and execution — ensuring every
-              project delivers value beyond visuals.
+              As a best-in-class web development company, we provide end-to-end
+              services including SEO services, social media marketing, Google
+              Ads management, content marketing, and lead generation for small
+              businesses. Our customized approach focuses on local SEO and
+              website design and development to ensure measurable growth and a
+              strong digital presence for our clients.
             </p>
           </div>
 
           <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-border bg-muted">
             <Image
-              src="/modern-ecommerce-platform.jpg"
+              src="/SMM.jpg"
               alt="Jisnu Digital team working"
               fill
               className="object-cover"
             />
           </div>
-
         </div>
       </section>
 
       {/* ================= VALUES ================= */}
       <section className="py-28 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
           <div className="max-w-2xl mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
               What Drives Us
@@ -71,7 +69,6 @@ export default function AboutPage() {
               Our values shape how we work, communicate, and deliver.
             </p>
           </div>
-
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
@@ -109,14 +106,12 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
       {/* ================= STATS ================= */}
       <section className="py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
           <div className="max-w-2xl mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
               By the Numbers
@@ -137,20 +132,16 @@ export default function AboutPage() {
                 <p className="font-display text-4xl md:text-5xl font-semibold text-primary mb-2">
                   {stat.value}
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  {stat.label}
-                </p>
+                <p className="text-sm text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
       {/* ================= TEAM ================= */}
       <section className="py-28 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
           <div className="max-w-2xl mb-16">
             <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
               Our Team
@@ -163,23 +154,23 @@ export default function AboutPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
-                name: "Team Member",
-                role: "Role / Position",
+                name: "Amole Ade",
+                role: "CEO & Founder ",
                 image: "/professional-headshot-man-business.jpg",
               },
               {
-                name: "Team Member",
-                role: "Role / Position",
+                name: "Rohit Pawar",
+                role: "Co-Founder & CTO",
                 image: "/professional-headshot-woman-technology.jpg",
               },
               {
-                name: "Team Member",
-                role: "Role / Position",
+                name: "Pratik Ghalme",
+                role: "Manager",
                 image: "/professional-creative-man.png",
-              },
+              },  
               {
-                name: "Team Member",
-                role: "Role / Position",
+                name: "Pratik Pawar",
+                role: "SEO Specialist",
                 image: "/professional-headshot-woman-engineer.jpg",
               },
             ].map((member, i) => (
@@ -197,7 +188,6 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
-
         </div>
       </section>
 
@@ -218,7 +208,6 @@ export default function AboutPage() {
           </Link>
         </div>
       </section>
-
     </main>
-  )
+  );
 }

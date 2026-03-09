@@ -22,9 +22,18 @@ export async function GET() {
     const isAdmin = session.user.role === "admin";
     
     const query = isAdmin ? {} : { email: session.user.email };
-    const requests = await ServiceRequest.find(query).sort({ createdAt: -1 });
+    const requests = await ServiceRequest.find(query).sort({ createdAt: -1 }).lean();
     
-    return NextResponse.json(requests);
+    // Populate whatsapp if missing (for legacy requests)
+    const populatedRequests = await Promise.all(requests.map(async (req: any) => {
+      if (!req.whatsapp && req.email) {
+        const user = await (require("@/models/User").default).findOne({ email: { $regex: new RegExp(`^${req.email}$`, "i") } });
+        if (user) req.whatsapp = user.whatsapp;
+      }
+      return req;
+    }));
+
+    return NextResponse.json(populatedRequests);
   } catch (error) {
     return NextResponse.json({ error: "Fetch failed" }, { status: 500 });
   }

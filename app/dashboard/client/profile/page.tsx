@@ -12,6 +12,7 @@ export default function ProfilePage() {
     name: "",
     email: "",
     phone: "",
+    whatsapp: "",
     company: "",
   })
 
@@ -39,6 +40,7 @@ export default function ProfilePage() {
           name: data.name || "",
           email: data.email || session.user.email,
           phone: data.phone || "",
+          whatsapp: data.whatsapp || "",
           company: data.company || "",
         });
       }
@@ -107,6 +109,12 @@ export default function ProfilePage() {
             label="Phone Number"
             value={profile.phone}
             onChange={(v) => setProfile({ ...profile, phone: v })}
+          />
+          <InputField
+            icon={<Phone size={18} />}
+            label="Whatsapp Number"
+            value={profile.whatsapp}
+            onChange={(v) => setProfile({ ...profile, whatsapp: v })}
           />
           <InputField
             icon={<Building size={18} />}

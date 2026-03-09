@@ -38,13 +38,13 @@ export async function PUT(req: Request) {
   try {
     await dbConnect();
     const body = await req.json();
-    const { email, name, phone, company } = body;
+    const { email, name, phone, whatsapp, company } = body;
 
     if (!email) return NextResponse.json({ error: "Email is required" }, { status: 400 });
 
     const updatedUser = await User.findOneAndUpdate(
       { email: { $regex: new RegExp(`^${email}$`, "i") } },
-      { name, phone, company },
+      { name, phone, whatsapp, company },
       { new: true, runValidators: true }
     );
 

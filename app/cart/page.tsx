@@ -10,6 +10,7 @@ export default function CartPage() {
   const [cart, setCart] = useState<any[]>([])
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
+  const [whatsapp, setWhatsapp] = useState("")
 
   // 🚀 Logic to load cart and listen for updates
   useEffect(() => {
@@ -19,6 +20,22 @@ export default function CartPage() {
     }
 
     loadCart() // Initial load
+    
+    // Fetch user profile to get whatsapp number
+    const fetchUserProfile = async () => {
+      if (status === "authenticated" && session.user?.email) {
+        try {
+          const res = await fetch(`/api/client/profile?email=${session.user.email}`);
+          if (res.ok) {
+            const data = await res.json();
+            setWhatsapp(data.whatsapp || "");
+          }
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
+        }
+      }
+    };
+    fetchUserProfile();
 
     // Listen for the custom event you dispatched in removeItem
     window.addEventListener("cartUpdated", loadCart)
@@ -48,6 +65,7 @@ export default function CartPage() {
     const payload = {
       email: session.user?.email,
       name: session.user?.name,
+      whatsapp: whatsapp,
       companyName: "Individual Request",
       services: cart.map(item => ({
         id: item._id,
