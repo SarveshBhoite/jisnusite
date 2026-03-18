@@ -1,8 +1,12 @@
 import dbConnect from "@/lib/mongodb";
 import Company from "@/models/Company";
 import { NextResponse } from "next/server";
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 export async function GET() {
+  const guard = await requireAdminOrEmployeePermission("approvals", "view");
+  if (!guard.ok) return guard.response!;
+
   try {
     await dbConnect();
     // Fetch companies where status is exactly 'pending'

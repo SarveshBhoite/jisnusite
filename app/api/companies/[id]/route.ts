@@ -1,9 +1,13 @@
 import dbConnect from '@/lib/mongodb';
 import Company from '@/models/Company';
 import { NextResponse } from 'next/server';
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 // Handle Fetch for Single Company
 export async function GET(req: Request, { params }: { params: any }) {
+  const guard = await requireAdminOrEmployeePermission("manage-companies", "view");
+  if (!guard.ok) return guard.response!;
+
   try {
     await dbConnect();
     const { id } = await params;
@@ -16,6 +20,9 @@ export async function GET(req: Request, { params }: { params: any }) {
 
 // Handle Update (PUT)
 export async function PUT(req: Request, { params }: { params: any }) {
+  const guard = await requireAdminOrEmployeePermission("manage-companies", "update");
+  if (!guard.ok) return guard.response!;
+
   try {
     await dbConnect();
     const { id } = await params;

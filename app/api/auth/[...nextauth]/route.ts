@@ -2,7 +2,9 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import connectDB from "@/lib/mongodb";
 import Company from "@/models/Company";
+import Employee from "@/models/Employee";
 import bcrypt from "bcryptjs";
+import { normalizePermissions } from "@/lib/employee-permissions";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -18,28 +20,53 @@ export const authOptions: NextAuthOptions = {
         }
 
         await connectDB();
-        
-        // Change this line:
-        const company = await Company.findOne({ email: credentials.email }).select("+password");
-        if (!company) throw new Error("No company found with this email");
+        const email = credentials.email.toLowerCase().trim();
 
-        let userRole = company.role || "client";
-if (company.email === "info.jdsolutions2018@gmail.com") {
-    userRole = "admin";
-}
+        const company = await Company.findOne({ email }).select("+password");
+        if (company) {
+          let userRole = company.role || "client";
+          if (company.email === "info.jdsolutions2018@gmail.com") {
+            userRole = "admin";
+          }
 
-        const isPasswordCorrect = await bcrypt.compare(
-          credentials.password, 
-          company.password
+          const isPasswordCorrect = await bcrypt.compare(
+            credentials.password,
+            company.password
+          );
+          if (!isPasswordCorrect) throw new Error("Invalid password");
+
+          return {
+            id: company._id.toString(),
+            name: company.name,
+            email: company.email,
+            role: userRole,
+            permissions: [],
+          };
+        }
+
+        const employee = await Employee.findOne({ email })
+          .select("+password isActive permissions name email")
+          .lean();
+        if (!employee || !employee.password) {
+          throw new Error("No account found with this email");
+        }
+        if (!employee.isActive) {
+          throw new Error("Your employee account is inactive");
+        }
+
+        const isEmployeePasswordCorrect = await bcrypt.compare(
+          credentials.password,
+          employee.password as string
         );
-        
-        if (!isPasswordCorrect) throw new Error("Invalid password");
+        if (!isEmployeePasswordCorrect) throw new Error("Invalid password");
 
+        const employeePermissions = normalizePermissions(employee.permissions as any);
         return {
-          id: company._id.toString(),
-          name: company.name,
-          email: company.email,
-          role: userRole,
+          id: String(employee._id),
+          name: employee.name,
+          email: employee.email,
+          role: "employee",
+          permissions: employeePermissions,
         };
       }
     })
@@ -52,6 +79,7 @@ if (company.email === "info.jdsolutions2018@gmail.com") {
       if (user) {
         token.role = user.role;
         token.id = user.id;
+        token.permissions = Array.isArray(user.permissions) ? user.permissions : [];
       }
       return token;
     },
@@ -59,6 +87,7 @@ if (company.email === "info.jdsolutions2018@gmail.com") {
       if (session.user) {
         session.user.role = token.role;
         session.user.id = token.id;
+        session.user.permissions = Array.isArray(token.permissions) ? token.permissions : [];
       }
       return session;
     }

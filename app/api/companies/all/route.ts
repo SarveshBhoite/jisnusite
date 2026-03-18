@@ -2,8 +2,12 @@ import dbConnect from '@/lib/mongodb';
 import Company from '@/models/Company';
 import ServiceRequest from '@/models/ServiceRequest'; // Import your service model
 import { NextResponse } from 'next/server';
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 export async function GET() {
+  const guard = await requireAdminOrEmployeePermission("manage-companies", "view");
+  if (!guard.ok) return guard.response!;
+
   try {
     await dbConnect();
 

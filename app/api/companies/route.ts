@@ -1,13 +1,17 @@
 import dbConnect from '@/lib/mongodb';
 import Company from '@/models/Company';
+import User from '@/models/User';
 import { NextResponse } from 'next/server';
-import bcrypt from "bcryptjs"; // 👈 Import bcrypt
+import bcrypt from "bcryptjs"; 
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 
 export async function POST(req: Request) {
   try {
     await dbConnect();
     const body = await req.json();
+    const session = await getServerSession(authOptions);
 
     if (!body || !body.password) {
       return NextResponse.json({ success: false, error: "Password is required" }, { status: 400 });
@@ -15,6 +19,34 @@ export async function POST(req: Request) {
 
     // 👈 IMPORTANT: Hash the password before saving
     const hashedPassword = await bcrypt.hash(body.password, 10);
+
+    let listedByUserId = null;
+    let listedByName = body?.listedByName?.trim() || null;
+
+    if (session?.user?.email) {
+      const email = session.user.email;
+      // Find the User record corresponding to the logged in account (Company)
+      let userRecord = await User.findOne({ 
+        email: { $regex: new RegExp(`^${email}$`, "i") } 
+      });
+      
+      // If NOT found, create the record immediately (to ensure we have a valid ID)
+      if (!userRecord) {
+        userRecord = await User.create({
+          email: email.toLowerCase(),
+          name: session.user.name || email.split("@")[0],
+          phone: "",
+          company: "",
+        });
+      }
+
+      if (userRecord) {
+        listedByUserId = userRecord._id;
+        if (!listedByName) {
+          listedByName = userRecord.name || session.user.name || null;
+        }
+      }
+    }
 
     const newCompany = await Company.create({
       name: body.name,
@@ -27,7 +59,9 @@ export async function POST(req: Request) {
       logo: body.logo,
       services: body.services,  
       workingHours: body.workingHours,
-      status: 'pending' 
+      status: 'pending',
+      listedByUserId: listedByUserId,
+      listedByName: listedByName,
     });
 
     return NextResponse.json({ success: true, data: newCompany }, { status: 201 });

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb"; // Ensure this path matches your DB connection utility
 import Ad from "@/models/Ad"; // Ensure this path matches your Ad model
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 // 1. GET: Fetch all ads
 export async function GET() {
@@ -14,6 +15,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("ads", "add");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   try {
     const body = await req.json();
@@ -35,6 +39,9 @@ export async function POST(req: Request) {
 }
 // 3. PUT: Update an existing ad (This fixes your 405 error)
 export async function PUT(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("ads", "update");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   try {
     const body = await req.json();
@@ -53,6 +60,9 @@ export async function PUT(req: Request) {
 
 // 4. DELETE: Remove an ad
 export async function DELETE(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("ads", "delete");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   try {
     const { searchParams } = new URL(req.url);

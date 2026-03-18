@@ -1,9 +1,13 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { useSession } from "next-auth/react"
 import { Plus, Trash2, Image as ImageIcon, Loader2,ChevronLeft  } from "lucide-react"
 
 export default function AdminPortfolio() {
+  const { status } = useSession()
+  const router = useRouter()
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -24,17 +28,41 @@ export default function AdminPortfolio() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+
+    if (status !== "authenticated") {
+      alert("Session expired. Please login again.");
+      router.push("/login");
+      return;
+    }
+
     setLoading(true);
     const res = await fetch("/api/admin/portfolio", {
       method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(formData)
     });
     if (res.ok) {
       alert("Project Added to Portfolio!");
       window.location.reload();
+    } else if (res.status === 401) {
+      alert("Unauthorized. Please login as admin.");
+      router.push("/login");
+    } else if (res.status === 403) {
+      alert("You do not have permission to add portfolio.");
+    } else {
+      alert("Failed to add portfolio.");
     }
     setLoading(false);
   }
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
 
   return (
     <div className="pt-25 max-w-6xl mx-auto bg-white min-h-screen">
@@ -65,8 +93,8 @@ export default function AdminPortfolio() {
           >
             <option>Web Development</option>
             <option>App Development</option>
-            <option>UI/UX Design</option>
-            <option>Branding</option>
+            <option>Software Development</option>
+            <option>Social Media Marketing</option>
             <option>SEO</option>
           </select>
         </div>

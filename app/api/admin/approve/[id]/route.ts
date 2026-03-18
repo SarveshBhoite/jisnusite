@@ -1,8 +1,12 @@
 import dbConnect from '@/lib/mongodb';
 import Company from '@/models/Company';
 import { NextResponse } from 'next/server';
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 export async function PATCH(req: Request, { params }: { params: any }) {
+  const guard = await requireAdminOrEmployeePermission("approvals", "update");
+  if (!guard.ok) return guard.response!;
+
   try {
     await dbConnect();
     const { id } = await params; 

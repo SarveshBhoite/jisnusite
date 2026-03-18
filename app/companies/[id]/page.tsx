@@ -3,7 +3,7 @@ import dbConnect from "@/lib/mongodb"
 import Company from "@/models/Company"
 import Link from "next/link"
 import ServiceRequest from "@/models/ServiceRequest"
-import RatingSystem from "@/components/RatingSystem" // Import naya component
+import RatingSystem from "@/components/RatingSystem" 
 import { 
   MapPin, Globe, ShieldCheck, Clock, 
   Phone, MessageSquare, Star, Info, 

@@ -25,7 +25,7 @@ export default function PortfolioPage() {
     fetchPortfolio()
   }, [])
 
-  const staticCategories = ["All", "Web Development", "App Development", "UI/UX Design", "Branding", "SEO"];
+  const staticCategories = ["All", "Web Development", "App Development", "Software Development", "Social Media Marketing", "SEO"];
   const dynamicCategories = portfolioItems.map((item: any) => item.category).filter(Boolean);
   const categories = Array.from(new Set([...staticCategories, ...dynamicCategories]));
 

@@ -153,25 +153,26 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-              {
-                name: "Amole Ade",
-                role: "CEO & Founder ",
-                image: "/professional-headshot-man-business.jpg",
-              },
+             
               {
                 name: "Rohit Pawar",
-                role: "Co-Founder & CTO",
-                image: "/professional-headshot-woman-technology.jpg",
+                role: "Sales Manager",
+                image: "/Rohit.jpg",
               },
               {
                 name: "Pratik Ghalme",
                 role: "Manager",
-                image: "/professional-creative-man.png",
+                image: "/pratik.jpg",
               },  
               {
                 name: "Pratik Pawar",
-                role: "SEO Specialist",
-                image: "/professional-headshot-woman-engineer.jpg",
+                role: "Team Leader",
+                image: "/Pawar.jpg",
+              },
+               {
+                name: "Sarvesh Bhoite",
+                role: "Software Developer",
+                image: "/professional-headshot-man-business.jpg",
               },
             ].map((member, i) => (
               <div key={i}>

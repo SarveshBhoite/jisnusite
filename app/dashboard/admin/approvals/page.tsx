@@ -67,16 +67,22 @@ export default function CompanyApprovalPage() {
                   <div className="w-20 h-20 rounded-[2rem] bg-slate-50 border flex items-center justify-center overflow-hidden shrink-0">
                     {company.logo ? <img src={company.logo} className="w-full h-full object-contain p-2" /> : <Building2 className="w-10 h-10 text-slate-300" />}
                   </div>
-                  <div>
-                    <h2 className="text-2xl font-black text-slate-900">{company.name}</h2>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wider">{company.category}</span>
-                      <span className="text-slate-300">•</span>
-                      <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
-                        <Clock className="w-3 h-3" /> Submitted {new Date(company.createdAt).toLocaleDateString()}
-                      </p>
+                    <div>
+                      <h2 className="text-2xl font-black text-slate-900">{company.name}</h2>
+                      <div className="flex flex-wrap items-center gap-2 mt-1">
+                        <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full uppercase tracking-wider">{company.category}</span>
+                        <span className="text-slate-300">&bull;</span>
+                        <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> Submitted {new Date(company.createdAt).toLocaleDateString()}
+                        </p>
+                        <>
+                          <span className="text-slate-300">&bull;</span>
+                          <p className="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase tracking-wider">
+                            Listed by: {company.listedByName || "Not Provided"}
+                          </p>
+                        </>
+                      </div>
                     </div>
-                  </div>
                 </div>
 
                 {/* Short Description */}
@@ -141,7 +147,7 @@ export default function CompanyApprovalPage() {
                     onClick={() => handleAction(company._id, "accepted")}
                     className="w-full flex items-center justify-center gap-2 bg-slate-900 text-white py-4 rounded-2xl font-black text-sm hover:bg-blue-600 transition-all shadow-xl shadow-slate-200"
                   >
-                    <CheckCircle className="w-4 h-4" /> Approve Listing
+                    <CheckCircle className="w-4 h-4" /> Approve Listings
                   </button>
                   <button 
                     onClick={() => handleAction(company._id, "rejected")}
@@ -169,3 +175,4 @@ export default function CompanyApprovalPage() {
     </main>
   )
 }
+

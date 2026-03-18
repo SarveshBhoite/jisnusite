@@ -2,27 +2,16 @@ import connectDB from "@/lib/mongodb";
 import ServiceRequest from "@/models/ServiceRequest";
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
-// 1. Import session tools
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 // GET: Filter based on logged-in user
 export async function GET() {
+  const guard = await requireAdminOrEmployeePermission("service-requests", "view");
+  if (!guard.ok) return guard.response!;
+
   try {
     await connectDB();
-    
-    // 2. Get the current session
-    const session = await getServerSession(authOptions);
-
-    // 3. If no session, don't show any data
-    if (!session || !session.user?.email) {
-      return NextResponse.json({ message: "Not Authenticated" }, { status: 401 });
-    }
-
-    const isAdmin = session.user.role === "admin";
-    
-    const query = isAdmin ? {} : { email: session.user.email };
-    const requests = await ServiceRequest.find(query).sort({ createdAt: -1 }).lean();
+    const requests = await ServiceRequest.find({}).sort({ createdAt: -1 }).lean();
     
     // Populate whatsapp if missing (for legacy requests)
     const populatedRequests = await Promise.all(requests.map(async (req: any) => {
@@ -59,6 +48,9 @@ export async function POST(req: Request) {
 
 // PATCH: Status update logic remains the same
 export async function PATCH(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("service-requests", "update");
+  if (!guard.ok) return guard.response!;
+
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);

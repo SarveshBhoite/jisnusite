@@ -49,7 +49,12 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const dashboardHref = session?.user?.role === "admin" ? "/dashboard/admin" : "/dashboard/client";
+  const dashboardHref =
+    session?.user?.role === "admin"
+      ? "/dashboard/admin"
+      : session?.user?.role === "employee"
+      ? "/dashboard/employee"
+      : "/dashboard/client";
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -66,9 +71,9 @@ export default function Navbar() {
   ];
 
   const socialLinks = [
-    { name: "Facebook", href: "https://facebook.com", icon: Facebook, hoverClass: "hover:bg-blue-600" },
-    { name: "Instagram", href: "https://instagram.com", icon: Instagram, hoverClass: "hover:bg-pink-600" },
-    { name: "LinkedIn", href: "https://linkedin.com", icon: Linkedin, hoverClass: "hover:bg-sky-700" },
+    { name: "Facebook", href: "https://www.facebook.com/profile.php?id=61571480567573", icon: Facebook, hoverClass: "hover:bg-blue-600" },
+    { name: "Instagram", href: "https://www.instagram.com/jisnu_digitalsolution_pvt_ltd/", icon: Instagram, hoverClass: "hover:bg-pink-600" },
+    { name: "LinkedIn", href: "https://x.com/Jisnudigital018", icon: Linkedin, hoverClass: "hover:bg-sky-700" },
     { name: "YouTube", href: "https://youtube.com", icon: Youtube, hoverClass: "hover:bg-red-600" },
   ];
 

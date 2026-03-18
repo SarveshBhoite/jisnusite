@@ -4,6 +4,7 @@ import nodemailer from "nodemailer";
 export async function POST(req: Request) {
   try {
     const { firstName, lastName, email, company, subject, message } = await req.json();
+    const adminRecipient = "info.jdsolutions2018@gmail.com";
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
       from: `"${firstName} ${lastName}" <${process.env.EMAIL_USER}>`,
       
       // 2. The destination (Admin)
-      to: process.env.ADMIN_EMAIL, 
+      to: adminRecipient, 
       
       // 3. THIS IS THE KEY: When you click "Reply", it goes to the user
       replyTo: email, 

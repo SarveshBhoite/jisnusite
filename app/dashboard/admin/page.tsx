@@ -168,10 +168,15 @@ export default function AdminDashboardPage() {
             icon={<Image />}
           />
 
-            <QuickAction
+          <QuickAction
             title="Publish banner"
             href="/dashboard/admin/banner"
             icon={<Image />}
+          />
+          <QuickAction
+            title="Manage Employees"
+            href="/dashboard/admin/manage-employees"
+            icon={<Users />}
           />
         </div>
       </section>

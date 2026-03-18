@@ -23,6 +23,7 @@ import {
   Zap,
   Trophy,
   TrendingUp,
+  MessageCircle,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -38,7 +39,12 @@ export default function Home() {
 
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
+  const [showLocationSuggestions, setShowLocationSuggestions] = useState(false);
   const suggestionRef = useRef<HTMLDivElement>(null);
+  const locationSuggestionRef = useRef<HTMLDivElement>(null);
+  const [recentWorkIndex, setRecentWorkIndex] = useState(0);
+  const [reviewIndex, setReviewIndex] = useState(0);
 
   const categories = [
     { name: "Web Development", icon: "🌐", count: "500+" },
@@ -106,6 +112,70 @@ export default function Home() {
     { icon: Clock, value: "5+", label: "Years Exp." },
   ];
 
+  const citySuggestions = [
+    "Nagpur",
+    "Nashik",
+    "Nanded",
+    "Navi Mumbai",
+    "New Delhi",
+    "Noida",
+    "Mumbai",
+    "Pune",
+    "Aurangabad",
+    "Amravati",
+    "Akola",
+    "Chandrapur",
+    "Wardha",
+    "Yavatmal",
+    "Jalgaon",
+    "Kolhapur",
+    "Solapur",
+    "Sangli",
+    "Satara",
+    "Ahmednagar",
+    "Bengaluru",
+    "Hyderabad",
+    "Chennai",
+    "Kolkata",
+    "Ahmedabad",
+    "Surat",
+    "Jaipur",
+    "Lucknow",
+    "Indore",
+    "Bhopal",
+  ];
+
+  const customerReviews = [
+    {
+      name: "Rohit Sharma",
+      company: "Urban Build Pvt Ltd",
+      review:
+        "Very professional team. Our website and leads both improved in just a few weeks.",
+      rating: 5,
+    },
+    {
+      name: "Pooja Verma",
+      company: "Glow Beauty Studio",
+      review:
+        "They handled our digital marketing really well. Great communication and fast support.",
+      rating: 5,
+    },
+    {
+      name: "Arjun Mehta",
+      company: "Mehta Electronics",
+      review:
+        "SEO and listing optimization gave us visible growth. Highly recommended service.",
+      rating: 4,
+    },
+    {
+      name: "Sneha Nair",
+      company: "Nair Interiors",
+      review:
+        "Design quality was excellent and the project delivery was on time exactly as promised.",
+      rating: 5,
+    },
+  ];
+
   useEffect(() => {
     const q = query.trim().toLowerCase();
     if (q.length > 0) {
@@ -124,12 +194,30 @@ export default function Home() {
   }, [query]);
 
   useEffect(() => {
+    const l = location.trim().toLowerCase();
+    if (l.length > 0) {
+      const filtered = citySuggestions
+        .filter((city) => city.toLowerCase().startsWith(l))
+        .slice(0, 8);
+      setLocationSuggestions(filtered);
+    } else {
+      setLocationSuggestions([]);
+    }
+  }, [location]);
+
+  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         suggestionRef.current &&
         !suggestionRef.current.contains(event.target as Node)
       ) {
         setShowSuggestions(false);
+      }
+      if (
+        locationSuggestionRef.current &&
+        !locationSuggestionRef.current.contains(event.target as Node)
+      ) {
+        setShowLocationSuggestions(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -233,6 +321,21 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    if (!portfolio.length) return;
+    const timer = setInterval(() => {
+      setRecentWorkIndex((prev) => (prev + 1) % portfolio.length);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, [portfolio.length]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setReviewIndex((prev) => (prev + 1) % customerReviews.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [customerReviews.length]);
+
   const current = cards[index];
 
   return (
@@ -275,7 +378,7 @@ export default function Home() {
                       setShowSuggestions(true);
                     }}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    placeholder="Search for services (e.g. H for Hotels)..."
+                    placeholder="Search for services "
                     className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
                   />
 
@@ -304,16 +407,45 @@ export default function Home() {
 
                 <div className="hidden md:block w-px h-8 bg-slate-200 mx-2" />
 
-                <div className="flex-1 flex items-center gap-3 px-4 w-full border-t md:border-t-0 border-slate-100 pt-2 md:pt-0">
+                <div
+                  className="flex-1 flex items-center gap-3 px-4 w-full border-t md:border-t-0 border-slate-100 pt-2 md:pt-0 relative"
+                  ref={locationSuggestionRef}
+                >
                   <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
                   <input
                     type="text"
                     value={location}
-                    onChange={(e) => setLocation(e.target.value)}
+                    onFocus={() => setShowLocationSuggestions(true)}
+                    onChange={(e) => {
+                      setLocation(e.target.value);
+                      setShowLocationSuggestions(true);
+                    }}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    placeholder="Location (e.g. Mumbai)"
+                    placeholder="Location "
                     className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
                   />
+
+                  {showLocationSuggestions && locationSuggestions.length > 0 && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl z-[100] overflow-hidden">
+                      <div className="max-h-60 overflow-y-auto">
+                        {locationSuggestions.map((city, index) => (
+                          <button
+                            key={index}
+                            onClick={() => {
+                              setLocation(city);
+                              setShowLocationSuggestions(false);
+                            }}
+                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 text-left transition-colors border-b border-slate-50 last:border-0"
+                          >
+                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-sm font-bold text-slate-700">
+                              {city}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <button
@@ -574,51 +706,124 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {portfolio.map((project, index) => (
-              <div
-                key={project._id}
-                className="group bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all"
-              >
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={project.image || "/project-placeholder.jpg"}
-                    alt={project.companyName || "Project"}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span className="px-2 py-1 bg-cyan-600 text-white text-[10px] font-bold rounded">
-                      {project.category}
-                    </span>
+            {portfolio.length > 0 && (
+              <div className="col-span-1 md:col-span-2 lg:col-span-4">
+                <div
+                  key={portfolio[recentWorkIndex]?._id || recentWorkIndex}
+                  className="group mx-auto max-w-3xl bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all"
+                >
+                  <div className="relative aspect-[16/8] overflow-hidden">
+                    <Image
+                      src={portfolio[recentWorkIndex]?.image || "/project-placeholder.jpg"}
+                      alt={portfolio[recentWorkIndex]?.companyName || "Project"}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3">
+                      <span className="px-2 py-1 bg-cyan-600 text-white text-[10px] font-bold rounded">
+                        {portfolio[recentWorkIndex]?.category}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    <h3 className="font-bold text-slate-900 mb-1 group-hover:text-cyan-600 transition-colors">
+                      {portfolio[recentWorkIndex]?.companyName}
+                    </h3>
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center">
+                        {[1, 2, 3, 4, 5].map((i) => (
+                          <Star
+                            key={i}
+                            className="w-3 h-3 fill-cyan-400 text-cyan-400"
+                          />
+                        ))}
+                      </div>
+                      <span className="text-slate-500 text-xs">
+                        (4.{9 - (recentWorkIndex % 2)})
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-teal-600 text-xs font-medium flex items-center gap-1">
+                        <BadgeCheck className="w-3 h-3" /> Verified Project
+                      </span>
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-600 transition-colors" />
+                    </div>
                   </div>
                 </div>
 
-                <div className="p-4">
-                  <h3 className="font-bold text-slate-900 mb-1 group-hover:text-cyan-600 transition-colors">
-                    {project.companyName}
-                  </h3>
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex items-center">
-                      {[1, 2, 3, 4, 5].map((i) => (
-                        <Star
-                          key={i}
-                          className="w-3 h-3 fill-cyan-400 text-cyan-400"
-                        />
-                      ))}
-                    </div>
-                    <span className="text-slate-500 text-xs">
-                      (4.{9 - (index % 2)})
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-teal-600 text-xs font-medium flex items-center gap-1">
-                      <BadgeCheck className="w-3 h-3" /> Verified Project
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-600 transition-colors" />
-                  </div>
+                <div className="mt-4 flex justify-center gap-2">
+                  {portfolio.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setRecentWorkIndex(i)}
+                      className={`h-2 rounded-full transition-all ${
+                        recentWorkIndex === i ? "w-6 bg-cyan-600" : "w-2 bg-slate-300"
+                      }`}
+                      aria-label={`Go to project ${i + 1}`}
+                    />
+                  ))}
                 </div>
               </div>
-            ))}
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* ========== CUSTOMER REVIEWS SECTION ========== */}
+      <section className="py-10 bg-slate-50 border-y border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-xl font-bold text-slate-900">Customer Reviews</h2>
+            <p className="text-sm text-slate-500">
+              What our clients say about our service quality
+            </p>
+          </div>
+
+          <div className="mx-auto max-w-4xl">
+            <div
+              key={reviewIndex}
+              className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm transition-all duration-500"
+            >
+              <div className="mb-4 flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <Star
+                    key={i}
+                    className={`w-4 h-4 ${
+                      i <= customerReviews[reviewIndex].rating
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-slate-300"
+                    }`}
+                  />
+                ))}
+              </div>
+
+              <p className="text-slate-700 text-base md:text-lg leading-relaxed">
+                "{customerReviews[reviewIndex].review}"
+              </p>
+
+              <div className="mt-5 pt-5 border-t border-slate-100">
+                <h3 className="font-bold text-slate-900">
+                  {customerReviews[reviewIndex].name}
+                </h3>
+                <p className="text-sm text-slate-500">
+                  {customerReviews[reviewIndex].company}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-center gap-2">
+              {customerReviews.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setReviewIndex(i)}
+                  className={`h-2 rounded-full transition-all ${
+                    reviewIndex === i ? "w-6 bg-cyan-600" : "w-2 bg-slate-300"
+                  }`}
+                  aria-label={`Go to review ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -813,6 +1018,22 @@ export default function Home() {
             <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />
           </div>
         </Link>
+
+        {/* WhatsApp Button (Vertical) */}
+        <a
+          href="https://wa.me/917709936965"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="pointer-events-auto mt-10 w-[34px] bg-[#25D366] text-white py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
+          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+        >
+          <div className="flex items-center gap-2 transform rotate-180">
+            <span className="text-[11px] font-bold uppercase tracking-wider">
+              WhatsApp
+            </span>
+            <MessageCircle className="w-3 h-3 text-white transform rotate-180" />
+          </div>
+        </a>
       </div>
     </main>
   );

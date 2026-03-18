@@ -1,14 +1,21 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/Blog";
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 export async function GET() {
+  const guard = await requireAdminOrEmployeePermission("blog", "view");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   const posts = await Blog.find({}).sort({ createdAt: -1 });
   return NextResponse.json(posts);
 }
 
 export async function POST(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("blog", "add");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   try {
     const body = await req.json();
@@ -54,6 +61,9 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("blog", "update");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   
   // Get ID from Query Params: /api/admin/blog?id=123
@@ -74,6 +84,9 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("blog", "delete");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   
   const { searchParams } = new URL(req.url);

@@ -2,8 +2,12 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Company from "@/models/Company";
 import ServiceRequest from "@/models/ServiceRequest";
+import { requireAdminOnly } from "@/lib/admin-access";
 
 export async function GET() {
+  const guard = await requireAdminOnly();
+  if (!guard.ok) return guard.response!;
+
   try {
     await connectDB();
 

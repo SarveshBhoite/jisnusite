@@ -1,6 +1,7 @@
 import connectDB from "@/lib/mongodb";
 import Service from "@/models/Services"; 
 import { NextResponse } from "next/server";
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 // 1. GET ALL SERVICES
 export async function GET() {
@@ -15,6 +16,9 @@ export async function GET() {
 
 // 2. POST (Add New)
 export async function POST(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("services", "add");
+  if (!guard.ok) return guard.response!;
+
   try {
     await connectDB();
     const data = await req.json();
@@ -27,6 +31,9 @@ export async function POST(req: Request) {
 
 // 3. PATCH (Update by ID)
 export async function PATCH(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("services", "update");
+  if (!guard.ok) return guard.response!;
+
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);
@@ -45,6 +52,9 @@ export async function PATCH(req: Request) {
 
 // 4. DELETE (Remove by ID)
 export async function DELETE(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("services", "delete");
+  if (!guard.ok) return guard.response!;
+
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);

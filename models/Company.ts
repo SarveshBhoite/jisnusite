@@ -41,6 +41,8 @@ const CompanySchema = new mongoose.Schema({
     enum: ['client', 'admin'], 
     default: 'client' 
   },
+  listedByUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  listedByName: { type: String },
 }, { timestamps: true });
 
 // Add indexes for performance

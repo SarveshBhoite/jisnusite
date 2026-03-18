@@ -1,125 +1,214 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { X, CheckCircle2, Crown, Star, Zap } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+
+type FormState = {
+  name: string;
+  mobile: string;
+  email: string;
+  businessName: string;
+  service: string;
+  location: string;
+};
+
+const INITIAL_FORM: FormState = {
+  name: "",
+  mobile: "",
+  email: "",
+  businessName: "",
+  service: "",
+  location: "",
+};
 
 export default function PricingPopup() {
-  const { data: session, status } = useSession();
   const pathname = usePathname();
   const [show, setShow] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [form, setForm] = useState<FormState>(INITIAL_FORM);
 
-  // Ensure we are in the browser
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (status === "authenticated" && pathname.includes("/dashboard")) {
-      // Check if user has already seen the popup in this browser
-      const hasSeenPopup = localStorage.getItem("hasSeenPricingPopup");
+    if (!isClient) return;
 
-      if (!hasSeenPopup) {
-        const timer = setTimeout(() => {
-          setShow(true);
-          // Mark as seen immediately when shown
-          localStorage.setItem("hasSeenPricingPopup", "true");
-        }, 2000);
-        return () => clearTimeout(timer);
-      }
-    } else {
-      // Hide if they log out
+    const blockedPaths = ["/login", "/logout"];
+    const isDashboardPath = pathname?.startsWith("/dashboard");
+
+    if (isDashboardPath || blockedPaths.includes(pathname || "")) {
       setShow(false);
+      return;
     }
-  }, [status, pathname]);
+
+    const popupClosed = sessionStorage.getItem("consultPopupClosed");
+    if (popupClosed) return;
+
+    const timer = setTimeout(() => {
+      setShow(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [isClient, pathname]);
+
+  const closePopup = () => {
+    setShow(false);
+    sessionStorage.setItem("consultPopupClosed", "true");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+
+    try {
+      const [firstName, ...restName] = form.name.trim().split(" ");
+      const lastName = restName.join(" ");
+
+      const message = [
+        "Free consultant inquiry",
+        `Name: ${form.name}`,
+        `Mobile: ${form.mobile}`,
+        `Business Name: ${form.businessName}`,
+        `Service Kai Pahije: ${form.service}`,
+        `Location/City: ${form.location}`,
+      ].join("\n");
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName || form.name,
+          lastName: lastName || "Lead",
+          email: form.email,
+          company: form.businessName,
+          subject: "Free consultant request",
+          message,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed");
+      }
+
+      alert("Thank you! Our team will contact you soon.");
+      setForm(INITIAL_FORM);
+      closePopup();
+    } catch (error) {
+      alert("Unable to submit now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   if (!show || !isClient) return null;
 
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-      {/* Dark Overlay */}
-      <div 
-        className="absolute inset-0 bg-slate-900/90 backdrop-blur-md animate-in fade-in duration-500" 
-        onClick={() => setShow(false)} 
+      <div
+        className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"
+        onClick={closePopup}
       />
-      
-      {/* Modal Container */}
-      <div className="bg-white w-full max-w-6xl rounded-[2.5rem] overflow-hidden shadow-2xl relative z-[100000] animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col lg:flex-row">
-        
-        {/* Close Button */}
-        <button 
-          onClick={() => setShow(false)} 
-          className="absolute top-6 right-6 p-2 bg-slate-100 hover:bg-slate-200 rounded-full z-[100001]"
+
+      <div className="relative z-[100000] w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl md:p-8">
+        <button
+          onClick={closePopup}
+          className="absolute right-4 top-4 rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
+          aria-label="Close popup"
         >
-          <X className="w-6 h-6 text-slate-500" />
+          <X className="h-5 w-5" />
         </button>
 
-        {/* Left Side: Branding */}
-        <div className="lg:w-1/4 bg-slate-900 p-10 text-white flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-slate-800">
-          <h2 className="text-4xl font-black italic leading-tight tracking-tighter">
-            DIGITAL <br /> MARKETING <br /> 
-            <span className="text-cyan-500">& BRANDING</span>
-          </h2>
-          <p className="mt-6 text-slate-400 text-xs font-medium leading-relaxed">
-            Scale your brand with professional social media management.
-          </p>
+        <div className="mb-5">
+          <h2 className="text-2xl font-black text-slate-900">Free Consultant</h2>
+          <p className="mt-1 text-sm text-slate-500">Fill this form and we will contact you shortly.</p>
         </div>
 
-        {/* Right Side: Packages */}
-        <div className="lg:w-3/4 p-8 md:p-12 bg-slate-50 overflow-y-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <PackageCard 
-              name="Platinum" 
-              icon={<Crown className="text-amber-500" />} 
-              features={["30 Posts", "10 Reels", "YT / GMB Included", "Local SEO", "Website SEO", "Full Research"]}
-              color="border-amber-400"
-              btn="bg-amber-600"
-            />
-            <PackageCard 
-              name="Gold" 
-              icon={<Zap className="text-cyan-500" />} 
-              features={["20 Posts", "5 Reels", "Adv. Research", "IG/FB/TW/LI", "Google Optimization", "Lead Campaigns"]}
-              color="border-cyan-500"
-              btn="bg-cyan-600"
-              popular
-            />
-            <PackageCard 
-              name="Silver" 
-              icon={<Star className="text-slate-400" />} 
-              features={["15 Posts", "2 Reels", "Research", "FB/IG", "Google Page", "Monthly Reports"]}
-              color="border-slate-200"
-              btn="bg-slate-800"
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="md:col-span-2">
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Name</label>
+            <input
+              required
+              type="text"
+              value={form.name}
+              onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
+              placeholder="Enter your name"
             />
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-function PackageCard({ name, icon, features, color, btn, popular = false }: any) {
-  return (
-    <div className={`bg-white p-6 rounded-3xl border-2 transition-all flex flex-col relative ${color}`}>
-      {popular && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-cyan-600 text-white text-[10px] font-black px-4 py-1 rounded-full uppercase">
-          Most Popular
-        </div>
-      )}
-      <div className="flex items-center gap-2 mb-4 font-bold uppercase text-slate-800">
-        {icon} {name}
+          <div>
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Mob Num</label>
+            <input
+              required
+              type="tel"
+              value={form.mobile}
+              onChange={(e) => setForm((prev) => ({ ...prev, mobile: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
+              placeholder="Mobile number"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Mail Id</label>
+            <input
+              required
+              type="email"
+              value={form.email}
+              onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
+              placeholder="Email address"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Business Name</label>
+            <input
+              required
+              type="text"
+              value={form.businessName}
+              onChange={(e) => setForm((prev) => ({ ...prev, businessName: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
+              placeholder="Your business"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Service Kai Pahije</label>
+            <input
+              required
+              type="text"
+              value={form.service}
+              onChange={(e) => setForm((prev) => ({ ...prev, service: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
+              placeholder="Required service"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Location / City</label>
+            <input
+              required
+              type="text"
+              value={form.location}
+              onChange={(e) => setForm((prev) => ({ ...prev, location: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
+              placeholder="City"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="md:col-span-2 mt-2 flex items-center justify-center gap-2 rounded-xl bg-cyan-600 px-5 py-3 font-bold text-white hover:bg-cyan-700 disabled:opacity-60"
+          >
+            {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+            Submit Free Consultant Request
+          </button>
+        </form>
       </div>
-      <ul className="space-y-2 mb-6 flex-1 text-[10px] font-bold text-slate-500">
-        {features.map((f: string, i: number) => (
-          <li key={i} className="flex gap-2">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> {f}
-          </li>
-        ))}
-      </ul>
-      <button className={`w-full py-3 rounded-xl text-white text-[10px] font-black uppercase tracking-widest ${btn}`}>
-        Get Started
-      </button>
     </div>
   );
 }

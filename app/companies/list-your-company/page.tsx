@@ -13,6 +13,7 @@ export default function ListYourCompanyPage() {
 
   const [formData, setFormData] = useState({
     name: "",
+    listedByName: "",
     category: "",
     description: "", // Linked to Short Description
     location: "",
@@ -114,6 +115,19 @@ export default function ListYourCompanyPage() {
                       type="text"
                       required
                       placeholder="e.g. Acme Solutions"
+                      className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20 outline-none transition-all"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-foreground/80">Listed User Name</label>
+                    <input
+                      name="listedByName"
+                      value={formData.listedByName}
+                      onChange={handleInputChange}
+                      type="text"
+                      required
+                      placeholder="Your full name"
                       className="w-full px-4 py-3 rounded-xl border border-border bg-muted/20 outline-none transition-all"
                     />
                   </div>

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Portfolio from "@/models/Portfolio";
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 // Ye function chalega jab aap fetch('/api/portfolio') karenge (GET)
 export async function GET() {
@@ -15,6 +16,9 @@ export async function GET() {
 
 // Ye function chalega jab aap fetch('/api/portfolio', { method: 'POST' }) karenge
 export async function POST(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("portfolio", "add");
+  if (!guard.ok) return guard.response!;
+
   try {
     await connectDB();
     const data = await req.json();

@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/mongodb";
 import Banner from "@/models/Banner";
 import { NextResponse } from "next/server";
+import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 // 1. GET ALL BANNERS (To list them in admin)
 export async function GET() {
@@ -18,6 +19,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("banner", "add");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   try {
     const { category, bannerImage } = await req.json();
@@ -41,6 +45,9 @@ export async function POST(req: Request) {
 
 // 3. DELETE BANNER
 export async function DELETE(req: Request) {
+  const guard = await requireAdminOrEmployeePermission("banner", "delete");
+  if (!guard.ok) return guard.response!;
+
   await dbConnect();
   try {
     const { id } = await req.json();

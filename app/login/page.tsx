@@ -53,6 +53,8 @@ export default function CombinedLoginPage() {
         
         if (session?.user?.role === "admin") {
           window.location.href = "/dashboard/admin";
+        } else if (session?.user?.role === "employee") {
+          window.location.href = "/dashboard/employee";
         } else {
           window.location.href = "/dashboard/client";
         }
