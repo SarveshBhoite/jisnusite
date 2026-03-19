@@ -176,7 +176,7 @@ export default function PricingPopup() {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Service Kai Pahije</label>
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Service Required</label>
             <input
               required
               type="text"
