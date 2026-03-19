@@ -72,7 +72,7 @@ export default function PricingPopup() {
         `Name: ${form.name}`,
         `Mobile: ${form.mobile}`,
         `Business Name: ${form.businessName}`,
-        `Service Kai Pahije: ${form.service}`,
+        `Service Required: ${form.service}`,
         `Location/City: ${form.location}`,
       ].join("\n");
 
