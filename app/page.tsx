@@ -148,30 +148,30 @@ export default function Home() {
   const customerReviews = [
     {
       name: "Rohit Sharma",
-      company: "Urban Build Pvt Ltd",
+      company: "Mounty River Resort",
       review:
-        "Very professional team. Our website and leads both improved in just a few weeks.",
+        "We had a great experience working with JISNU Digital Solutions Pvt. Ltd In Wakad & PCMC. Their team is highly professional, creative, and dedicated to delivering excellent digital marketing services. They helped us improve our online presence with effective strategies, quality content, and consistent support. Their approach to digital marketing, branding, and social media management is very impressive.The team understands business needs and provides the right solutions to help grow online visibility. We highly recommend JISNU Digital Solutions Pvt. Ltd. to anyone looking for reliable and result-oriented digital marketing services.Great work and excellent support! Thank you so much Team",
       rating: 5,
     },
     {
-      name: "Pooja Verma",
-      company: "Glow Beauty Studio",
+      name: "asmita shirsat",
+      company: "Kidz Explore Theorpy Center",
       review:
-        "They handled our digital marketing really well. Great communication and fast support.",
+        "For our center Kidz Explore Therapy, Jisnu Digital Solutions Pvt. Ltd in Wakad. has provided excellent digital marketing services. They have managed our GMB page, social media, and online branding very professionally.",
       rating: 5,
     },
     {
-      name: "Arjun Mehta",
-      company: "Mehta Electronics",
+      name: "NITIN LONKAR",
+      company: "Lonkar Enterprises Pune",
       review:
-        "SEO and listing optimization gave us visible growth. Highly recommended service.",
+        "I’ve been working with Jisnu Digital for my digital marketing needs, and the results have been amazing! Their team is professional, responsive, and truly understands the latest trends. Thanks to them, my online presence has improved significantly, and I’m seeing great results in lead generation and traffic Highly recommend!",
       rating: 4,
     },
     {
-      name: "Sneha Nair",
+      name: "Amole ade",
       company: "Nair Interiors",
       review:
-        "Design quality was excellent and the project delivery was on time exactly as promised.",
+        "Best digital marketing solutions company.",
       rating: 5,
     },
   ];

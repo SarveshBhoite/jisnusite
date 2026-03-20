@@ -4,7 +4,12 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["your-domain.com"], // add if using external images
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+    ],
   },
 }
 

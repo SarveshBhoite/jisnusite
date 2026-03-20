@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { Plus, Trash2, Image as ImageIcon, Loader2,ChevronLeft  } from "lucide-react"
+import CloudinaryUploadButton from "@/components/CloudinaryUploadButton"
 
 export default function AdminPortfolio() {
   const { status } = useSession()
@@ -17,14 +18,6 @@ export default function AdminPortfolio() {
     description: "",
     image: ""
   })
-
-  // Handle Image Upload (Base64)
-  const handleImage = (e: any) => {
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => setFormData({ ...formData, image: reader.result as string });
-    reader.readAsDataURL(file);
-  }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -105,10 +98,24 @@ export default function AdminPortfolio() {
             className="w-full p-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none"
             onChange={(e) => setFormData({...formData, description: e.target.value})}
           />
-          <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-2xl cursor-pointer hover:bg-slate-100">
-            {formData.image ? <img src={formData.image} className="h-full object-contain" /> : <ImageIcon className="text-slate-400" />}
-            <input type="file" className="hidden" onChange={handleImage} />
-          </label>
+          <div className="space-y-3">
+            {formData.image ? (
+              <div className="h-40 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white">
+                <img src={formData.image} className="h-full w-full object-cover" />
+              </div>
+            ) : (
+              <div className="flex h-32 w-full items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50">
+                <ImageIcon className="text-slate-400" />
+              </div>
+            )}
+
+            <CloudinaryUploadButton
+              label="Upload Project Image"
+              onUploaded={(secureUrl) =>
+                setFormData((prev) => ({ ...prev, image: secureUrl }))
+              }
+            />
+          </div>
         </div>
 
         <button 
