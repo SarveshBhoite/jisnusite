@@ -955,7 +955,7 @@ export default function Home() {
                   <div>
                     <div className="font-bold text-lg mb-1">Email Us</div>
                     <div className="text-lg font-bold">
-                      info@jisnudigital.com
+                      info.jdsolutions2018@gmail.com
                     </div>
                   </div>
                 </div>

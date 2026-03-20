@@ -72,7 +72,7 @@ export default function PricingPopup() {
         `Name: ${form.name}`,
         `Mobile: ${form.mobile}`,
         `Business Name: ${form.businessName}`,
-        `Service Kai Pahije: ${form.service}`,
+        `Service Required: ${form.service}`,
         `Location/City: ${form.location}`,
       ].join("\n");
 
@@ -176,7 +176,7 @@ export default function PricingPopup() {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Service Kai Pahije</label>
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Service Required</label>
             <input
               required
               type="text"
