@@ -22,8 +22,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Best Digital Marketing Agency in Pune Jisnu DigitalsFF",
-  description: "Professional digital solutions for modern businesses.",
+  title: "Best Digital Marketing Agency in Pune|Jisnu Digital",
+  description: "Best Digital Marketing Agency in Pune. Jisnu Digital Solutions Pvt. Ltd. offers SEO, Social Media Marketing,Google Ads and Website development services.",
   icons: { icon: "/icon.jpeg", apple: "/icon.jpeg" },
 }
 

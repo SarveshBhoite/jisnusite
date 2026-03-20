@@ -172,7 +172,7 @@ export default function AboutPage() {
                {
                 name: "Sarvesh Bhoite",
                 role: "Software Developer",
-                image: "/professional-headshot-man-business.jpg",
+                image: "/Raj.jpg",
               },
             ].map((member, i) => (
               <div key={i}>
