@@ -62,7 +62,7 @@ export default function ContactPage() {
           {/* INFO COLUMN */}
           <div className="space-y-8">
             <InfoItem icon={<Mail />} title="Email" value="info.jdsolutions2018@gmail.com" href="info.jdsolutions2018@gmail.com" />
-            <InfoItem icon={<Phone />} title="Phone" value="+91 98765 43210" href="tel:+917709936965" />
+            <InfoItem icon={<Phone />} title="Phone" value="917709936965" href="tel:+917709936965" />
             <InfoItem icon={<MapPin />} title="Office" value="Office No.545, 5th Floor, Solitaire business Hub, opp. Ambience Hotel, Vishnu Dev Nagar, Wakad, Pimpri-Chinchwad, Pune, Maharashtra 411057" />
             <InfoItem icon={<Clock />} title="Hours" value="Mon-Sat: 9AM - 6PM" />
           </div>
