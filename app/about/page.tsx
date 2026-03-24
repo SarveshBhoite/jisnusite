@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Users, Lightbulb, Target, Award } from "lucide-react";
+import {
+  ArrowRight,
+  Users,
+  Lightbulb,
+  Target,
+  Award,
+  CheckCircle2,
+} from "lucide-react";
 
 export default function AboutPage() {
   return (
@@ -29,21 +36,14 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              Welcome to <b>Jisnu Digital Solutions Pvt. Ltd.</b>, your trusted partner
-              in the digital world. <b>Established in 2018,</b> we are recognized as
-              one of the top digital marketing companies in Pune, known for
-              delivering innovative and result-driven digital solutions. Based
-              in Pune, Maharashtra, our expert team is committed to helping
-              businesses grow online using cutting-edge technology and proven
-              strategies.
+              <b>Jisnu Digital</b> is a leading digital marketing agency in Pune
+              providing result-oriented online marketing services for
+              businesses. We help brands grow online through advanced SEO
+              strategies, social media marketing, Google Ads campaigns and
+              professional website development.
             </p>
             <p className="text-muted-foreground leading-relaxed">
-              As a best-in-class web development company, we provide end-to-end
-              services including SEO services, social media marketing, Google
-              Ads management, content marketing, and lead generation for small
-              businesses. Our customized approach focuses on local SEO and
-              website design and development to ensure measurable growth and a
-              strong digital presence for our clients.
+             Our goal is to help businesses increase online visibility, generate quality leads and improve their brand presence in the digital world.
             </p>
           </div>
 
@@ -55,6 +55,96 @@ export default function AboutPage() {
               className="object-cover"
             />
           </div>
+        </div>
+      </section>
+
+      {/* ================= SERVICES ================= */}
+      <section className="py-28 bg-muted/40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-16">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
+              Our Digital Marketing Services
+            </h2>
+            <p className="text-muted-foreground">
+              We offer complete digital marketing solutions to help your
+              business grow online and attract the right audience.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {[
+              {
+                title: "SEO Services",
+                desc: "We provide professional SEO services in Pune to improve your website ranking on Google and increase organic traffic.",
+              },
+              {
+                title: "Social Media Marketing",
+                desc: "Our social media experts create engaging campaigns on Facebook, Instagram and other platforms to build your brand and connect with customers.",
+              },
+              {
+                title: "Google Ads Management",
+                desc: "We run targeted Google Ads campaigns that bring high-quality leads and maximize ROI for your business.",
+              },
+              {
+                title: "Website Development",
+                desc: "We design fast, responsive and SEO-friendly websites that help businesses grow online.",
+              },
+            ].map((service, i) => (
+              <div
+                key={i}
+                className="p-8 rounded-xl border border-border bg-background"
+              >
+                <h3 className="font-display text-xl font-semibold mb-3">
+                  {service.title}
+                </h3>
+                <p className="text-muted-foreground leading-relaxed">
+                  {service.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= WHY CHOOSE US ================= */}
+      <section className="py-28">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-10">
+            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
+              Why Choose Jisnu Digital
+            </h2>
+          </div>
+
+          <ul className="grid md:grid-cols-2 gap-4 text-muted-foreground">
+            {[
+              "Experienced Digital Marketing Experts",
+              "Result-Driven Marketing Strategies",
+              "Affordable Pricing",
+              "Dedicated Customer Support",
+              "Proven SEO Techniques",
+            ].map((point, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-3 p-4 rounded-lg border border-border bg-muted/30"
+              >
+                <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                <span>{point}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* ================= CONTACT BLOCK ================= */}
+      <section className="py-20 bg-muted/40 border-y border-border">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
+            Contact Us
+          </h2>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            If you are looking for the best digital marketing agency in Pune,
+            contact Jisnu Digital today and grow your business online.
+          </p>
         </div>
       </section>
 
@@ -153,7 +243,6 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
-             
               {
                 name: "Rohit Pawar",
                 role: "Sales Manager",
@@ -163,13 +252,13 @@ export default function AboutPage() {
                 name: "Pratik Ghalme",
                 role: "Manager",
                 image: "/pratik.jpg",
-              },  
+              },
               {
                 name: "Pratik Pawar",
                 role: "Team Leader",
                 image: "/Pawar.jpg",
               },
-               {
+              {
                 name: "Sarvesh Bhoite",
                 role: "Software Developer",
                 image: "/Raj.jpg",
@@ -196,10 +285,10 @@ export default function AboutPage() {
       <section className="py-28 border-t border-border">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-display text-3xl md:text-4xl font-semibold mb-6">
-            Let’s work together
+            Let's work together
           </h2>
           <p className="text-muted-foreground mb-8">
-            Have a project in mind? We’d love to understand your goals and help
+            Have a project in mind? We'd love to understand your goals and help
             you build something meaningful.
           </p>
           <Link href="/contact">
@@ -212,3 +301,4 @@ export default function AboutPage() {
     </main>
   );
 }
+
