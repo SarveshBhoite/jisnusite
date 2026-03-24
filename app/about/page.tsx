@@ -135,69 +135,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ================= CONTACT BLOCK ================= */}
-      <section className="py-20 bg-muted/40 border-y border-border">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
-            Contact Us
-          </h2>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            If you are looking for the best digital marketing agency in Pune,
-            contact Jisnu Digital today and grow your business online.
-          </p>
-        </div>
-      </section>
-
-      {/* ================= VALUES ================= */}
-      <section className="py-28 bg-muted/40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-16">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
-              What Drives Us
-            </h2>
-            <p className="text-muted-foreground">
-              Our values shape how we work, communicate, and deliver.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              {
-                icon: Lightbulb,
-                title: "Innovation",
-                desc: "We continuously explore better ways to design and build digital solutions.",
-              },
-              {
-                icon: Target,
-                title: "Quality",
-                desc: "Every project is executed with attention to detail and long-term impact.",
-              },
-              {
-                icon: Users,
-                title: "Collaboration",
-                desc: "We work closely with clients as partners, not vendors.",
-              },
-              {
-                icon: Award,
-                title: "Integrity",
-                desc: "Honest communication and transparency guide everything we do.",
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="p-8 rounded-xl border border-border bg-background hover:border-primary/40 transition"
-              >
-                <item.icon className="w-10 h-10 text-primary mb-4" />
-                <h3 className="font-display text-lg font-semibold mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ================= STATS ================= */}
       <section className="py-28">
@@ -278,6 +215,19 @@ export default function AboutPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+      
+      {/* ================= CONTACT BLOCK ================= */}
+      <section className="py-20 bg-muted/40 border-y border-border">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
+            Contact Us
+          </h2>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            If you are looking for the best digital marketing agency in Pune,
+            contact Jisnu Digital today and grow your business online.
+          </p>
         </div>
       </section>
 
