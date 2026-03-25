@@ -6,6 +6,7 @@ import { Loader2, X } from "lucide-react";
 
 type FormState = {
   name: string;
+  countryCode: string;
   mobile: string;
   email: string;
   businessName: string;
@@ -15,6 +16,7 @@ type FormState = {
 
 const INITIAL_FORM: FormState = {
   name: "",
+  countryCode: "+91",
   mobile: "",
   email: "",
   businessName: "",
@@ -22,12 +24,23 @@ const INITIAL_FORM: FormState = {
   location: "",
 };
 
+const COUNTRY_OPTIONS = [
+  { label: "India", code: "+91", min: 10, max: 10 },
+  { label: "United States", code: "+1", min: 10, max: 10 },
+  { label: "United Kingdom", code: "+44", min: 10, max: 11 },
+  { label: "United Arab Emirates", code: "+971", min: 9, max: 9 },
+  { label: "Australia", code: "+61", min: 9, max: 9 },
+];
+
 export default function PricingPopup() {
   const pathname = usePathname();
   const [show, setShow] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
+  const selectedCountry =
+    COUNTRY_OPTIONS.find((item) => item.code === form.countryCode) ||
+    COUNTRY_OPTIONS[0];
 
   useEffect(() => {
     setIsClient(true);
@@ -61,6 +74,18 @@ export default function PricingPopup() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const mobileDigits = form.mobile.replace(/\D/g, "");
+    const isMobileValid =
+      mobileDigits.length >= selectedCountry.min &&
+      mobileDigits.length <= selectedCountry.max;
+
+    if (!isMobileValid) {
+      alert(
+        `Please enter a valid ${selectedCountry.label} mobile number (${selectedCountry.min}-${selectedCountry.max} digits).`,
+      );
+      return;
+    }
+
     setSubmitting(true);
 
     try {
@@ -70,7 +95,7 @@ export default function PricingPopup() {
       const message = [
         "Free consultant inquiry",
         `Name: ${form.name}`,
-        `Mobile: ${form.mobile}`,
+        `Mobile: ${form.countryCode} ${mobileDigits}`,
         `Business Name: ${form.businessName}`,
         `Service Required: ${form.service}`,
         `Location/City: ${form.location}`,
@@ -141,14 +166,44 @@ export default function PricingPopup() {
 
           <div>
             <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Mob Num</label>
-            <input
-              required
-              type="tel"
-              value={form.mobile}
-              onChange={(e) => setForm((prev) => ({ ...prev, mobile: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
-              placeholder="Mobile number"
-            />
+            <div className="flex gap-2">
+              <select
+                value={form.countryCode}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, countryCode: e.target.value }))
+                }
+                className="w-[42%] rounded-xl border border-slate-200 bg-white px-3 py-3 outline-none focus:border-cyan-500"
+                aria-label="Country code"
+              >
+                {COUNTRY_OPTIONS.map((country) => (
+                  <option key={country.code} value={country.code}>
+                    {country.code} ({country.label})
+                  </option>
+                ))}
+              </select>
+              <input
+                required
+                type="tel"
+                inputMode="numeric"
+                maxLength={selectedCountry.max}
+                value={form.mobile}
+                onChange={(e) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    mobile: e.target.value.replace(/\D/g, ""),
+                  }))
+                }
+                className="w-[58%] rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
+                placeholder={`${selectedCountry.min}-${selectedCountry.max} digit number`}
+              />
+            </div>
+            <p className="mt-1 text-xs text-slate-500">
+              {selectedCountry.label}: enter {selectedCountry.min}
+              {selectedCountry.min !== selectedCountry.max
+                ? `-${selectedCountry.max}`
+                : ""}
+              {" "}digits
+            </p>
           </div>
 
           <div>
