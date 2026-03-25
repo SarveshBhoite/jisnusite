@@ -1,5 +1,6 @@
 "use client";
 
+import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -339,7 +340,11 @@ export default function Home() {
   const current = cards[index];
 
   return (
-    <main className="bg-slate-50 min-h-screen relative">
+    <>
+      <Head>
+        <link rel="canonical" href="https://www.jisnudigital.com/" />
+      </Head>
+      <main className="bg-slate-50 min-h-screen relative">
       {/* ========== HERO SECTION ========== */}
       <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1035,6 +1040,7 @@ export default function Home() {
           </div>
         </a>
       </div>
-    </main>
+      </main>
+    </>
   );
 }

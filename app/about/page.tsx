@@ -65,10 +65,7 @@ export default function AboutPage() {
             <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
               Our Digital Marketing Services
             </h2>
-            <p className="text-muted-foreground">
-              We offer complete digital marketing solutions to help your
-              business grow online and attract the right audience.
-            </p>
+        
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -136,35 +133,7 @@ export default function AboutPage() {
       </section>
 
 
-      {/* ================= STATS ================= */}
-      <section className="py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-16">
-            <h2 className="font-display text-3xl md:text-4xl font-semibold mb-4">
-              By the Numbers
-            </h2>
-            <p className="text-muted-foreground">
-              A snapshot of our experience and impact.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 text-center">
-            {[
-              { value: "200+", label: "Projects Delivered" },
-              { value: "95%", label: "Client Retention" },
-              { value: "8+", label: "Years of Experience" },
-              { value: "15+", label: "Industries Served" },
-            ].map((stat, i) => (
-              <div key={i}>
-                <p className="font-display text-4xl md:text-5xl font-semibold text-primary mb-2">
-                  {stat.value}
-                </p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ================= TEAM ================= */}
       <section className="py-28 bg-muted/40">
@@ -231,23 +200,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ================= CTA ================= */}
-      <section className="py-28 border-t border-border">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-semibold mb-6">
-            Let's work together
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            Have a project in mind? We'd love to understand your goals and help
-            you build something meaningful.
-          </p>
-          <Link href="/contact">
-            <button className="inline-flex items-center gap-2 px-7 py-3 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition">
-              Contact Us <ArrowRight className="w-4 h-4" />
-            </button>
-          </Link>
-        </div>
-      </section>
+
     </main>
   );
 }
