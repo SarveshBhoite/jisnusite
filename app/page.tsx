@@ -46,6 +46,14 @@ export default function Home() {
   const locationSuggestionRef = useRef<HTMLDivElement>(null);
   const [recentWorkIndex, setRecentWorkIndex] = useState(0);
   const [reviewIndex, setReviewIndex] = useState(0);
+  const [quoteSubmitting, setQuoteSubmitting] = useState(false);
+  const [quoteForm, setQuoteForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    requirement: "",
+  });
 
   const categories = [
     { name: "Web Development", icon: "🌐", count: "500+" },
@@ -230,6 +238,56 @@ export default function Home() {
     if (query) params.append("query", query);
     if (location) params.append("location", location);
     router.push(`/companies?${params.toString()}`);
+  };
+
+  const handleQuoteSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (quoteSubmitting) return;
+
+    const [firstName, ...restName] = quoteForm.name.trim().split(" ");
+    const lastName = restName.join(" ");
+
+    setQuoteSubmitting(true);
+    try {
+      const message = [
+        "Home page quote inquiry",
+        `Name: ${quoteForm.name}`,
+        `Email: ${quoteForm.email}`,
+        `Phone: ${quoteForm.phone}`,
+        `Service: ${quoteForm.service}`,
+        `Requirement: ${quoteForm.requirement || "Not provided"}`,
+      ].join("\n");
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName || quoteForm.name,
+          lastName: lastName || "Lead",
+          email: quoteForm.email,
+          company: "Website Lead",
+          subject: "Get Free Quote Request",
+          message,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit quote form");
+      }
+
+      alert("Thank you! We received your request and will contact you soon.");
+      setQuoteForm({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        requirement: "",
+      });
+    } catch (error) {
+      alert("Unable to submit now. Please try again.");
+    } finally {
+      setQuoteSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -903,39 +961,72 @@ export default function Home() {
               <p className="text-slate-500 text-sm mb-6">
                 Fill the form and get callback within 30 minutes
               </p>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4" onSubmit={handleQuoteSubmit}>
                 <input
+                  required
                   type="text"
+                  value={quoteForm.name}
+                  onChange={(e) =>
+                    setQuoteForm((prev) => ({ ...prev, name: e.target.value }))
+                  }
                   placeholder="Your Name *"
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                 />
                 <div className="grid grid-cols-2 gap-4">
                   <input
+                    required
                     type="email"
+                    value={quoteForm.email}
+                    onChange={(e) =>
+                      setQuoteForm((prev) => ({ ...prev, email: e.target.value }))
+                    }
                     placeholder="Email Address *"
                     className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                   />
                   <input
+                    required
                     type="tel"
+                    value={quoteForm.phone}
+                    onChange={(e) =>
+                      setQuoteForm((prev) => ({ ...prev, phone: e.target.value }))
+                    }
                     placeholder="Phone Number *"
                     className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                   />
                 </div>
-                <select className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all">
+                <select
+                  required
+                  value={quoteForm.service}
+                  onChange={(e) =>
+                    setQuoteForm((prev) => ({ ...prev, service: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                >
                   <option value="">Select Service *</option>
-                  <option>Web Development</option>
-                  <option>App Development</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="App Development">App Development</option>
+                  <option value="SEO Services">SEO Services</option>
+                  <option value="Digital Marketing">Digital Marketing</option>
                 </select>
                 <textarea
+                  value={quoteForm.requirement}
+                  onChange={(e) =>
+                    setQuoteForm((prev) => ({
+                      ...prev,
+                      requirement: e.target.value,
+                    }))
+                  }
                   placeholder="Tell us about your requirement..."
                   rows={3}
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all resize-none"
                 ></textarea>
                 <button
                   type="submit"
+                  disabled={quoteSubmitting}
                   className="w-full py-4 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
                 >
-                  Get Free Quote <ArrowRight className="w-4 h-4" />
+                  {quoteSubmitting ? "Submitting..." : "Get Free Quote"}{" "}
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
             </div>
