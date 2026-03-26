@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/Blog";
-import { ArrowLeft, Clock, Calendar, User } from "lucide-react";
+import { ArrowLeft,  Calendar, User } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -57,9 +57,7 @@ export default async function PostDetail({
             <span className="flex items-center gap-2">
               <Calendar size={18} className="text-cyan-600" /> {post.date}
             </span>
-            <span className="flex items-center gap-2">
-              <Clock size={18} className="text-cyan-600" /> {post.readTime}
-            </span>
+            
           </div>
         </header>
 
