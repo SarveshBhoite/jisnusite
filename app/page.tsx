@@ -156,7 +156,7 @@ export default function Home() {
 
   const customerReviews = [
     {
-      name: "Rohit Sharma",
+      name: "Sumit Marane",
       company: "Mounty River Resort",
       review:
         "We had a great experience working with JISNU Digital Solutions Pvt. Ltd In Wakad & PCMC. Their team is highly professional, creative, and dedicated to delivering excellent digital marketing services. They helped us improve our online presence with effective strategies, quality content, and consistent support. Their approach to digital marketing, branding, and social media management is very impressive.The team understands business needs and provides the right solutions to help grow online visibility. We highly recommend JISNU Digital Solutions Pvt. Ltd. to anyone looking for reliable and result-oriented digital marketing services.Great work and excellent support! Thank you so much Team",
@@ -177,7 +177,7 @@ export default function Home() {
       rating: 4,
     },
     {
-      name: "Amole ade",
+      name: "Amol ade",
       company: "Nair Interiors",
       review:
         "Best digital marketing solutions company.",
