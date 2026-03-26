@@ -1075,10 +1075,10 @@ export default function Home() {
             </div>
             <div className="flex gap-3">
               <button className="flex items-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold transition-colors">
-                <PhoneCall className="w-4 h-4" /> Call Now
+                <PhoneCall className="w-4 h-4" /> <a  href="https://wa.me/917709936965">Call Now</a>
               </button>
               <button className="flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold transition-colors">
-                <Send className="w-4 h-4" /> Get Quote
+                <Send className="w-4 h-4" /><a href="/contact"> Get Quote</a>
               </button>
             </div>
           </div>
