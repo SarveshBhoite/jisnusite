@@ -16,7 +16,7 @@ export default async function PostDetail({
 
   let post: any;
   try {
-    post = await Blog.findById(id).lean();
+    // post = await Blog.findById(id).lean();m
   } catch {
     return notFound();
   }
@@ -29,7 +29,7 @@ export default async function PostDetail({
       : `/${post.image}`;
 
   return (
-    <main className="pt-24 min-h-screen bg-white">
+    <main className="pt-24 min-h-screen bg-white">9
       <div className="max-w-4xl mx-auto px-6 py-10">
         {/* Navigation */}
         <Link

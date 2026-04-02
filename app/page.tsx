@@ -972,7 +972,7 @@ export default function Home() {
                   placeholder="Your Name *"
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                 />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
                     required
                     type="email"
@@ -1050,7 +1050,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="font-bold text-lg mb-1">Email Us</div>
-                    <div className="text-lg font-bold">
+                    <div className="text-lg font-bold break-all">
                       info.jdsolutions2018@gmail.com
                     </div>
                   </div>
@@ -1073,11 +1073,11 @@ export default function Home() {
                 Get the best quotes from Jisnu Digital
               </div>
             </div>
-            <div className="flex gap-3">
-              <button className="flex items-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold transition-colors">
+            <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
+              <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold transition-colors">
                 <PhoneCall className="w-4 h-4" /> <a  href="https://wa.me/917709936965">Call Now</a>
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold transition-colors">
+              <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold transition-colors">
                 <Send className="w-4 h-4" /><a href="/contact"> Get Quote</a>
               </button>
             </div>
@@ -1086,7 +1086,7 @@ export default function Home() {
       </section>
 
       {/* ========== VERTICAL FLOATING SIDEBAR (JUSTDIAL STYLE) ========== */}
-      <div className="fixed right-0 top-[40%] z-[999] flex flex-col items-end pointer-events-none">
+      <div className="fixed right-0 top-[40%] z-[999] hidden md:flex flex-col items-end pointer-events-none">
         {/* Advertise Button (Vertical) */}
         <Link
           href="/companies/list-your-company"
