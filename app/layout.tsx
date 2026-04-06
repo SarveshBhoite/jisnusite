@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Sora, Inter } from "next/font/google"
+import Script from "next/script"
 import { Analytics } from "@vercel/analytics/next"
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer"
@@ -35,6 +36,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${sora.variable} ${inter.variable} font-sans antialiased`}>
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-1RSY1JFY9H"
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-1RSY1JFY9H');
+          `}
+        </Script>
         <AuthProvider>
           <Navbar />
           {/* The Popup lives here, it will handle its own "show/hide" logic */}
