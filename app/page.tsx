@@ -411,6 +411,7 @@ export default function Home() {
             <span className="text-sm font-medium">Serving All Over India</span>
             <ChevronRight className="w-4 h-4" />
           </div>
+          
 
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -426,9 +427,9 @@ export default function Home() {
                 development, SEO, marketing & more at affordable prices.
               </p>
 
-              <div className="bg-white rounded-xl shadow-xl p-2 flex flex-col md:flex-row items-center gap-2 mb-6 border border-slate-100 relative">
+              <div className="hidden bg-white rounded-xl shadow-xl p-2 flex flex-nowrap items-center gap-2 mb-6 border border-slate-100 relative overflow-x-auto">
                 <div
-                  className="flex-1 flex items-center gap-3 px-4 w-full relative"
+                  className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
                   ref={suggestionRef}
                 >
                   <Search className="w-5 h-5 text-slate-400 shrink-0" />
@@ -468,10 +469,10 @@ export default function Home() {
                   )}
                 </div>
 
-                <div className="hidden md:block w-px h-8 bg-slate-200 mx-2" />
+                <div className="w-px h-8 bg-slate-200 mx-2 shrink-0" />
 
                 <div
-                  className="flex-1 flex items-center gap-3 px-4 w-full border-t md:border-t-0 border-slate-100 pt-2 md:pt-0 relative"
+                  className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
                   ref={locationSuggestionRef}
                 >
                   <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
@@ -513,21 +514,21 @@ export default function Home() {
 
                 <button
                   onClick={handleSearch}
-                  className="w-full md:w-auto bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
+                  className="shrink-0 bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
                 >
                   Search
                 </button>
               </div>
 
-              <div className="flex flex-wrap gap-6">
+              <div className="grid grid-cols-4 gap-2 md:flex md:flex-wrap md:gap-6">
                 {trustStats.map((stat, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                  <div key={i} className="flex items-center gap-2 md:gap-4 min-w-0">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                       <stat.icon className="w-5 h-5 text-cyan-300" />
                     </div>
-                    <div>
-                      <div className="font-black text-white">{stat.value}</div>
-                      <div className="text-xs text-cyan-100/70">
+                    <div className="min-w-0">
+                      <div className="font-black text-white text-sm md:text-base">{stat.value}</div>
+                      <div className="text-[10px] md:text-xs text-cyan-100/70 truncate">
                         {stat.label}
                       </div>
                     </div>
@@ -629,20 +630,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Category Grid Section */}
-      <section className="bg-white py-8 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
-            {categories.map((cat, i) => (
-              <Link
-                href={`/services?category=${encodeURIComponent(cat.name)}`}
-                key={i}
-                className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
+      {/* ========== Companies SECTION (Home Page) ========== */}
+      <section className="bg-white py-12 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <div className="text-left">
+              <h2 className="text-lg md:text-2xl font-black text-slate-900 uppercase italic tracking-tight whitespace-nowrap">
+                Browse Categories
+              </h2>
+              <p className="text-slate-500 text-sm font-small">
+                Find the best businesses by industry
+              </p>
+            </div>
+            <Link
+                href="/categories"
+                className="text-cyan-600 text-sm font-medium flex items-center gap-1"
               >
-                <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
+                View All <ChevronRight className="w-4 h-4" />
+              </Link>
+          </div>
+
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
+            {companyCategories.slice(0, 16).map((cat, i) => (
+              <Link
+                key={i}
+                href={`/companies?query=${encodeURIComponent(cat.name)}`}
+                className={`group flex flex-col items-center gap-3 ${i >= 8 ? "hidden md:flex" : ""}`}
+              >
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
                   {cat.icon}
                 </div>
-                <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
+
+                <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors line-clamp-1">
                   {cat.name}
                 </span>
               </Link>
@@ -699,51 +718,24 @@ export default function Home() {
         </section>
       )}
 
-      {/* ========== Companies SECTION (Home Page) ========== */}
-      <section className="bg-white py-12 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-end mb-8">
-            <div className="text-left">
-              <h2 className="text-2xl font-black text-slate-900 uppercase italic tracking-tight">
-                Browse Categories
-              </h2>
-              <p className="text-slate-500 text-sm font-medium">
-                Find the best businesses by industry
-              </p>
-            </div>
-
-            <Link
-              href="/categories"
-              className="hidden md:flex items-center gap-2 text-cyan-600 font-bold text-xs uppercase tracking-widest hover:gap-3 transition-all"
-            >
-              Explore All <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
-            {companyCategories.slice(0, 16).map((cat, i) => (
+      {/* Category Grid Section */}
+      <section className="bg-white py-8 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+            {categories.map((cat, i) => (
               <Link
+                href={`/services?category=${encodeURIComponent(cat.name)}`}
                 key={i}
-                href={`/companies?query=${encodeURIComponent(cat.name)}`}
-                className="group flex flex-col items-center gap-3"
+                className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
               >
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
+                <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
                   {cat.icon}
                 </div>
-
-                <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors line-clamp-1">
+                <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
                   {cat.name}
                 </span>
               </Link>
             ))}
-          </div>
-
-          <div className="mt-8 md:hidden">
-            <Link href="/categories">
-              <button className="w-full py-3 bg-slate-50 text-slate-600 text-xs font-bold uppercase rounded-xl border border-slate-100">
-                View All Categories
-              </button>
-            </Link>
           </div>
         </div>
       </section>
@@ -903,7 +895,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-2 md:gap-4">
             {[
               {
                 icon: Shield,
@@ -932,15 +924,15 @@ export default function Home() {
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-6 text-center border border-slate-200 hover:shadow-lg transition-shadow"
+                className="bg-white rounded-xl p-2.5 md:p-6 text-center border border-slate-200 hover:shadow-lg transition-shadow"
               >
                 <div
-                  className={`w-14 h-14 ${item.color} rounded-full flex items-center justify-center mx-auto mb-4`}
+                  className={`w-9 h-9 md:w-14 md:h-14 ${item.color} rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4`}
                 >
-                  <item.icon className="w-7 h-7" />
+                  <item.icon className="w-4 h-4 md:w-7 md:h-7" />
                 </div>
-                <h3 className="font-bold text-slate-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-slate-500">{item.desc}</p>
+                <h3 className="font-bold text-[11px] md:text-base text-slate-900 mb-1 leading-tight">{item.title}</h3>
+                <p className="text-[10px] md:text-sm text-slate-500 leading-tight">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -1031,26 +1023,26 @@ export default function Home() {
               </form>
             </div>
 
-            <div className="space-y-4">
-              <div className="bg-teal-700 rounded-xl p-6 text-white">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <PhoneCall className="w-6 h-6" />
+            <div className="space-y-3 md:space-y-4">
+              <div className="bg-teal-700 rounded-xl p-4 md:p-6 text-white">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
                   </div>
                   <div>
-                    <div className="font-bold text-lg mb-1">Call Us Now</div>
-                    <div className="text-xl font-bold">+91 7709936965 </div>
+                    <div className="font-bold text-base md:text-lg mb-1">Call Us Now</div>
+                    <div className="text-lg md:text-xl font-bold">+91 7709936965 </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-cyan-700 rounded-xl p-6 text-white">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6" />
+              <div className="bg-cyan-700 rounded-xl p-4 md:p-6 text-white">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 md:w-6 md:h-6" />
                   </div>
                   <div>
-                    <div className="font-bold text-lg mb-1">Email Us</div>
-                    <div className="text-lg font-bold break-all">
+                    <div className="font-bold text-base md:text-lg mb-1">Email Us</div>
+                    <div className="text-base md:text-lg font-bold break-all">
                       info.jdsolutions2018@gmail.com
                     </div>
                   </div>
