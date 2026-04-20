@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Sora, Inter } from "next/font/google"
 import Script from "next/script"
 import { Analytics } from "@vercel/analytics/next"
+import { MessageCircle } from "lucide-react"
 import Navbar from "@/components/navbar";
 import { Footer } from "@/components/footer"
 import "./globals.css"
@@ -54,6 +55,15 @@ export default function RootLayout({
           {/* The Popup lives here, it will handle its own "show/hide" logic */}
           <PricingPopup /> 
           <main className="min-h-screen">{children}</main>
+          <a
+            href="https://wa.me/917709936965"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-[2000] bg-[#25D366] text-white w-12 h-12 sm:w-14 sm:h-14 rounded-full shadow-lg hover:bg-[#20bf5a] transition-colors flex items-center justify-center"
+            aria-label="Chat on WhatsApp"
+          >
+            <MessageCircle className="w-6 h-6 sm:w-7 sm:h-7" />
+          </a>
           <Footer />
           <Analytics />
         </AuthProvider>

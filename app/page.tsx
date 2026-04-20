@@ -24,7 +24,6 @@ import {
   Zap,
   Trophy,
   TrendingUp,
-  MessageCircle,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -1077,7 +1076,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ========== VERTICAL FLOATING SIDEBAR (JUSTDIAL STYLE) ========== */}
+      {/* ========== VERTICAL FLOATING SIDEBAR ========== */}
       <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[999] flex flex-col items-end pointer-events-none">
         {/* Advertise Button (Vertical) */}
         <Link
@@ -1107,22 +1106,8 @@ export default function Home() {
           </div>
         </Link>
 
-        {/* WhatsApp Button (Vertical) */}
-        <a
-          href="https://wa.me/917709936965"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="pointer-events-auto mt-3 sm:mt-10 w-[28px] sm:w-[34px] bg-[#25D366] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
-          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-        >
-          <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">
-              WhatsApp
-            </span>
-            <MessageCircle className="w-3 h-3 text-white transform rotate-180" />
-          </div>
-        </a>
       </div>
+
       </main>
     </>
   );
