@@ -3,10 +3,24 @@ import { Calendar, ChevronLeft, User } from "lucide-react";
 import Blog from "@/models/Blog";
 import dbConnect from "@/lib/mongodb";
 
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ query?: string }>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const query = (resolvedSearchParams.query || "").trim().toLowerCase();
 
-export default async function BlogPage() {
   await dbConnect();
-  const posts = await Blog.find({}).sort({ createdAt: -1 }).lean();
+  const allPosts = await Blog.find({}).sort({ createdAt: -1 }).lean();
+
+  const posts = query
+    ? allPosts.filter((post: any) =>
+        [post.title, post.category, post.excerpt]
+          .filter(Boolean)
+          .some((field: string) => field.toLowerCase().includes(query)),
+      )
+    : allPosts;
 
   if (posts.length === 0) return <div className="pt-40 text-center">No blogs found.</div>;
 
@@ -23,7 +37,11 @@ export default async function BlogPage() {
             <ChevronLeft className="w-4 h-4" /> Back to Home
           </Link>
         <h1 className="text-4xl font-bold mb-4">Insights & Articles</h1>
-        <p className="text-slate-500">Thoughts on digital growth from our team.</p>
+        <p className="text-slate-500">
+          {query
+            ? `Showing blog results for "${resolvedSearchParams.query}"`
+            : "Thoughts on digital growth from our team."}
+        </p>
       </section>
 
       {/* Featured Post */}

@@ -239,6 +239,25 @@ export default function Home() {
     router.push(`/companies?${params.toString()}`);
   };
 
+  const buildOfferCartLink = (ad: any) => {
+    if (ad?.link && ad.link.trim()) return ad.link;
+
+    const sourceText = `${ad?.title || ""} ${ad?.subtitle || ""}`;
+    const percentMatch = sourceText.match(/(\d+)\s*%/);
+    const amountMatch = sourceText.match(/(?:₹|rs\.?|inr)\s*(\d+)/i);
+    const offerValue = percentMatch
+      ? `${percentMatch[1]}%`
+      : amountMatch
+      ? `₹${amountMatch[1]}`
+      : "";
+
+    const params = new URLSearchParams();
+    if (ad?.title) params.append("offerTitle", ad.title);
+    if (ad?.subtitle) params.append("offerSubtitle", ad.subtitle);
+    if (offerValue) params.append("offerValue", offerValue);
+    return `/cart?${params.toString()}`;
+  };
+
   const handleQuoteSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (quoteSubmitting) return;
@@ -691,9 +710,10 @@ export default function Home() {
             <div className="overflow-hidden">
               <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
                 {[...ads, ...ads, ...ads].map((ad, index) => (
-                  <div
+                  <Link
                     key={index}
-                    className="w-[300px] bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-lg hover:shadow-xl transition-shadow"
+                    href={buildOfferCartLink(ad)}
+                    className="w-[300px] bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-lg hover:shadow-xl transition-shadow block"
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -703,13 +723,13 @@ export default function Home() {
                         <h3 className="text-white font-bold text-lg leading-tight">
                           {ad.title}
                         </h3>
-                        <button className="mt-3 px-4 py-1.5 bg-white text-cyan-700 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
+                        <span className="mt-3 inline-block px-4 py-1.5 bg-white text-cyan-700 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
                           Get This Deal
-                        </button>
+                        </span>
                       </div>
                       <div className="text-4xl">🎉</div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -723,7 +743,7 @@ export default function Home() {
           <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
             {categories.map((cat, i) => (
               <Link
-                href={`/services?category=${encodeURIComponent(cat.name)}`}
+                href={`/blog?query=${encodeURIComponent(cat.name)}`}
                 key={i}
                 className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
               >

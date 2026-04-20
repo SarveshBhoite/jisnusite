@@ -4,49 +4,47 @@ import { useEffect, useState } from "react"
 import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Lock, ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
+import { useSearchParams } from "next/navigation"
 
 export default function CartPage() {
   const { data: session, status } = useSession()
+  const searchParams = useSearchParams()
   const [cart, setCart] = useState<any[]>([])
   const [message, setMessage] = useState("")
   const [loading, setLoading] = useState(false)
   const [whatsapp, setWhatsapp] = useState("")
 
-  // 🚀 Logic to load cart and listen for updates
   useEffect(() => {
     const loadCart = () => {
       const stored = JSON.parse(localStorage.getItem("cart") || "[]")
       setCart(stored)
     }
 
-    loadCart() // Initial load
-    
-    // Fetch user profile to get whatsapp number
+    loadCart()
+
     const fetchUserProfile = async () => {
       if (status === "authenticated" && session.user?.email) {
         try {
-          const res = await fetch(`/api/client/profile?email=${session.user.email}`);
+          const res = await fetch(`/api/client/profile?email=${session.user.email}`)
           if (res.ok) {
-            const data = await res.json();
-            setWhatsapp(data.whatsapp || "");
+            const data = await res.json()
+            setWhatsapp(data.whatsapp || "")
           }
         } catch (error) {
-          console.error("Failed to fetch user profile:", error);
+          console.error("Failed to fetch user profile:", error)
         }
       }
-    };
-    fetchUserProfile();
+    }
+    fetchUserProfile()
 
-    // Listen for the custom event you dispatched in removeItem
     window.addEventListener("cartUpdated", loadCart)
     return () => window.removeEventListener("cartUpdated", loadCart)
-  }, [])
+  }, [session?.user?.email, status])
 
   const removeItem = (id: string) => {
-    const updated = cart.filter(item => item._id !== id)
+    const updated = cart.filter((item) => item._id !== id)
     setCart(updated)
     localStorage.setItem("cart", JSON.stringify(updated))
-    // This triggers the listener above
     window.dispatchEvent(new Event("cartUpdated"))
   }
 
@@ -54,64 +52,74 @@ export default function CartPage() {
   const totalDiscounted = cart.reduce((acc, item) => acc + (item.discountPrice || 0), 0)
   const totalSavings = totalMRP - totalDiscounted
 
+  const offerTitle = searchParams.get("offerTitle") || ""
+  const offerSubtitle = searchParams.get("offerSubtitle") || ""
+  const offerValue = searchParams.get("offerValue") || ""
+  const offerNumeric = Number((offerValue.match(/[\d.]+/) || [0])[0])
+  const extraOfferSavings = offerNumeric
+    ? offerValue.includes("%")
+      ? Math.round((totalDiscounted * offerNumeric) / 100)
+      : offerNumeric
+    : 0
+  const finalPayable = Math.max(totalDiscounted - extraOfferSavings, 0)
+
   const submitRequest = async () => {
     if (status !== "authenticated") {
-      alert("Please login to place an order");
-      return;
+      alert("Please login to place an order")
+      return
     }
 
-    setLoading(true);
+    setLoading(true)
 
     const payload = {
       email: session.user?.email,
       name: session.user?.name,
       whatsapp: whatsapp,
       companyName: "Individual Request",
-      services: cart.map(item => ({
+      services: cart.map((item) => ({
         id: item._id,
         name: item.title,
-        price: item.discountPrice
+        price: item.discountPrice,
       })),
-      totalAmount: totalDiscounted,
-      message: message,
-      status: "New"
-    };
+      totalAmount: finalPayable,
+      message: `${message}${offerTitle ? `\nOffer Applied: ${offerTitle}${offerValue ? ` (${offerValue})` : ""}` : ""}`,
+      status: "New",
+    }
 
     try {
       const res = await fetch("/api/admin/services/request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+        body: JSON.stringify(payload),
+      })
 
       if (res.ok) {
-        alert("✅ Order Placed Successfully!");
-        localStorage.removeItem("cart");
-        setCart([]);
-        window.dispatchEvent(new Event("cartUpdated"));
+        alert("Order Placed Successfully!")
+        localStorage.removeItem("cart")
+        setCart([])
+        window.dispatchEvent(new Event("cartUpdated"))
       } else {
-        const result = await res.json();
-        alert(`❌ ${result.message || "Something went wrong"}`);
+        const result = await res.json()
+        alert(`Error: ${result.message || "Something went wrong"}`)
       }
     } catch (error) {
-      alert("System error. Please try again later.");
+      alert("System error. Please try again later.")
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <main className="pt-28 pb-24 bg-[#fcfcfc] min-h-screen">
       <Link href="/" className="md:hidden text-primary text-lg font-bold flex items-center gap-1 mb-5 px-4">
         <ChevronLeft className="w-4 h-4" /> Back to Home
       </Link>
-      
+
       <div className="max-w-5xl mx-auto px-4">
         <div className="flex items-center justify-between mb-10">
           <h1 className="text-3xl font-black text-slate-900 flex items-center gap-3 italic uppercase">
             <div className="relative">
               <ShoppingCart className="w-8 h-8 text-blue-600" />
-              {/* 🚀 ADDED: Visual Count Badge on Icon */}
               {cart.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center border-2 border-white animate-in zoom-in">
                   {cart.length}
@@ -138,7 +146,7 @@ export default function CartPage() {
                 <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest flex items-center gap-2 mb-2">
                   <UserCircle className="w-4 h-4 text-blue-600" /> Checkout Account
                 </h3>
-                
+
                 {status === "authenticated" ? (
                   <div className="flex items-center gap-4 p-4 bg-blue-50/50 rounded-2xl border border-blue-100">
                     <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
@@ -179,8 +187,8 @@ export default function CartPage() {
 
                   <div className="flex items-center gap-6">
                     <div className="text-right">
-                      <p className="font-black text-slate-900">₹{item.discountPrice}</p>
-                      <p className="text-xs text-slate-400 line-through font-bold">₹{item.basePrice}</p>
+                      <p className="font-black text-slate-900">?{item.discountPrice}</p>
+                      <p className="text-xs text-slate-400 line-through font-bold">?{item.basePrice}</p>
                     </div>
                     <button onClick={() => removeItem(item._id)} className="p-2 bg-slate-50 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
                       <X className="w-5 h-5" />
@@ -209,19 +217,34 @@ export default function CartPage() {
             <div className="lg:col-span-1">
               <div className="bg-slate-900 text-white p-8 rounded-[2.5rem] shadow-xl sticky top-32 border border-white/5">
                 <h2 className="text-xl font-bold mb-6 pb-4 border-b border-white/10 italic uppercase">Summary</h2>
-                
+
+                {offerTitle && (
+                  <div className="mb-6 p-4 rounded-2xl bg-emerald-500/10 border border-emerald-400/20">
+                    <p className="text-[10px] uppercase tracking-widest text-emerald-300 font-black">Offer Applied</p>
+                    <p className="text-sm font-bold text-emerald-100 mt-1">{offerTitle}</p>
+                    {offerSubtitle && <p className="text-xs text-emerald-200/80 mt-1">{offerSubtitle}</p>}
+                    {offerValue && <p className="text-xs font-black text-emerald-200 mt-2">Value: {offerValue}</p>}
+                  </div>
+                )}
+
                 <div className="space-y-4 mb-8">
                   <div className="flex justify-between text-slate-400 font-bold text-xs uppercase">
                     <span>Subtotal</span>
-                    <span>₹{totalMRP}</span>
+                    <span>?{totalMRP}</span>
                   </div>
                   <div className="flex justify-between text-green-400 font-bold text-xs uppercase">
                     <span>Discount</span>
-                    <span>- ₹{totalSavings}</span>
+                    <span>- ?{totalSavings}</span>
                   </div>
+                  {extraOfferSavings > 0 && (
+                    <div className="flex justify-between text-emerald-300 font-bold text-xs uppercase">
+                      <span>Offer Savings</span>
+                      <span>- ?{extraOfferSavings}</span>
+                    </div>
+                  )}
                   <div className="pt-4 border-t border-white/10 flex justify-between items-end">
                     <span className="font-bold text-sm uppercase">Total Payable</span>
-                    <span className="text-3xl font-black text-white italic">₹{totalDiscounted}</span>
+                    <span className="text-3xl font-black text-white italic">?{finalPayable}</span>
                   </div>
                 </div>
 
@@ -240,7 +263,7 @@ export default function CartPage() {
                     </button>
                   </Link>
                 )}
-                
+
                 <p className="text-[10px] text-center text-slate-500 mt-6 font-bold uppercase tracking-widest">
                   Our team will call you within 24 hours
                 </p>
