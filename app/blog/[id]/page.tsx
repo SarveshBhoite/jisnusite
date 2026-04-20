@@ -1,6 +1,6 @@
 import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/Blog";
-import { ArrowLeft,  Calendar, User } from "lucide-react";
+import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -9,14 +9,13 @@ export default async function PostDetail({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+  const { id } = await params;
 
   await dbConnect();
 
   let post: any;
   try {
-    // post = await Blog.findById(id).lean();m
+    post = await Blog.findById(id).lean();
   } catch {
     return notFound();
   }
@@ -24,14 +23,13 @@ export default async function PostDetail({
   if (!post) return notFound();
 
   const imagePath =
-    post.image.startsWith("http") || post.image.startsWith("/")
+    post.image?.startsWith("http") || post.image?.startsWith("/")
       ? post.image
       : `/${post.image}`;
 
   return (
-    <main className="pt-24 min-h-screen bg-white">9
+    <main className="pt-24 min-h-screen bg-white">
       <div className="max-w-4xl mx-auto px-6 py-10">
-        {/* Navigation */}
         <Link
           href="/blog"
           className="text-cyan-600 flex items-center gap-2 mb-8 hover:-translate-x-1 transition group"
@@ -40,7 +38,6 @@ export default async function PostDetail({
           Back to Blog
         </Link>
 
-        {/* Header */}
         <header className="mb-10">
           <span className="bg-cyan-100 text-cyan-700 px-4 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
             {post.category}
@@ -57,11 +54,9 @@ export default async function PostDetail({
             <span className="flex items-center gap-2">
               <Calendar size={18} className="text-cyan-600" /> {post.date}
             </span>
-            
           </div>
         </header>
 
-        {/* Image */}
         <div className="rounded-3xl overflow-hidden mb-12 shadow-2xl bg-slate-100">
           <img
             src={imagePath}
@@ -70,7 +65,6 @@ export default async function PostDetail({
           />
         </div>
 
-        {/* BLOG CONTENT (PLAIN HTML — INTERNAL LINKS WORK) */}
         <article
           suppressHydrationWarning
           className="prose prose-lg prose-cyan max-w-none
