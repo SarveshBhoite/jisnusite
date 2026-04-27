@@ -36,7 +36,6 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
   const router = useRouter();
-
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
@@ -158,8 +157,8 @@ export default function Home() {
       name: "Sumit Marane",
       company: "Mounty River Resort",
       review:
-        "We had a great experience working with JISNU Digital Solutions Pvt. Ltd In Wakad & PCMC. Their team is highly professional, creative, and dedicated to delivering excellent digital marketing services. They helped us improve our online presence with effective strategies, quality content, and consistent support. Their approach to digital marketing, branding, and social media management is very impressive.The team understands business needs and provides the right solutions to help grow online visibility. We highly recommend JISNU Digital Solutions Pvt. Ltd. to anyone looking for reliable and result-oriented digital marketing services.Great work and excellent support! Thank you so much Team",
-      rating: 5,
+        "Professional team, quick delivery, and great results. Jisnu Digital is definitely worth it.",
+         rating: 5,
     },
     {
       name: "asmita shirsat",

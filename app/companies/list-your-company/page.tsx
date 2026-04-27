@@ -150,6 +150,7 @@ export default function ListYourCompanyPage() {
                       <option>Education</option>
                       <option>Hotels</option>
                       <option>Hotels</option>
+                      <option>Event Organiser</option>
                     </select>
                   </div>
 
