@@ -1,12 +1,12 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { ArrowRight, ShoppingCart, X, MessageSquare, UserCircle, Lock, ChevronLeft } from "lucide-react"
 import Link from "next/link"
 import { useSession } from "next-auth/react"
 import { useSearchParams } from "next/navigation"
 
-export default function CartPage() {
+function CartContent() {
   const { data: session, status } = useSession()
   const searchParams = useSearchParams()
   const [cart, setCart] = useState<any[]>([])
@@ -273,5 +273,20 @@ export default function CartPage() {
         )}
       </div>
     </main>
+  )
+}
+
+export default function CartPage() {
+  return (
+    <Suspense fallback={
+      <main className="pt-28 pb-24 bg-[#fcfcfc] min-h-screen">
+        <div className="max-w-5xl mx-auto px-4">
+          <div className="h-12 bg-slate-200 rounded-lg animate-pulse mb-8"></div>
+          <div className="h-96 bg-slate-100 rounded-lg animate-pulse"></div>
+        </div>
+      </main>
+    }>
+      <CartContent />
+    </Suspense>
   )
 }
