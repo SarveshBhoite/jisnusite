@@ -1,5 +1,6 @@
 import connectDB from "@/lib/mongodb";
 import ServiceRequest from "@/models/ServiceRequest";
+import User from "@/models/User";
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
@@ -16,7 +17,7 @@ export async function GET() {
     // Populate whatsapp if missing (for legacy requests)
     const populatedRequests = await Promise.all(requests.map(async (req: any) => {
       if (!req.whatsapp && req.email) {
-        const user = await (require("@/models/User").default).findOne({ email: { $regex: new RegExp(`^${req.email}$`, "i") } });
+        const user = await User.findOne({ email: { $regex: new RegExp(`^${req.email}$`, "i") } });
         if (user) req.whatsapp = user.whatsapp;
       }
       return req;

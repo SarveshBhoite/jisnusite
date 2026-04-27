@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const ServiceRequestSchema = new mongoose.Schema({
- name: { type: String, required: true },     // Changed from company
+  name: { type: String, required: true },
+  email: { type: String, required: true },
   whatsapp: { type: String, required: false},
   services: [{
     id: String,
