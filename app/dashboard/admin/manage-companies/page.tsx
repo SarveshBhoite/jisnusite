@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Search, MapPin, Loader2, Crown, Building2, CheckCircle2, ChevronLeft } from "lucide-react"
+import { Search, MapPin, Loader2, Crown, Building2, CheckCircle2, ChevronLeft, Trash2 } from "lucide-react"
 
 export default function ManageCompaniesPage() {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState("")
   const [filter, setFilter] = useState("All")
   const [companies, setCompanies] = useState<any[]>([])
+  const [deleting, setDeleting] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchVerifiedCompanies = async () => {
@@ -24,6 +25,35 @@ export default function ManageCompaniesPage() {
     }
     fetchVerifiedCompanies()
   }, [])
+
+  // Handle delete company
+  const handleDelete = async (companyId: string, companyName: string) => {
+    if (!confirm(`Are you sure you want to delete "${companyName}"? This action cannot be undone.`)) {
+      return
+    }
+
+    setDeleting(companyId)
+    try {
+      const res = await fetch(`/api/admin/companies?id=${companyId}`, {
+        method: "DELETE",
+        credentials: "include",
+      })
+
+      if (res.ok) {
+        alert("Company deleted successfully!")
+        setCompanies(companies.filter(c => c._id !== companyId))
+      } else if (res.status === 403) {
+        alert("You do not have permission to delete companies.")
+      } else {
+        alert("Failed to delete company.")
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      alert("An error occurred while deleting the company.")
+    } finally {
+      setDeleting(null)
+    }
+  }
 
   const filteredCompanies = companies.filter((company: any) => {
     const matchesSearch = company.name?.toLowerCase().includes(search.toLowerCase())
@@ -178,12 +208,24 @@ export default function ManageCompaniesPage() {
                 </div>
 
                 {/* Mobile Optimized Actions */}
-                <div className="w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-none">
-                  <Link href={`/dashboard/admin/manage-companies/${company._id}`} className="block">
+                <div className="w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-none flex gap-2">
+                  <Link href={`/dashboard/admin/manage-companies/${company._id}`} className="flex-1 sm:flex-none">
                     <button className="w-full sm:w-auto px-10 py-4 bg-slate-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 group-hover:gap-4">
                       Modify <ChevronLeft className="w-4 h-4 rotate-180" />
                     </button>
                   </Link>
+                  <button
+                    onClick={() => handleDelete(company._id, company.name)}
+                    disabled={deleting === company._id}
+                    className="flex-1 sm:flex-none px-6 py-4 bg-red-500 text-white rounded-2xl text-[11px] font-black uppercase tracking-widest hover:bg-red-600 transition-all shadow-xl active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {deleting === company._id ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-4 h-4" />
+                    )}
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
