@@ -132,10 +132,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-
-
-
-      {/* ================= TEAM ================= */}
+     {/* ================= TEAM ================= */}
       <section className="py-28 bg-muted/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl mb-16">
