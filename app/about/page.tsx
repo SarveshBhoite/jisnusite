@@ -157,9 +157,9 @@ export default function AboutPage() {
                 image: "/pratik.jpg",
               },
               {
-                name: "Pratik Pawar",
+                name: " Hrushikesh patil",
                 role: "Team Leader",
-                image: "/Pawar.jpg",
+                image: "/patil sir.jpeg",
               },
               {
                 name: "Sarvesh Bhoite",

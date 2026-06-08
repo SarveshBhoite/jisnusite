@@ -16,7 +16,9 @@ export default async function BlogPage({
 
   const posts = query
     ? allPosts.filter((post: any) =>
+
         [post.title, post.category, post.excerpt]
+
           .filter(Boolean)
           .some((field: string) => field.toLowerCase().includes(query)),
       )
@@ -37,7 +39,7 @@ export default async function BlogPage({
             <ChevronLeft className="w-4 h-4" /> Back to Home
           </Link>
         <h1 className="text-4xl font-bold mb-4">Insights & Articles</h1>
-        <p className="text-slate-500">
+        <p className="text-slate-500">n
           {query
             ? `Showing blog results for "${resolvedSearchParams.query}"`
             : "Thoughts on digital growth from our team."}

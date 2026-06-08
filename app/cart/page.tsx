@@ -1,3 +1,4 @@
+
 "use client"
 
 import { Suspense, useEffect, useState } from "react"
@@ -35,7 +36,7 @@ function CartContent() {
         }
       }
     }
-    fetchUserProfile()
+    fetchUserProfile
 
     window.addEventListener("cartUpdated", loadCart)
     return () => window.removeEventListener("cartUpdated", loadCart)
