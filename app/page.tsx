@@ -62,6 +62,7 @@ export default function Home() {
     { name: "E-Commerce", icon: "🛒", count: "150+" },
     { name: "UI/UX Design", icon: "✨", count: "280+" },
     { name: "Content Writing", icon: "✍️", count: "180+" },
+    {name:"Meta Ads",icon:"📢",count:"220+"},
   ];
 
   const companyCategories = [
