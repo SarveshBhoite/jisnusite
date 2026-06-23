@@ -740,7 +740,7 @@ export default function Home() {
       {/* Category Grid Section */}
       <section className="bg-white py-8 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
+          <div className="grid grid-cols-4 md:grid-cols-9 gap-4">
             {categories.map((cat, i) => (
               <Link
                 href={`/blog?query=${encodeURIComponent(cat.name)}`}
