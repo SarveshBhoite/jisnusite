@@ -14,6 +14,7 @@ const PUBLIC_ROUTES = [
   "/login",
   "/logout",
   "/site-map",
+  "/privacy-policy",
 ];
 
 function getBaseUrl() {

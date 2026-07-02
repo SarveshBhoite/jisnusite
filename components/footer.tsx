@@ -82,6 +82,7 @@ export function Footer() {
                 { label: "Portfolio", href: "/portfolio" },
                 { label: "Blogs", href: "/blog" },
                 { label: "Contact", href: "/contact" },
+                { label: "Privacy Policy", href: "/privacy-policy" },
                 { label: "Sitemap", href: "/site-map" },
               ].map((item) => (
                 <li key={item.label}>

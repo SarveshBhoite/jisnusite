@@ -7,6 +7,7 @@ const sitemapSections = [
       { label: "Home", href: "/" },
       { label: "About Us", href: "/about" },
       { label: "Contact", href: "/contact" },
+      { label: "Privacy Policy", href: "/privacy-policy" },
     ],
   },
   {
