@@ -63,7 +63,7 @@ export default function ContactPage() {
           <div className="space-y-8">
             <InfoItem icon={<Mail />} title="Email" value="info.jdsolutions2018@gmail.com" href="mailto:info.jdsolutions2018@gmail.com" />
             <InfoItem icon={<Phone />} title="Phone" value="+91 7709936965 / 020 47246321" href="tel:+917709936965" />
-            <InfoItem icon={<MapPin />} title="Office" value="Pune, Maharashtra, India" />
+            <InfoItem icon={<MapPin />} title="Office" value="Office No.545, 5th Floor, Solitaire business Hub, opp. Ambience Hotel, Vishnu Dev Nagar, Wakad, Pimpri-Chinchwad, Pune, Maharashtra 411057" />
             <InfoItem icon={<Clock />} title="Hours" value="Mon-Sat: 9AM - 6PM" />
           </div>
 

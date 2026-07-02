@@ -22,7 +22,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
         Employee.findOne({ email, _id: { $ne: id } }).select("_id"),
         Company.findOne({ email }).select("_id"),
       ]);
-
+ 
       if (existingEmployee || existingCompany) {
         return NextResponse.json({ error: "Email already in use" }, { status: 409 });
       }

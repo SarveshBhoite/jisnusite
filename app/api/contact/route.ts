@@ -1,10 +1,22 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+const DEFAULT_CONTACT_RECIPIENT = "info.jdsolutions2018@gmail.com";
+
+function getContactRecipients() {
+  const envRecipients = process.env.CONTACT_RECIPIENTS || "";
+  const recipients = envRecipients
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+
+  return recipients.length ? recipients.join(",") : DEFAULT_CONTACT_RECIPIENT;
+}
+
 export async function POST(req: Request) {
   try {
     const { firstName, lastName, email, company, subject, message } = await req.json();
-    const adminRecipient = "info.jdsolutions2018@gmail.com";
+    const adminRecipient = getContactRecipients();
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -19,7 +31,7 @@ export async function POST(req: Request) {
       from: `"${firstName} ${lastName}" <${process.env.EMAIL_USER}>`,
       
       // 2. The destination (Admin)
-      to: adminRecipient, 
+      to: adminRecipient,
       
       // 3. THIS IS THE KEY: When you click "Reply", it goes to the user
       replyTo: email, 

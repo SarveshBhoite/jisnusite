@@ -1,5 +1,6 @@
 "use client";
 
+import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -23,7 +24,6 @@ import {
   Zap,
   Trophy,
   TrendingUp,
-  MessageCircle,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -36,7 +36,6 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState("");
   const router = useRouter();
-
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [locationSuggestions, setLocationSuggestions] = useState<string[]>([]);
@@ -45,6 +44,14 @@ export default function Home() {
   const locationSuggestionRef = useRef<HTMLDivElement>(null);
   const [recentWorkIndex, setRecentWorkIndex] = useState(0);
   const [reviewIndex, setReviewIndex] = useState(0);
+  const [quoteSubmitting, setQuoteSubmitting] = useState(false);
+  const [quoteForm, setQuoteForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    service: "",
+    requirement: "",
+  });
 
   const categories = [
     { name: "Web Development", icon: "🌐", count: "500+" },
@@ -55,6 +62,7 @@ export default function Home() {
     { name: "E-Commerce", icon: "🛒", count: "150+" },
     { name: "UI/UX Design", icon: "✨", count: "280+" },
     { name: "Content Writing", icon: "✍️", count: "180+" },
+    {name:"Meta Ads",icon:"📢",count:"220+"},
   ];
 
   const companyCategories = [
@@ -147,31 +155,31 @@ export default function Home() {
 
   const customerReviews = [
     {
-      name: "Rohit Sharma",
-      company: "Urban Build Pvt Ltd",
+      name: "Sumit Marane",
+      company: "Mounty River Resort",
       review:
-        "Very professional team. Our website and leads both improved in just a few weeks.",
+        "Professional team, quick delivery, and great results. Jisnu Digital is definitely worth it.",
+         rating: 5,
+    },
+    {
+      name: "asmita shirsat",
+      company: "Kidz Explore Theorpy Center",
+      review:
+        "For our center Kidz Explore Therapy, Jisnu Digital Solutions Pvt. Ltd in Wakad. has provided excellent digital marketing services. They have managed our GMB page, social media, and online branding very professionally.",
       rating: 5,
     },
     {
-      name: "Pooja Verma",
-      company: "Glow Beauty Studio",
+      name: "NITIN LONKAR",
+      company: "Lonkar Enterprises Pune",
       review:
-        "They handled our digital marketing really well. Great communication and fast support.",
-      rating: 5,
-    },
-    {
-      name: "Arjun Mehta",
-      company: "Mehta Electronics",
-      review:
-        "SEO and listing optimization gave us visible growth. Highly recommended service.",
+        "I’ve been working with Jisnu Digital for my digital marketing needs, and the results have been amazing! Their team is professional, responsive, and truly understands the latest trends. Thanks to them, my online presence has improved significantly, and I’m seeing great results in lead generation and traffic Highly recommend!",
       rating: 4,
     },
     {
-      name: "Sneha Nair",
+      name: "Amol ade",
       company: "Nair Interiors",
       review:
-        "Design quality was excellent and the project delivery was on time exactly as promised.",
+        "Best digital marketing solutions company.",
       rating: 5,
     },
   ];
@@ -229,6 +237,75 @@ export default function Home() {
     if (query) params.append("query", query);
     if (location) params.append("location", location);
     router.push(`/companies?${params.toString()}`);
+  };
+
+  const buildOfferCartLink = (ad: any) => {
+    if (ad?.link && ad.link.trim()) return ad.link;
+
+    const sourceText = `${ad?.title || ""} ${ad?.subtitle || ""}`;
+    const percentMatch = sourceText.match(/(\d+)\s*%/);
+    const amountMatch = sourceText.match(/(?:₹|rs\.?|inr)\s*(\d+)/i);
+    const offerValue = percentMatch
+      ? `${percentMatch[1]}%`
+      : amountMatch
+      ? `₹${amountMatch[1]}`
+      : "";
+
+    const params = new URLSearchParams();
+    if (ad?.title) params.append("offerTitle", ad.title);
+    if (ad?.subtitle) params.append("offerSubtitle", ad.subtitle);
+    if (offerValue) params.append("offerValue", offerValue);
+    return `/cart?${params.toString()}`;
+  };
+
+  const handleQuoteSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (quoteSubmitting) return;
+
+    const [firstName, ...restName] = quoteForm.name.trim().split(" ");
+    const lastName = restName.join(" ");
+
+    setQuoteSubmitting(true);
+    try {
+      const message = [
+        "Home page quote inquiry",
+        `Name: ${quoteForm.name}`,
+        `Email: ${quoteForm.email}`,
+        `Phone: ${quoteForm.phone}`,
+        `Service: ${quoteForm.service}`,
+        `Requirement: ${quoteForm.requirement || "Not provided"}`,
+      ].join("\n");
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          firstName: firstName || quoteForm.name,
+          lastName: lastName || "Lead",
+          email: quoteForm.email,
+          company: "Website Lead",
+          subject: "Get Free Quote Request",
+          message,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to submit quote form");
+      }
+
+      alert("Thank you! We received your request and will contact you soon.");
+      setQuoteForm({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        requirement: "",
+      });
+    } catch (error) {
+      alert("Unable to submit now. Please try again.");
+    } finally {
+      setQuoteSubmitting(false);
+    }
   };
 
   useEffect(() => {
@@ -339,7 +416,11 @@ export default function Home() {
   const current = cards[index];
 
   return (
-    <main className="bg-slate-50 min-h-screen relative">
+    <>
+      <Head>
+        <link rel="canonical" href="https://www.jisnudigital.com/" />
+      </Head>
+      <main className="bg-slate-50 min-h-screen relative">
       {/* ========== HERO SECTION ========== */}
       <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -348,6 +429,7 @@ export default function Home() {
             <span className="text-sm font-medium">Serving All Over India</span>
             <ChevronRight className="w-4 h-4" />
           </div>
+          
 
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
@@ -363,9 +445,9 @@ export default function Home() {
                 development, SEO, marketing & more at affordable prices.
               </p>
 
-              <div className="bg-white rounded-xl shadow-xl p-2 flex flex-col md:flex-row items-center gap-2 mb-6 border border-slate-100 relative">
+              <div className="hidden bg-white rounded-xl shadow-xl p-2 flex flex-nowrap items-center gap-2 mb-6 border border-slate-100 relative overflow-x-auto">
                 <div
-                  className="flex-1 flex items-center gap-3 px-4 w-full relative"
+                  className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
                   ref={suggestionRef}
                 >
                   <Search className="w-5 h-5 text-slate-400 shrink-0" />
@@ -405,10 +487,10 @@ export default function Home() {
                   )}
                 </div>
 
-                <div className="hidden md:block w-px h-8 bg-slate-200 mx-2" />
+                <div className="w-px h-8 bg-slate-200 mx-2 shrink-0" />
 
                 <div
-                  className="flex-1 flex items-center gap-3 px-4 w-full border-t md:border-t-0 border-slate-100 pt-2 md:pt-0 relative"
+                  className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
                   ref={locationSuggestionRef}
                 >
                   <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
@@ -450,21 +532,21 @@ export default function Home() {
 
                 <button
                   onClick={handleSearch}
-                  className="w-full md:w-auto bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
+                  className="shrink-0 bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
                 >
                   Search
                 </button>
               </div>
 
-              <div className="flex flex-wrap gap-6">
+              <div className="grid grid-cols-4 gap-2 md:flex md:flex-wrap md:gap-6">
                 {trustStats.map((stat, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center">
+                  <div key={i} className="flex items-center gap-2 md:gap-4 min-w-0">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
                       <stat.icon className="w-5 h-5 text-cyan-300" />
                     </div>
-                    <div>
-                      <div className="font-black text-white">{stat.value}</div>
-                      <div className="text-xs text-cyan-100/70">
+                    <div className="min-w-0">
+                      <div className="font-black text-white text-sm md:text-base">{stat.value}</div>
+                      <div className="text-[10px] md:text-xs text-cyan-100/70 truncate">
                         {stat.label}
                       </div>
                     </div>
@@ -566,20 +648,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Category Grid Section */}
-      <section className="bg-white py-8 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4">
-            {categories.map((cat, i) => (
-              <Link
-                href={`/services?category=${encodeURIComponent(cat.name)}`}
-                key={i}
-                className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
+      {/* ========== Companies SECTION (Home Page) ========== */}
+      <section className="bg-white py-12 border-b border-slate-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <div className="text-left">
+              <h2 className="text-lg md:text-2xl font-black text-slate-900 uppercase italic tracking-tight whitespace-nowrap">
+                Browse Categories
+              </h2>
+              <p className="text-slate-500 text-sm font-small">
+                Find the best businesses by industry
+              </p>
+            </div>
+            <Link
+                href="/categories"
+                className="text-cyan-600 text-sm font-medium flex items-center gap-1"
               >
-                <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
+                View All <ChevronRight className="w-4 h-4" />
+              </Link>
+          </div>
+
+          <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
+            {companyCategories.slice(0, 16).map((cat, i) => (
+              <Link
+                key={i}
+                href={`/companies?query=${encodeURIComponent(cat.name)}`}
+                className={`group flex flex-col items-center gap-3 ${i >= 8 ? "hidden md:flex" : ""}`}
+              >
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
                   {cat.icon}
                 </div>
-                <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
+
+                <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors line-clamp-1">
                   {cat.name}
                 </span>
               </Link>
@@ -610,9 +710,10 @@ export default function Home() {
             <div className="overflow-hidden">
               <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
                 {[...ads, ...ads, ...ads].map((ad, index) => (
-                  <div
+                  <Link
                     key={index}
-                    className="w-[300px] bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-lg hover:shadow-xl transition-shadow"
+                    href={buildOfferCartLink(ad)}
+                    className="w-[300px] bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-lg hover:shadow-xl transition-shadow block"
                   >
                     <div className="flex items-start justify-between">
                       <div>
@@ -622,13 +723,13 @@ export default function Home() {
                         <h3 className="text-white font-bold text-lg leading-tight">
                           {ad.title}
                         </h3>
-                        <button className="mt-3 px-4 py-1.5 bg-white text-cyan-700 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
+                        <span className="mt-3 inline-block px-4 py-1.5 bg-white text-cyan-700 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
                           Get This Deal
-                        </button>
+                        </span>
                       </div>
                       <div className="text-4xl">🎉</div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -636,51 +737,24 @@ export default function Home() {
         </section>
       )}
 
-      {/* ========== Companies SECTION (Home Page) ========== */}
-      <section className="bg-white py-12 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-end mb-8">
-            <div className="text-left">
-              <h2 className="text-2xl font-black text-slate-900 uppercase italic tracking-tight">
-                Browse Categories
-              </h2>
-              <p className="text-slate-500 text-sm font-medium">
-                Find the best businesses by industry
-              </p>
-            </div>
-
-            <Link
-              href="/categories"
-              className="hidden md:flex items-center gap-2 text-cyan-600 font-bold text-xs uppercase tracking-widest hover:gap-3 transition-all"
-            >
-              Explore All <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
-            {companyCategories.slice(0, 16).map((cat, i) => (
+      {/* Category Grid Section */}
+      <section className="bg-white py-8 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-4 md:grid-cols-9 gap-4">
+            {categories.map((cat, i) => (
               <Link
+                href={`/blog?query=${encodeURIComponent(cat.name)}`}
                 key={i}
-                href={`/companies?query=${encodeURIComponent(cat.name)}`}
-                className="group flex flex-col items-center gap-3"
+                className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
               >
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
+                <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
                   {cat.icon}
                 </div>
-
-                <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors line-clamp-1">
+                <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
                   {cat.name}
                 </span>
               </Link>
             ))}
-          </div>
-
-          <div className="mt-8 md:hidden">
-            <Link href="/categories">
-              <button className="w-full py-3 bg-slate-50 text-slate-600 text-xs font-bold uppercase rounded-xl border border-slate-100">
-                View All Categories
-              </button>
-            </Link>
           </div>
         </div>
       </section>
@@ -765,6 +839,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
+              
             )}
           </div>
         </div>
@@ -840,7 +915,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-2 md:gap-4">
             {[
               {
                 icon: Shield,
@@ -869,15 +944,15 @@ export default function Home() {
             ].map((item, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-6 text-center border border-slate-200 hover:shadow-lg transition-shadow"
+                className="bg-white rounded-xl p-2.5 md:p-6 text-center border border-slate-200 hover:shadow-lg transition-shadow"
               >
                 <div
-                  className={`w-14 h-14 ${item.color} rounded-full flex items-center justify-center mx-auto mb-4`}
+                  className={`w-9 h-9 md:w-14 md:h-14 ${item.color} rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4`}
                 >
-                  <item.icon className="w-7 h-7" />
+                  <item.icon className="w-4 h-4 md:w-7 md:h-7" />
                 </div>
-                <h3 className="font-bold text-slate-900 mb-1">{item.title}</h3>
-                <p className="text-sm text-slate-500">{item.desc}</p>
+                <h3 className="font-bold text-[11px] md:text-base text-slate-900 mb-1 leading-tight">{item.title}</h3>
+                <p className="text-[10px] md:text-sm text-slate-500 leading-tight">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -898,63 +973,96 @@ export default function Home() {
               <p className="text-slate-500 text-sm mb-6">
                 Fill the form and get callback within 30 minutes
               </p>
-              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+              <form className="space-y-4" onSubmit={handleQuoteSubmit}>
                 <input
+                  required
                   type="text"
+                  value={quoteForm.name}
+                  onChange={(e) =>
+                    setQuoteForm((prev) => ({ ...prev, name: e.target.value }))
+                  }
                   placeholder="Your Name *"
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                 />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <input
+                    required
                     type="email"
+                    value={quoteForm.email}
+                    onChange={(e) =>
+                      setQuoteForm((prev) => ({ ...prev, email: e.target.value }))
+                    }
                     placeholder="Email Address *"
                     className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                   />
                   <input
+                    required
                     type="tel"
+                    value={quoteForm.phone}
+                    onChange={(e) =>
+                      setQuoteForm((prev) => ({ ...prev, phone: e.target.value }))
+                    }
                     placeholder="Phone Number *"
                     className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                   />
                 </div>
-                <select className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all">
+                <select
+                  required
+                  value={quoteForm.service}
+                  onChange={(e) =>
+                    setQuoteForm((prev) => ({ ...prev, service: e.target.value }))
+                  }
+                  className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                >
                   <option value="">Select Service *</option>
-                  <option>Web Development</option>
-                  <option>App Development</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="App Development">App Development</option>
+                  <option value="SEO Services">SEO Services</option>
+                  <option value="Digital Marketing">Digital Marketing</option>
                 </select>
                 <textarea
+                  value={quoteForm.requirement}
+                  onChange={(e) =>
+                    setQuoteForm((prev) => ({
+                      ...prev,
+                      requirement: e.target.value,
+                    }))
+                  }
                   placeholder="Tell us about your requirement..."
                   rows={3}
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all resize-none"
                 ></textarea>
                 <button
                   type="submit"
+                  disabled={quoteSubmitting}
                   className="w-full py-4 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
                 >
-                  Get Free Quote <ArrowRight className="w-4 h-4" />
+                  {quoteSubmitting ? "Submitting..." : "Get Free Quote"}{" "}
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </form>
             </div>
 
-            <div className="space-y-4">
-              <div className="bg-teal-700 rounded-xl p-6 text-white">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <PhoneCall className="w-6 h-6" />
+            <div className="space-y-3 md:space-y-4">
+              <div className="bg-teal-700 rounded-xl p-4 md:p-6 text-white">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
                   </div>
                   <div>
-                    <div className="font-bold text-lg mb-1">Call Us Now</div>
-                    <div className="text-xl font-bold">+91 7709936965 </div>
+                    <div className="font-bold text-base md:text-lg mb-1">Call Us Now</div>
+                    <div className="text-lg md:text-xl font-bold">+91 7709936965 </div>
                   </div>
                 </div>
               </div>
-              <div className="bg-cyan-700 rounded-xl p-6 text-white">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-6 h-6" />
+              <div className="bg-cyan-700 rounded-xl p-4 md:p-6 text-white">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Mail className="w-5 h-5 md:w-6 md:h-6" />
                   </div>
                   <div>
-                    <div className="font-bold text-lg mb-1">Email Us</div>
-                    <div className="text-lg font-bold">
+                    <div className="font-bold text-base md:text-lg mb-1">Email Us</div>
+                    <div className="text-base md:text-lg font-bold break-all">
                       info.jdsolutions2018@gmail.com
                     </div>
                   </div>
@@ -977,28 +1085,28 @@ export default function Home() {
                 Get the best quotes from Jisnu Digital
               </div>
             </div>
-            <div className="flex gap-3">
-              <button className="flex items-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold transition-colors">
-                <PhoneCall className="w-4 h-4" /> Call Now
+            <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
+              <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold transition-colors">
+                <PhoneCall className="w-4 h-4" /> <a  href="https://wa.me/917709936965">Call Now</a>
               </button>
-              <button className="flex items-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold transition-colors">
-                <Send className="w-4 h-4" /> Get Quote
+              <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold transition-colors">
+                <Send className="w-4 h-4" /><a href="/contact"> Get Quote</a>
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ========== VERTICAL FLOATING SIDEBAR (JUSTDIAL STYLE) ========== */}
-      <div className="fixed right-0 top-[40%] z-[999] flex flex-col items-end pointer-events-none">
+      {/* ========== VERTICAL FLOATING SIDEBAR ========== */}
+      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[999] flex flex-col items-end pointer-events-none">
         {/* Advertise Button (Vertical) */}
         <Link
           href="/companies/list-your-company"
-          className="pointer-events-auto w-[34px] bg-[#df4f2d] text-white py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-10"
+          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#df4f2d] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-3 sm:mb-10"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[11px] font-bold uppercase tracking-wider">
+            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">
               Paid Listing
             </span>
             <Zap className="w-3 h-3 text-white fill-current transform rotate-180" />
@@ -1008,33 +1116,20 @@ export default function Home() {
         {/* Free Listing Button (Vertical) */}
         <Link
           href="/companies/list-your-company"
-          className="pointer-events-auto w-[34px] bg-[#0076d7] text-white py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
+          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#0076d7] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[11px] font-bold uppercase tracking-wider">
+            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">
               Free Listing
             </span>
             <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />
           </div>
         </Link>
 
-        {/* WhatsApp Button (Vertical) */}
-        <a
-          href="https://wa.me/917709936965"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="pointer-events-auto mt-10 w-[34px] bg-[#25D366] text-white py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
-          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-        >
-          <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[11px] font-bold uppercase tracking-wider">
-              WhatsApp
-            </span>
-            <MessageCircle className="w-3 h-3 text-white transform rotate-180" />
-          </div>
-        </a>
       </div>
-    </main>
+
+      </main>
+    </>
   );
 }

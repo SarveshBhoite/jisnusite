@@ -19,10 +19,10 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
 
         {/* Top Section */}
-        <div className="grid gap-12 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-12 md:grid-cols-4">
 
           {/* Brand */}
-          <div className="space-y-5">
+          <div className="col-span-2 md:col-span-1 space-y-5">
             <Link href="/" className="flex items-center gap-3">
               <Image
                 src="/icon.jpeg"
@@ -98,7 +98,7 @@ export function Footer() {
           </div>
 
           {/* Contact */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <p className="font-display text-sm font-semibold mb-4">
               Contact
             </p>
@@ -113,7 +113,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 mt-0.5" />
-                India
+                Office No.545, 5th Floor, Solitaire business Hub, opp. Ambience Hotel, Vishnu Dev Nagar, Wakad, Pimpri-Chinchwad, Pune, Maharashtra 411057
               </li>
             </ul>
           </div>

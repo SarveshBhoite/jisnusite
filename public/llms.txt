@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Website: Jisnu Digital
+Description: Digital marketing agency in Pune offering SEO, social media marketing, Google Ads, and website development services.
+Contact: https://www.jisnudigital.com/contact
+Sitemap: https://www.jisnudigital.com/sitemap.xml

@@ -198,43 +198,17 @@ function CompaniesList() {
 
   return (
     <main className="pt-16 bg-[#F8FAFC] min-h-screen">
-      {/* Banner Section */}
-      {!loading && matchingBanners.length > 0 && (
-        <div
-          key={matchingBanners[currentIndex]._id}
-          className="w-full pt-4 max-w-7xl mx-auto px-4"
-        >
-          <div className="relative w-full h-[140px] md:h-[200px] rounded-[1rem] overflow-hidden shadow-xl border-2 border-white">
-            <Image
-              src={matchingBanners[currentIndex].bannerImage}
-              alt="Banner"
-              fill
-              priority
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 flex flex-col justify-end p-4 md:p-10">
-              <h2 className="text-white text-lg md:text-4xl font-black italic uppercase">
-                Best in {matchingBanners[currentIndex].category}
-              </h2>
-            </div>
-          </div>
-        </div>
-      )}
+
 
       {/* Search Section */}
       <section className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 shadow-sm mt-5">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="flex flex-col md:flex-row gap-3 w-full max-w-2xl">
-                <Link
-                  href="/"
-                  className="flex items-center gap-1.5 text-slate-500 text-sm font-semibold mb-1 md:mb-0"
-                >
-                  <Home className="w-4 h-4" /> <span>Home</span>
-                </Link>
+              <div className="flex flex-nowrap gap-2 md:gap-3 w-full max-w-2xl">
+                
 
-                <div className="flex-1 relative" ref={suggestionRef}>
+                <div className="flex-1 min-w-0 relative" ref={suggestionRef}>
                   <input
                     type="text"
                     placeholder="Search category (e.g. H for Hotels)..."
@@ -283,20 +257,36 @@ function CompaniesList() {
                   placeholder="Location..."
                   value={locationQuery}
                   onChange={(e) => setLocationQuery(e.target.value)}
-                  className="w-full md:w-48 px-4 py-2.5 border border-slate-200 rounded-xl outline-none text-sm bg-slate-50"
+                  className="flex-1 min-w-0 px-4 py-2.5 border border-slate-200 rounded-xl outline-none text-sm bg-slate-50"
                 />
               </div>
-              <Link
-                href="/companies/list-your-company"
-                className="w-full md:w-auto"
-              >
-                <button className="w-full md:w-auto px-6 py-2.5 rounded-xl bg-cyan-700 text-white font-bold text-xs uppercase">
-                  Add Business
-                </button>
-              </Link>
+            
             </div>
 
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+                  {/* Banner Section */}
+      {!loading && matchingBanners.length > 0 && (
+        <div
+          key={matchingBanners[currentIndex]._id}
+          className="w-full pt-4 max-w-7xl mx-auto px-1"
+        >
+          <div className="relative w-full h-[140px] md:h-[200px] rounded-[1rem] overflow-hidden shadow-xl border-2 border-white">
+            <Image
+              src={matchingBanners[currentIndex].bannerImage}
+              alt="Banner"
+              fill
+              priority
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 flex flex-col justify-end p-4 md:p-10">
+              <h2 className="text-white text-lg md:text-4xl font-black italic uppercase">
+                Best in {matchingBanners[currentIndex].category}
+              </h2>
+            </div>
+          </div>
+        </div>
+      )}
+
+            <div className="flex items-center gap-2 overflow-x-auto  no-scrollbar pb-1">
               {filterTabs.map((tab) => (
                 <button
                   key={tab.id}

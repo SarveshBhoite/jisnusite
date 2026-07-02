@@ -12,7 +12,9 @@ export async function GET() {
       .limit(10)
       .lean();
 
-    return NextResponse.json(banners);
+    return NextResponse.json(banners
+      
+    );
   } catch (error) {
     return NextResponse.json({ success: false }, { status: 500 });
   }

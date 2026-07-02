@@ -88,7 +88,7 @@ export default function ServiceRequestDetailPage() {
         className="flex items-center gap-2 text-slate-400 hover:text-slate-900 font-bold text-[9px] md:text-[10px] uppercase tracking-widest mb-6 md:mb-10 transition-all"
       >
         <ArrowLeft className="w-4 h-4" /> Back to All Requests
-      </Link>
+      </Link>6
 
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-8 md:mb-12">
@@ -160,8 +160,18 @@ export default function ServiceRequestDetailPage() {
                     Contact Number
                   </p>
                   <p className="font-bold text-slate-900 text-base md:text-lg">
-                    {request.whatsapp || "Pending..."}
+                    {request.whatsapp ? (
+                      <>
+                        {request.whatsapp}
+                        <span className="text-[10px] font-bold text-blue-600 ml-2">(WhatsApp)</span>
+                      </>
+                    ) : request.phone ? (
+                      request.phone
+                    ) : (
+                      <span className="text-slate-400">Pending...</span>
+                    )}
                   </p>
+                  
                 </div>
               </div>
             </div>
