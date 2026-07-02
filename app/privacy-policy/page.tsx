@@ -139,8 +139,9 @@ export default function PrivacyPolicyPage() {
                   <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
                   <div>
                     <p className="font-semibold text-foreground">Address</p>
-                    <p>Pune, Maharashtra,</p>
-                    <p>India</p>
+                    <p className="leading-relaxed">
+                      Office No.545, 5th Floor, Solitaire business Hub, opp. Ambience Hotel, Vishnu Dev Nagar, Wakad, Pimpri-Chinchwad, Pune, Maharashtra 411057
+                    </p>
                   </div>
                 </div>
               </div>

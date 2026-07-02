@@ -5,7 +5,7 @@ import { requireAdminOrEmployeePermission } from "@/lib/admin-access";
 
 // DELETE - Delete company by ID
 export async function DELETE(req: Request) {
-  const guard = await requireAdminOrEmployeePermission("companies", "delete");
+  const guard = await requireAdminOrEmployeePermission("manage-companies", "delete");
   if (!guard.ok) return guard.response!;
 
   try {
