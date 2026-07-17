@@ -44,7 +44,7 @@ export default async function BlogPage({
             ? `Showing blog results for "${resolvedSearchParams.query}"`
             : "Thoughts on digital growth from our team."}
         </p>
-      </section>
+      </section>[]
 
       {/* Featured Post */}
       <section className="pb-16 max-w-7xl mx-auto px-4">
