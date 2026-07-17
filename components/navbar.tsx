@@ -419,7 +419,11 @@ export default function Navbar() {
                   <Search className="w-5 h-5" />
                 </button>
 
-                <Link href="/cart" className="relative p-2 rounded-full hover:bg-black transition-colors">
+                <Link
+                  href="/cart"
+                  aria-label="View shopping cart"
+                  className="relative p-2 rounded-full hover:bg-black transition-colors"
+                >
                   <ShoppingBag
                     className={`w-5 h-5 ${
                       useWhiteNav || isMobileMenuOpen ? "text-slate-700" : "text-white"
@@ -492,6 +496,7 @@ export default function Navbar() {
 
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                   className={`p-2 rounded-lg lg:hidden transition-colors ${
                     useWhiteNav || isMobileMenuOpen
                       ? "text-slate-900 hover:bg-slate-100"

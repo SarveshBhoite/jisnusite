@@ -621,7 +621,7 @@ export default function Home() {
                         </span>
                       </div>
                     ) : (
-                      <span className="text-sm font-bold text-cyan-600 cursor-pointer hover:underline flex items-center gap-1">
+                      <span className="text-sm font-bold text-cyan-700 cursor-pointer hover:underline flex items-center gap-1">
                         {current.footer} <Zap className="w-3 h-3" />
                       </span>
                     )}
@@ -662,9 +662,10 @@ export default function Home() {
             </div>
             <Link
                 href="/categories"
-                className="text-cyan-600 text-sm font-medium flex items-center gap-1"
+                className="text-cyan-700 text-sm font-medium flex items-center gap-1"
+                aria-label="View all categories"
               >
-                View All <ChevronRight className="w-4 h-4" />
+                View All Categories <ChevronRight className="w-4 h-4" />
               </Link>
           </div>
 
@@ -694,16 +695,17 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-cyan-600" />
+                <Zap className="w-5 h-5 text-cyan-700" />
                 <h2 className="font-bold text-slate-900">
                   Best Deals & Offers
                 </h2>
               </div>
               <Link
                 href="/services"
-                className="text-cyan-600 text-sm font-medium flex items-center gap-1"
+                className="text-cyan-700 text-sm font-medium flex items-center gap-1"
+                aria-label="View all services"
               >
-                View All <ChevronRight className="w-4 h-4" />
+                View All Services <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -773,9 +775,10 @@ export default function Home() {
             </div>
             <Link
               href="/portfolio"
-              className="text-cyan-600 text-sm font-medium flex items-center gap-1"
+              className="text-cyan-700 text-sm font-medium flex items-center gap-1"
+              aria-label="View all portfolio projects"
             >
-              View All <ChevronRight className="w-4 h-4" />
+              View All Portfolio <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -801,7 +804,7 @@ export default function Home() {
                   </div>
 
                   <div className="p-5">
-                    <h3 className="font-bold text-slate-900 mb-1 group-hover:text-cyan-600 transition-colors">
+                    <h3 className="font-bold text-slate-900 mb-1 group-hover:text-cyan-700 transition-colors">
                       {portfolio[recentWorkIndex]?.companyName}
                     </h3>
                     <div className="flex items-center gap-2 mb-3">
@@ -821,7 +824,7 @@ export default function Home() {
                       <span className="text-teal-600 text-xs font-medium flex items-center gap-1">
                         <BadgeCheck className="w-3 h-3" /> Verified Project
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-600 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-700 transition-colors" />
                     </div>
                   </div>
                 </div>
@@ -831,8 +834,8 @@ export default function Home() {
                     <button
                       key={i}
                       onClick={() => setRecentWorkIndex(i)}
-                      className={`h-2 rounded-full transition-all ${
-                        recentWorkIndex === i ? "w-6 bg-cyan-600" : "w-2 bg-slate-300"
+                      className={`h-3.5 rounded-full transition-all ${
+                        recentWorkIndex === i ? "w-6 bg-cyan-600" : "w-3.5 bg-slate-300"
                       }`}
                       aria-label={`Go to project ${i + 1}`}
                     />
@@ -892,8 +895,8 @@ export default function Home() {
                 <button
                   key={i}
                   onClick={() => setReviewIndex(i)}
-                  className={`h-2 rounded-full transition-all ${
-                    reviewIndex === i ? "w-6 bg-cyan-600" : "w-2 bg-slate-300"
+                  className={`h-3.5 rounded-full transition-all ${
+                    reviewIndex === i ? "w-6 bg-cyan-600" : "w-3.5 bg-slate-300"
                   }`}
                   aria-label={`Go to review ${i + 1}`}
                 />
@@ -927,7 +930,7 @@ export default function Home() {
                 icon: Clock,
                 title: "On-Time Delivery",
                 desc: "We Value Your Time",
-                color: "bg-cyan-50 text-cyan-600",
+                color: "bg-cyan-50 text-cyan-700",
               },
               {
                 icon: Headphones,
@@ -965,7 +968,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-8">
             <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 md:p-8">
               <div className="flex items-center gap-2 mb-2">
-                <Send className="w-5 h-5 text-cyan-600" />
+                <Send className="w-5 h-5 text-cyan-700" />
                 <h2 className="text-xl font-bold text-slate-900">
                   Get Free Quote
                 </h2>
@@ -1006,15 +1009,20 @@ export default function Home() {
                     className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                   />
                 </div>
+                <label htmlFor="service-select" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Select Service *
+                </label>
                 <select
+                  id="service-select"
                   required
                   value={quoteForm.service}
                   onChange={(e) =>
                     setQuoteForm((prev) => ({ ...prev, service: e.target.value }))
                   }
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                  aria-label="Select service"
                 >
-                  <option value="">Select Service *</option>
+                  <option value="">Choose a service</option>
                   <option value="Web Development">Web Development</option>
                   <option value="App Development">App Development</option>
                   <option value="SEO Services">SEO Services</option>
@@ -1035,7 +1043,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={quoteSubmitting}
-                  className="w-full py-4 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
+                  className="w-full py-4 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
                 >
                   {quoteSubmitting ? "Submitting..." : "Get Free Quote"}{" "}
                   <ArrowRight className="w-4 h-4" />
