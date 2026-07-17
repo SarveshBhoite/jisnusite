@@ -134,15 +134,30 @@ export function Footer() {
           {/* Social Icons */}
           <div className="flex items-center gap-4">
             {[
-              { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61571480567573" },
-              { icon: Linkedin, href: "https://x.com/Jisnudigital018" },
-              { icon: Instagram, href: "https://www.instagram.com/jisnu_digitalsolution_pvt_ltd/" },
+              {
+                icon: Facebook,
+                href: "https://www.facebook.com/profile.php?id=61571480567573",
+                label: "Facebook",
+              },
+              {
+                icon: Linkedin,
+                href: "https://x.com/Jisnudigital018",
+                label: "X / Twitter",
+              },
+              {
+                icon: Instagram,
+                href: "https://www.instagram.com/jisnu_digitalsolution_pvt_ltd/",
+                label: "Instagram",
+              },
             ].map((social, i) => (
               <a
                 key={i}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-md border border-border text-muted-foreground hover:text-foreground hover:border-primary transition"
-                aria-label="social"
+                aria-label={social.label}
+                title={social.label}
               >
                 <social.icon className="w-4 h-4" />
               </a>

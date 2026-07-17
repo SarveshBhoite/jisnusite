@@ -1130,11 +1130,11 @@ export default function Home() {
         {/* Advertise Button (Vertical) */}
         <Link
           href="/companies/list-your-company"
-          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#df4f2d] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-3 sm:mb-10"
+          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#b43a18] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-3 sm:mb-10"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
               Paid Listing
             </span>
             <Zap className="w-3 h-3 text-white fill-current transform rotate-180" />
@@ -1144,11 +1144,11 @@ export default function Home() {
         {/* Free Listing Button (Vertical) */}
         <Link
           href="/companies/list-your-company"
-          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#0076d7] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
+          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#005ea8] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
               Free Listing
             </span>
             <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />
