@@ -257,7 +257,7 @@ export default function PricingPopup() {
           <button
             type="submit"
             disabled={submitting}
-            className="md:col-span-2 mt-2 flex items-center justify-center gap-2 rounded-xl bg-cyan-600 px-5 py-3 font-bold text-white hover:bg-cyan-700 disabled:opacity-60"
+            className="md:col-span-2 mt-2 flex items-center justify-center gap-2 rounded-xl bg-cyan-700 px-5 py-3 font-bold text-white hover:bg-cyan-800 disabled:opacity-60"
           >
             {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
             Submit Free Consultant Request
