@@ -725,8 +725,9 @@ export default function Home() {
 
           <div className="overflow-hidden">
             <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
-              {[1, 2, 3, 4].map((itemIndex) => (
-                <div key={itemIndex} className="flex gap-4">
+              {/* Duplicate array twice for seamless endless marquee looping */}
+              {[1, 2].map((groupIndex) => (
+                <div key={groupIndex} className="flex gap-4 shrink-0">
                   {/* offer.jpg Banner Card */}
                   <Link
                     href="/services"
@@ -734,12 +735,12 @@ export default function Home() {
                   >
                     <img
                       src="/offer.jpg"
-                      alt="Special Offer"
+                      alt="Special Offer 1"
                       className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
                     />
                   </Link>
 
-                  {/* offer2.png Banner Card */}
+                  {/* offer3.png Banner Card */}
                   <Link
                     href="/services"
                     className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
