@@ -243,7 +243,14 @@ export default function Navbar() {
         <div className="flex items-center justify-between gap-3">
           <Link href="/" className="group flex items-center gap-2.5 shrink-0">
             <div className="relative z-10 w-10 h-10 rounded-xl border-2 border-cyan-600/20 bg-white overflow-hidden shadow-lg transition-transform group-hover:rotate-0 rotate-3">
-              <Image src="/icon.jpeg" alt="Logo" fill className="object-cover" />
+              <Image
+                src="/icon.jpeg"
+                alt="Jisnu Digital logo"
+                fill
+                priority
+                sizes="40px"
+                className="object-cover"
+              />
             </div>
             <span
               className={`text-xl font-black tracking-tighter ${
@@ -419,7 +426,11 @@ export default function Navbar() {
                   <Search className="w-5 h-5" />
                 </button>
 
-                <Link href="/cart" className="relative p-2 rounded-full hover:bg-black transition-colors">
+                <Link
+                  href="/cart"
+                  aria-label="View shopping cart"
+                  className="relative p-2 rounded-full hover:bg-black transition-colors"
+                >
                   <ShoppingBag
                     className={`w-5 h-5 ${
                       useWhiteNav || isMobileMenuOpen ? "text-slate-700" : "text-white"
@@ -492,6 +503,7 @@ export default function Navbar() {
 
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                   className={`p-2 rounded-lg lg:hidden transition-colors ${
                     useWhiteNav || isMobileMenuOpen
                       ? "text-slate-900 hover:bg-slate-100"

@@ -44,11 +44,11 @@ export default async function BlogPage({
             ? `Showing blog results for "${resolvedSearchParams.query}"`
             : "Thoughts on digital growth from our team."}
         </p>
-      </section>
+      </section>[]
 
       {/* Featured Post */}
       <section className="pb-16 max-w-7xl mx-auto px-4">
-        <Link href={`/blog/${featured._id}`}>
+        <Link href={`/blog/${featured.slug}`}>
           <div className="relative h-[450px] rounded-3xl overflow-hidden group">
             <img src={featured.image} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
             <div className="absolute inset-0 bg-black/50 p-10 flex flex-col justify-end">
@@ -64,7 +64,7 @@ export default async function BlogPage({
       <section className="py-16 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
           {rest.map((post: any) => (
-            <Link key={post._id} href={`/blog/${post._id}`}>
+            <Link key={post._id} href={`/blog/${post.slug}`}>
               <div className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition">
                 <img src={post.image} className="h-48 w-full object-cover" />
                 <div className="p-6">

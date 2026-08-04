@@ -627,7 +627,7 @@ export default function Home() {
                         </span>
                       </div>
                     ) : (
-                      <span className="text-sm font-bold text-cyan-600 cursor-pointer hover:underline flex items-center gap-1">
+                      <span className="text-sm font-bold text-cyan-700 cursor-pointer hover:underline flex items-center gap-1">
                         {current.footer} <Zap className="w-3 h-3" />
                       </span>
                     )}
@@ -668,9 +668,10 @@ export default function Home() {
             </div>
             <Link
                 href="/categories"
-                className="text-cyan-600 text-sm font-medium flex items-center gap-1"
+                className="text-cyan-700 text-sm font-medium flex items-center gap-1"
+                aria-label="View all categories"
               >
-                View All <ChevronRight className="w-4 h-4" />
+                View All Categories <ChevronRight className="w-4 h-4" />
               </Link>
           </div>
 
@@ -679,6 +680,7 @@ export default function Home() {
               <Link
                 key={i}
                 href={`/companies?query=${encodeURIComponent(cat.name)}`}
+                aria-label={`Browse ${cat.name} companies`}
                 className={`group flex flex-col items-center gap-3 ${i >= 8 ? "hidden md:flex" : ""}`}
               >
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
@@ -700,16 +702,17 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-cyan-600" />
+                <Zap className="w-5 h-5 text-cyan-700" />
                 <h2 className="font-bold text-slate-900">
                   Best Deals & Offers
                 </h2>
               </div>
               <Link
                 href="/services"
-                className="text-cyan-600 text-sm font-medium flex items-center gap-1"
+                className="text-cyan-800 text-sm font-medium flex items-center gap-1"
+                aria-label="View all services"
               >
-                View All <ChevronRight className="w-4 h-4" />
+                View All Services <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
 
@@ -751,6 +754,7 @@ export default function Home() {
               <Link
                 href={`/blog?query=${encodeURIComponent(cat.name)}`}
                 key={i}
+                aria-label={`Browse ${cat.name} blog posts`}
                 className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
               >
                 <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
@@ -779,9 +783,10 @@ export default function Home() {
             </div>
             <Link
               href="/portfolio"
-              className="text-cyan-600 text-sm font-medium flex items-center gap-1"
+              className="text-cyan-800 text-sm font-medium flex items-center gap-1"
+              aria-label="View all portfolio projects"
             >
-              View All <ChevronRight className="w-4 h-4" />
+              View All Portfolio <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -800,14 +805,14 @@ export default function Home() {
                       className="object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute top-3 left-3">
-                      <span className="px-2 py-1 bg-cyan-600 text-white text-[10px] font-bold rounded">
+                      <span className="px-2 py-1 bg-cyan-700 text-white text-[10px] font-bold rounded">
                         {portfolio[recentWorkIndex]?.category}
                       </span>
                     </div>
                   </div>
 
                   <div className="p-5">
-                    <h3 className="font-bold text-slate-900 mb-1 group-hover:text-cyan-600 transition-colors">
+                    <h3 className="font-bold text-slate-900 mb-1 group-hover:text-cyan-700 transition-colors">
                       {portfolio[recentWorkIndex]?.companyName}
                     </h3>
                     <div className="flex items-center gap-2 mb-3">
@@ -824,10 +829,10 @@ export default function Home() {
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-teal-600 text-xs font-medium flex items-center gap-1">
+                      <span className="text-teal-700 text-xs font-medium flex items-center gap-1">
                         <BadgeCheck className="w-3 h-3" /> Verified Project
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-600 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-700 transition-colors" />
                     </div>
                   </div>
                 </div>
@@ -837,11 +842,14 @@ export default function Home() {
                     <button
                       key={i}
                       onClick={() => setRecentWorkIndex(i)}
-                      className={`h-2 rounded-full transition-all ${
-                        recentWorkIndex === i ? "w-6 bg-cyan-600" : "w-2 bg-slate-300"
+                      className={`h-10 w-10 flex items-center justify-center rounded-full transition-all ${
+                        recentWorkIndex === i ? "bg-cyan-700" : "bg-slate-300"
                       }`}
                       aria-label={`Go to project ${i + 1}`}
-                    />
+                      aria-pressed={recentWorkIndex === i}
+                    >
+                      <span className={`block rounded-full ${recentWorkIndex === i ? "h-2.5 w-2.5 bg-white" : "h-2.5 w-2.5 bg-slate-700"}`} />
+                    </button>
                   ))}
                 </div>
               </div>
@@ -898,11 +906,14 @@ export default function Home() {
                 <button
                   key={i}
                   onClick={() => setReviewIndex(i)}
-                  className={`h-2 rounded-full transition-all ${
-                    reviewIndex === i ? "w-6 bg-cyan-600" : "w-2 bg-slate-300"
+                  className={`h-10 w-10 flex items-center justify-center rounded-full transition-all ${
+                    reviewIndex === i ? "bg-cyan-700" : "bg-slate-300"
                   }`}
                   aria-label={`Go to review ${i + 1}`}
-                />
+                  aria-pressed={reviewIndex === i}
+                >
+                  <span className={`block rounded-full ${reviewIndex === i ? "h-2.5 w-2.5 bg-white" : "h-2.5 w-2.5 bg-slate-700"}`} />
+                </button>
               ))}
             </div>
           </div>
@@ -916,7 +927,7 @@ export default function Home() {
             <h2 className="text-xl font-bold text-slate-900">
               Why Choose Jisnu Digital?
             </h2>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-slate-700">
               Trusted by 1000+ businesses across India
             </p>
           </div>
@@ -933,7 +944,7 @@ export default function Home() {
                 icon: Clock,
                 title: "On-Time Delivery",
                 desc: "We Value Your Time",
-                color: "bg-cyan-50 text-cyan-600",
+                color: "bg-cyan-50 text-cyan-700",
               },
               {
                 icon: Headphones,
@@ -971,7 +982,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-8">
             <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 md:p-8">
               <div className="flex items-center gap-2 mb-2">
-                <Send className="w-5 h-5 text-cyan-600" />
+                <Send className="w-5 h-5 text-cyan-700" />
                 <h2 className="text-xl font-bold text-slate-900">
                   Get Free Quote
                 </h2>
@@ -1012,15 +1023,20 @@ export default function Home() {
                     className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                   />
                 </div>
+                <label htmlFor="service-select" className="block text-sm font-semibold text-slate-700 mb-2">
+                  Select Service *
+                </label>
                 <select
+                  id="service-select"
                   required
                   value={quoteForm.service}
                   onChange={(e) =>
                     setQuoteForm((prev) => ({ ...prev, service: e.target.value }))
                   }
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                  aria-label="Select service"
                 >
-                  <option value="">Select Service *</option>
+                  <option value="">Choose a service</option>
                   <option value="Web Development">Web Development</option>
                   <option value="App Development">App Development</option>
                   <option value="SEO Services">SEO Services</option>
@@ -1041,7 +1057,7 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={quoteSubmitting}
-                  className="w-full py-4 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
+                  className="w-full py-4 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
                 >
                   {quoteSubmitting ? "Submitting..." : "Get Free Quote"}{" "}
                   <ArrowRight className="w-4 h-4" />
@@ -1092,12 +1108,24 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
-              <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white rounded-lg font-bold transition-colors">
-                <PhoneCall className="w-4 h-4" /> <a  href="https://wa.me/917709936965">Call Now</a>
-              </button>
-              <button className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-cyan-600 hover:bg-cyan-700 text-white rounded-lg font-bold transition-colors">
-                <Send className="w-4 h-4" /><a href="/contact"> Get Quote</a>
-              </button>
+              <a
+                href="https://wa.me/917709936965"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Call us on WhatsApp"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white rounded-lg font-bold transition-colors"
+              >
+                <PhoneCall className="w-4 h-4" />
+                Call Now
+              </a>
+              <a
+                href="/contact"
+                aria-label="Get a quote"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg font-bold transition-colors"
+              >
+                <Send className="w-4 h-4" />
+                Get Quote
+              </a>
             </div>
           </div>
         </div>
@@ -1108,11 +1136,11 @@ export default function Home() {
         {/* Advertise Button (Vertical) */}
         <Link
           href="/companies/list-your-company"
-          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#df4f2d] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-3 sm:mb-10"
+          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#b43a18] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-3 sm:mb-10"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
               Paid Listing
             </span>
             <Zap className="w-3 h-3 text-white fill-current transform rotate-180" />
@@ -1122,11 +1150,11 @@ export default function Home() {
         {/* Free Listing Button (Vertical) */}
         <Link
           href="/companies/list-your-company"
-          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#0076d7] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
+          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#005ea8] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
           style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
         >
           <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[9px] sm:text-[11px] font-bold uppercase tracking-wider">
+            <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
               Free Listing
             </span>
             <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />

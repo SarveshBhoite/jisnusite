@@ -2,22 +2,34 @@ import dbConnect from "@/lib/mongodb";
 import Blog from "@/models/Blog";
 import { ArrowLeft, Calendar, User } from "lucide-react";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function PostDetail({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
 
   await dbConnect();
 
-  let post: any;
+  let post: any = null;
   try {
-    post = await Blog.findById(id).lean();
+    post = await Blog.findOne({ slug }).lean();
   } catch {
     return notFound();
+  }
+
+  // Fallback: Redirect legacy ID URLs to their corresponding slug URLs
+  if (!post && slug.match(/^[0-9a-fA-F]{24}$/)) {
+    try {
+      const postById = await Blog.findById(slug).lean() as any;
+      if (postById && postById.slug) {
+        redirect(`/blog/${postById.slug}`);
+      }
+    } catch {
+      // Ignore database errors during legacy ID lookup
+    }
   }
 
   if (!post) return notFound();
