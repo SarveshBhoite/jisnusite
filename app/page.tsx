@@ -730,18 +730,13 @@ export default function Home() {
                   {/* offer.jpg Banner Card */}
                   <Link
                     href="/services"
-                    className="w-[320px] h-[140px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-100 group block"
+                    className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
                   >
                     <img
                       src="/offer.jpg"
                       alt="Special Independence Offer"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-3">
-                      <span className="px-3 py-1 bg-cyan-600 text-white text-xs font-bold rounded-full shadow">
-                        Limited Time Deal 🔥
-                      </span>
-                    </div>
                   </Link>
 
                   {/* Ads items if available */}
@@ -749,22 +744,22 @@ export default function Home() {
                     <Link
                       key={adIndex}
                       href={buildOfferCartLink(ad)}
-                      className="w-[300px] h-[140px] bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between"
+                      className="w-[220px] h-[165px] bg-gradient-to-br from-teal-600 to-cyan-700 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between"
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="flex items-start justify-between gap-1">
                         <div>
-                          <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-white text-[10px] font-bold uppercase mb-1">
+                          <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-white text-[10px] font-bold uppercase mb-2">
                             {ad.subtitle || ad.text || "Limited Offer"}
                           </span>
-                          <h3 className="text-white font-bold text-base leading-tight line-clamp-2">
+                          <h3 className="text-white font-bold text-sm leading-snug line-clamp-3">
                             {ad.title}
                           </h3>
                         </div>
-                        <div className="text-3xl shrink-0">🎉</div>
+                        <div className="text-2xl shrink-0">🎉</div>
                       </div>
                       <div>
-                        <span className="inline-block px-3 py-1 bg-white text-cyan-700 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
-                          Get This Deal
+                        <span className="inline-block px-3 py-1 bg-white text-cyan-800 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
+                          Get Deal
                         </span>
                       </div>
                     </Link>
