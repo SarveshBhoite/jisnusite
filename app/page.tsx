@@ -734,7 +734,19 @@ export default function Home() {
                   >
                     <img
                       src="/offer.jpg"
-                      alt="Special Independence Offer"
+                      alt="Special Offer"
+                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </Link>
+
+                  {/* offer2.png Banner Card */}
+                  <Link
+                    href="/services"
+                    className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
+                  >
+                    <img
+                      src="/offer3.png"
+                      alt="Special Offer 2"
                       className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
                     />
                   </Link>
