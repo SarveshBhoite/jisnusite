@@ -232,14 +232,30 @@ export default function Navbar() {
   ];
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
-        useWhiteNav || isMobileMenuOpen || isSearchOpen
-          ? "bg-white shadow-lg py-3"
-          : "bg-transparent py-6"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header className="fixed top-0 w-full z-[100]">
+      {/* 15th August Special Offer Scrolling Marquee Banner (Above Navbar) */}
+      <div className="bg-gradient-to-r from-orange-600 via-amber-500 to-green-600 text-white font-bold py-2 px-4 overflow-hidden relative shadow-md">
+        <div className="whitespace-nowrap inline-block animate-marquee flex items-center gap-8">
+          <span className="inline-flex items-center gap-2 text-xs sm:text-sm">
+            🎉 <strong>Independence Day Special Offer!</strong> Get up to 50% OFF on Web Development, SEO & Digital Marketing services! 🇮🇳 Offer valid till 15th August! Call/WhatsApp Now: +91 7709936965 🚀
+          </span>
+          <span className="inline-flex items-center gap-2 text-xs sm:text-sm">
+            🎉 <strong>Independence Day Special Offer!</strong> Get up to 50% OFF on Web Development, SEO & Digital Marketing services! 🇮🇳 Offer valid till 15th August! Call/WhatsApp Now: +91 7709936965 🚀
+          </span>
+          <span className="inline-flex items-center gap-2 text-xs sm:text-sm">
+            🎉 <strong>Independence Day Special Offer!</strong> Get up to 50% OFF on Web Development, SEO & Digital Marketing services! 🇮🇳 Offer valid till 15th August! Call/WhatsApp Now: +91 7709936965 🚀
+          </span>
+        </div>
+      </div>
+
+      <nav
+        className={`w-full transition-all duration-500 ${
+          useWhiteNav || isMobileMenuOpen || isSearchOpen
+            ? "bg-white shadow-lg py-3"
+            : "bg-transparent py-4"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between gap-3">
           <Link href="/" className="group flex items-center gap-2.5 shrink-0">
             <div className="relative z-10 w-10 h-10 rounded-xl border-2 border-cyan-600/20 bg-white overflow-hidden shadow-lg transition-transform group-hover:rotate-0 rotate-3">
@@ -579,5 +595,6 @@ export default function Navbar() {
         )}
       </div>
     </nav>
+    </header>
   );
 }
