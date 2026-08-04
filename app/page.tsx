@@ -422,7 +422,7 @@ export default function Home() {
       </Head>
       <main className="bg-slate-50 min-h-screen relative">
         {/* 15th August Special Offer Scrolling Marquee Banner */}
-        <div className="bg-gradient-to-r from-orange-600 via-amber-500 to-green-600 text-white font-bold py-2.5 px-4 overflow-hidden relative shadow-md z-20">
+        <div className="bg-gradient-to-r from-orange-600 via-amber-500 to-green-600 text-white font-bold py-2.5 px-4 overflow-hidden relative shadow-md z-20 mt-16 sm:mt-20">
           <div className="whitespace-nowrap inline-block animate-marquee flex items-center gap-8">
             <span className="inline-flex items-center gap-2 text-sm sm:text-base">
               🎉 <strong>Independence Day Special Offer!</strong> Get up to 50% OFF on Web Development, SEO & Digital Marketing services! 🇮🇳 Offer valid till 15th August! Call/WhatsApp Now: +91 7709936965 🚀
