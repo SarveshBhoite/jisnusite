@@ -427,8 +427,8 @@ export default function Home() {
         className="relative pt-24 pb-12 text-white bg-cover bg-center bg-no-repeat" 
         style={{ backgroundImage: "url('/herobg.jpg')" }}
       >
-        {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/60 z-0"></div>
+        {/* Minimal dark overlay so the background image shows clearly */}
+        <div className="absolute inset-0 bg-black/20 z-0"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center gap-2 text-cyan-200 mb-6">
             <MapPin className="w-4 h-4" />
@@ -563,8 +563,18 @@ export default function Home() {
 
             {/* Changed max-w-sm to max-w-md for more width */}
             <div className="hidden lg:block w-full max-w-650px">
+              {/* TEMPORARY HERO CARD IMAGE - Remove comment block below and restore original dynamic card to revert */}
+              <div className="bg-white rounded-2xl shadow-2xl p-2 text-slate-900 border-t-4 border-cyan-500 overflow-hidden">
+                <img 
+                  src="/offer.jpg" 
+                  alt="Special Offer" 
+                  className="w-full h-auto max-h-[420px] object-contain rounded-xl"
+                />
+              </div>
+
+              {/* 
+              ORIGINAL DYNAMIC CAROUSEL CARD (PRESERVED FOR LATER REVERSION):
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500 transition-all duration-500 ease-in-out min-h-[380px] flex flex-col justify-between">
-                {/* Header Section */}
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="flex items-center gap-3 mb-4">
                     <div
@@ -582,7 +592,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Content Logic */}
                   <div className="space-y-3">
                     {current.type === "image" && (
                       <div className="grid grid-cols-2 gap-2 mb-4">
@@ -611,7 +620,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Footer Section */}
                 <div className="mt-6 pt-4 border-t border-slate-100">
                   <div className="flex items-center justify-between">
                     {current.type === "trust" ? (
@@ -638,7 +646,6 @@ export default function Home() {
                     )}
                   </div>
 
-                  {/* Simple Pagination Dots */}
                   <div className="flex gap-1.5 mt-4 justify-center">
                     {cards.map((_, i) => (
                       <div
@@ -649,6 +656,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              */}
             </div>
           </div>
         </div>
