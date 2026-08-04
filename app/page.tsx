@@ -421,9 +421,15 @@ export default function Home() {
         <link rel="canonical" href="https://www.jisnudigital.com/" />
       </Head>
       <main className="bg-slate-50 min-h-screen relative">
-      {/* ========== HERO SECTION ========== */}
-      <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* TEMPORARY HERO BACKGROUND IMAGE - Remove comment below and restore original bg class after temporary period */}
+      {/* Original class: className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white" */}
+      <section 
+        className="relative pt-24 pb-12 text-white bg-cover bg-center bg-no-repeat" 
+        style={{ backgroundImage: "url('/herobg.jpg')" }}
+      >
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/60 z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center gap-2 text-cyan-200 mb-6">
             <MapPin className="w-4 h-4" />
             <span className="text-sm font-medium">Serving All Over India</span>
