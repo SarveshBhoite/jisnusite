@@ -421,34 +421,31 @@ export default function Home() {
         <link rel="canonical" href="https://www.jisnudigital.com/" />
       </Head>
       <main className="bg-slate-50 min-h-screen relative">
-      {/* TEMPORARY HERO BACKGROUND IMAGE - Remove comment below and restore original bg class after temporary period */}
-      {/* Original class: className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white" */}
-      <section 
-        className="relative pt-24 pb-12 text-white bg-cover bg-center bg-no-repeat" 
-        style={{ backgroundImage: "url('/herobg.jpg')" }}
-      >
-        {/* Minimal dark overlay so the background image shows clearly */}
-        <div className="absolute inset-0 bg-black/20 z-0"></div>
+      <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex items-center gap-2 text-cyan-200 mb-6">
-            <MapPin className="w-4 h-4" />
-            <span className="text-sm font-medium">Serving All Over India</span>
-            <ChevronRight className="w-4 h-4" />
+          <div className="flex flex-wrap items-center gap-3 mb-6">
+            <div className="flex items-center gap-2 text-cyan-200">
+              <MapPin className="w-4 h-4" />
+              <span className="text-sm font-medium">Serving All Over India</span>
+              <ChevronRight className="w-4 h-4 text-cyan-300" />
+            </div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 backdrop-blur-md">
+              <Zap className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+              <span>Fast Turnaround & 24/7 Dedicated Support</span>
+            </div>
           </div>
-          
 
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
               <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4">
                 India&apos;s #1 Digital
-                <span className="block text-cyan-400 drop-shadow-md">
+                <span className="block bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-md">
                   Service Provider
                 </span>
               </h1>
 
               <p className="text-slate-200 text-base mb-6 max-w-lg">
-                Get the best digital services for your business. Web
-                development, SEO, marketing & more at affordable prices.
+                Empower your brand with top-tier Web Development, SEO, Mobile Apps & Digital Marketing. Transform your online presence with industry experts!
               </p>
 
               <div className="hidden bg-white rounded-xl shadow-xl p-2 flex flex-nowrap items-center gap-2 mb-6 border border-slate-100 relative overflow-x-auto">
@@ -563,16 +560,9 @@ export default function Home() {
 
             {/* Changed max-w-sm to max-w-md for more width */}
             <div className="hidden lg:block w-full max-w-650px">
-              {/* TEMPORARY HERO CARD IMAGE - Remove comment block below and restore original dynamic card to revert */}
-              <div className="bg-white rounded-2xl shadow-2xl p-2 text-slate-900 border-t-4 border-cyan-500 overflow-hidden">
-                <img 
-                  src="/offer.jpg" 
-                  alt="Special Offer" 
-                  className="w-full h-auto max-h-[420px] object-contain rounded-xl"
-                />
-              </div>
+             
 
-              {/* 
+               
               ORIGINAL DYNAMIC CAROUSEL CARD (PRESERVED FOR LATER REVERSION):
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500 transition-all duration-500 ease-in-out min-h-[380px] flex flex-col justify-between">
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
@@ -656,7 +646,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              */}
+              
             </div>
           </div>
         </div>

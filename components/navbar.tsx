@@ -233,21 +233,6 @@ export default function Navbar() {
 
   return (
     <header className="fixed top-0 w-full z-[100]">
-      {/* 15th August Special Offer Scrolling Marquee Banner (Above Navbar) */}
-      <div className="bg-gradient-to-r from-orange-600 via-amber-500 to-green-600 text-white font-bold py-2 px-4 overflow-hidden relative shadow-md">
-        <div className="whitespace-nowrap inline-block animate-marquee flex items-center gap-8">
-          <span className="inline-flex items-center gap-2 text-xs sm:text-sm">
-            🎉 <strong>Independence Day Special Offer!</strong> Get up to 50% OFF on Web Development, SEO & Digital Marketing services! 🇮🇳 Offer valid till 15th August! Call/WhatsApp Now: +91 7709936965 🚀
-          </span>
-          <span className="inline-flex items-center gap-2 text-xs sm:text-sm">
-            🎉 <strong>Independence Day Special Offer!</strong> Get up to 50% OFF on Web Development, SEO & Digital Marketing services! 🇮🇳 Offer valid till 15th August! Call/WhatsApp Now: +91 7709936965 🚀
-          </span>
-          <span className="inline-flex items-center gap-2 text-xs sm:text-sm">
-            🎉 <strong>Independence Day Special Offer!</strong> Get up to 50% OFF on Web Development, SEO & Digital Marketing services! 🇮🇳 Offer valid till 15th August! Call/WhatsApp Now: +91 7709936965 🚀
-          </span>
-        </div>
-      </div>
-
       <nav
         className={`w-full transition-all duration-500 ${
           useWhiteNav || isMobileMenuOpen || isSearchOpen
