@@ -421,9 +421,15 @@ export default function Home() {
         <link rel="canonical" href="https://www.jisnudigital.com/" />
       </Head>
       <main className="bg-slate-50 min-h-screen relative">
-      {/* ========== HERO SECTION ========== */}
-      <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* TEMPORARY HERO BACKGROUND IMAGE - Remove comment below and restore original bg class after temporary period */}
+      {/* Original class: className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white" */}
+      <section 
+        className="relative pt-24 pb-12 text-white bg-cover bg-center bg-no-repeat" 
+        style={{ backgroundImage: "url('/herobg.jpg')" }}
+      >
+        {/* Minimal dark overlay so the background image shows clearly */}
+        <div className="absolute inset-0 bg-black/20 z-0"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="flex items-center gap-2 text-cyan-200 mb-6">
             <MapPin className="w-4 h-4" />
             <span className="text-sm font-medium">Serving All Over India</span>
@@ -557,8 +563,18 @@ export default function Home() {
 
             {/* Changed max-w-sm to max-w-md for more width */}
             <div className="hidden lg:block w-full max-w-650px">
+              {/* TEMPORARY HERO CARD IMAGE - Remove comment block below and restore original dynamic card to revert */}
+              <div className="bg-white rounded-2xl shadow-2xl p-2 text-slate-900 border-t-4 border-cyan-500 overflow-hidden">
+                <img 
+                  src="/offer.jpg" 
+                  alt="Special Offer" 
+                  className="w-full h-auto max-h-[420px] object-contain rounded-xl"
+                />
+              </div>
+
+              {/* 
+              ORIGINAL DYNAMIC CAROUSEL CARD (PRESERVED FOR LATER REVERSION):
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500 transition-all duration-500 ease-in-out min-h-[380px] flex flex-col justify-between">
-                {/* Header Section */}
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="flex items-center gap-3 mb-4">
                     <div
@@ -576,7 +592,6 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* Content Logic */}
                   <div className="space-y-3">
                     {current.type === "image" && (
                       <div className="grid grid-cols-2 gap-2 mb-4">
@@ -605,7 +620,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Footer Section */}
                 <div className="mt-6 pt-4 border-t border-slate-100">
                   <div className="flex items-center justify-between">
                     {current.type === "trust" ? (
@@ -632,7 +646,6 @@ export default function Home() {
                     )}
                   </div>
 
-                  {/* Simple Pagination Dots */}
                   <div className="flex gap-1.5 mt-4 justify-center">
                     {cards.map((_, i) => (
                       <div
@@ -643,6 +656,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              */}
             </div>
           </div>
         </div>
@@ -691,54 +705,84 @@ export default function Home() {
       </section>
 
       {/* ========== OFFERS SECTION ========== */}
-      {!loading && ads.length > 0 && (
-        <section className="bg-white py-6 border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-cyan-700" />
-                <h2 className="font-bold text-slate-900">
-                  Best Deals & Offers
-                </h2>
-              </div>
-              <Link
-                href="/services"
-                className="text-cyan-800 text-sm font-medium flex items-center gap-1"
-                aria-label="View all services"
-              >
-                View All Services <ChevronRight className="w-4 h-4" />
-              </Link>
+      <section className="bg-white py-6 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <Zap className="w-5 h-5 text-cyan-700" />
+              <h2 className="font-bold text-slate-900">
+                Best Deals & Offers
+              </h2>
             </div>
+            <Link
+              href="/services"
+              className="text-cyan-800 text-sm font-medium flex items-center gap-1"
+              aria-label="View all services"
+            >
+              View All Services <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
 
-            <div className="overflow-hidden">
-              <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
-                {[...ads, ...ads, ...ads].map((ad, index) => (
+          <div className="overflow-hidden">
+            <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
+              {/* Duplicate array twice for seamless endless marquee looping */}
+              {[1, 2].map((groupIndex) => (
+                <div key={groupIndex} className="flex gap-4 shrink-0">
+                  {/* offer.jpg Banner Card */}
                   <Link
-                    key={index}
-                    href={buildOfferCartLink(ad)}
-                    className="w-[300px] bg-gradient-to-r from-teal-600 to-cyan-600 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-lg hover:shadow-xl transition-shadow block"
+                    href="/services"
+                    className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
                   >
-                    <div className="flex items-start justify-between">
+                    <img
+                      src="/offer.jpg"
+                      alt="Special Offer 1"
+                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </Link>
+
+                  {/* offer3.png Banner Card */}
+                  <Link
+                    href="/services"
+                    className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
+                  >
+                    <img
+                      src="/offer3.png"
+                      alt="Special Offer 2"
+                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </Link>
+
+                  {/* Ads items if available */}
+                  {ads.map((ad, adIndex) => (
+                    <Link
+                      key={adIndex}
+                      href={buildOfferCartLink(ad)}
+                      className="w-[220px] h-[165px] bg-gradient-to-br from-teal-600 to-cyan-700 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between"
+                    >
+                      <div className="flex items-start justify-between gap-1">
+                        <div>
+                          <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-white text-[10px] font-bold uppercase mb-2">
+                            {ad.subtitle || ad.text || "Limited Offer"}
+                          </span>
+                          <h3 className="text-white font-bold text-sm leading-snug line-clamp-3">
+                            {ad.title}
+                          </h3>
+                        </div>
+                        <div className="text-2xl shrink-0">🎉</div>
+                      </div>
                       <div>
-                        <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-white text-[10px] font-bold uppercase mb-2">
-                          {ad.subtitle || ad.text || "Limited Offer"}
-                        </span>
-                        <h3 className="text-white font-bold text-lg leading-tight">
-                          {ad.title}
-                        </h3>
-                        <span className="mt-3 inline-block px-4 py-1.5 bg-white text-cyan-700 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
-                          Get This Deal
+                        <span className="inline-block px-3 py-1 bg-white text-cyan-800 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
+                          Get Deal
                         </span>
                       </div>
-                      <div className="text-4xl">🎉</div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
+                    </Link>
+                  ))}
+                </div>
+              ))}
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Category Grid Section */}
       <section className="bg-white py-8 border-b border-slate-200">
