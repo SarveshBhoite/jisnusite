@@ -572,10 +572,6 @@ export default function Home() {
 
             {/* Changed max-w-sm to max-w-md for more width */}
             <div className="hidden lg:block w-full max-w-650px">
-             
-
-               
-              ORIGINAL DYNAMIC CAROUSEL CARD (PRESERVED FOR LATER REVERSION):
               <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500 transition-all duration-500 ease-in-out min-h-[380px] flex flex-col justify-between">
                 <div className="animate-in fade-in slide-in-from-right-4 duration-500">
                   <div className="flex items-center gap-3 mb-4">
