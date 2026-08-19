@@ -2,18 +2,18 @@
 
 import { useState } from "react"
 import { Mail, Phone, MapPin, Clock, Loader2, CheckCircle } from "lucide-react"
+import EmailVerificationModal, { isEmailVerifiedInSession } from "@/components/EmailVerificationModal"
+import InlineEmailOtpInput from "@/components/InlineEmailOtpInput"
 
 export default function ContactPage() {
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [showVerifyModal, setShowVerifyModal] = useState(false)
+  const [contactEmail, setContactEmail] = useState("")
+  const [pendingData, setPendingData] = useState<any>(null)
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
+  async function processSubmission(data: any) {
     setLoading(true)
-
-    const formData = new FormData(e.currentTarget)
-    const data = Object.fromEntries(formData.entries())
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -22,11 +22,27 @@ export default function ContactPage() {
       })
 
       if (res.ok) setSubmitted(true)
+      else alert("Failed to submit message. Please try again.")
     } catch (err) {
       alert("Something went wrong. Please try again.")
     } finally {
       setLoading(false)
     }
+  }
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData.entries())
+    const email = (data.email as string) || ""
+
+    if (!isEmailVerifiedInSession(email)) {
+      setPendingData(data)
+      setShowVerifyModal(true)
+      return
+    }
+
+    processSubmission(data)
   }
 
   if (submitted) {
@@ -75,7 +91,24 @@ export default function ContactPage() {
                   <Input label="First Name" name="firstName" required placeholder="John" />
                   <Input label="Last Name" name="lastName" required placeholder="Doe" />
                 </div>
-                <Input label="Email Address" name="email" type="email" required placeholder="john@example.com" />
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2 text-xs uppercase tracking-wider">
+                    Email Address <span className="text-rose-500 font-bold">* (Verification Mandatory)</span>
+                  </label>
+                  <input
+                    name="email"
+                    type="email"
+                    required
+                    value={contactEmail}
+                    onChange={(e) => setContactEmail(e.target.value)}
+                    placeholder="john@example.com"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 focus:ring-2 ring-cyan-500/20 focus:border-cyan-500 outline-none transition-all"
+                  />
+                  <InlineEmailOtpInput
+                    email={contactEmail}
+                    onVerificationChange={() => {}}
+                  />
+                </div>
                 <Input label="Company Name" name="company" placeholder="Optional" />
                 
                 <div>
@@ -106,6 +139,18 @@ export default function ContactPage() {
           </div>
         </div>
       </section>
+
+      <EmailVerificationModal
+        isOpen={showVerifyModal}
+        email={pendingData?.email || contactEmail || ""}
+        onClose={() => setShowVerifyModal(false)}
+        onVerified={() => {
+          setShowVerifyModal(false)
+          if (pendingData) {
+            processSubmission(pendingData)
+          }
+        }}
+      />
     </main>
   )
 }

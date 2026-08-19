@@ -27,6 +27,8 @@ import {
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import EmailVerificationModal, { isEmailVerifiedInSession } from "@/components/EmailVerificationModal";
+import InlineEmailOtpInput from "@/components/InlineEmailOtpInput";
 
 export default function Home() {
   const [services, setServices] = useState<any[]>([]);
@@ -258,8 +260,9 @@ export default function Home() {
     return `/cart?${params.toString()}`;
   };
 
-  const handleQuoteSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const [showQuoteVerifyModal, setShowQuoteVerifyModal] = useState(false);
+
+  const processQuoteSubmission = async () => {
     if (quoteSubmitting) return;
 
     const [firstName, ...restName] = quoteForm.name.trim().split(" ");
@@ -306,6 +309,15 @@ export default function Home() {
     } finally {
       setQuoteSubmitting(false);
     }
+  };
+
+  const handleQuoteSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isEmailVerifiedInSession(quoteForm.email)) {
+      setShowQuoteVerifyModal(true);
+      return;
+    }
+    processQuoteSubmission();
   };
 
   useEffect(() => {
@@ -1030,16 +1042,22 @@ export default function Home() {
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
                 />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input
-                    required
-                    type="email"
-                    value={quoteForm.email}
-                    onChange={(e) =>
-                      setQuoteForm((prev) => ({ ...prev, email: e.target.value }))
-                    }
-                    placeholder="Email Address *"
-                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                  />
+                  <div>
+                    <input
+                      required
+                      type="email"
+                      value={quoteForm.email}
+                      onChange={(e) =>
+                        setQuoteForm((prev) => ({ ...prev, email: e.target.value }))
+                      }
+                      placeholder="Email Address * (Verification Mandatory)"
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                    />
+                    <InlineEmailOtpInput
+                      email={quoteForm.email}
+                      onVerificationChange={() => {}}
+                    />
+                  </div>
                   <input
                     required
                     type="tel"
@@ -1188,9 +1206,17 @@ export default function Home() {
             <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />
           </div>
         </Link>
-
       </div>
 
+      <EmailVerificationModal
+        isOpen={showQuoteVerifyModal}
+        email={quoteForm.email}
+        onClose={() => setShowQuoteVerifyModal(false)}
+        onVerified={() => {
+          setShowQuoteVerifyModal(false);
+          processQuoteSubmission();
+        }}
+      />
       </main>
     </>
   );

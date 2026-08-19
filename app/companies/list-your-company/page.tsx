@@ -4,10 +4,13 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Upload, ArrowLeft, Plus, X, MessageSquare, Loader2, Check, Sparkles } from "lucide-react"
+import EmailVerificationModal, { isEmailVerifiedInSession } from "@/components/EmailVerificationModal"
+import InlineEmailOtpInput from "@/components/InlineEmailOtpInput"
 
 export default function ListYourCompanyPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
+  const [showVerifyModal, setShowVerifyModal] = useState(false)
   const [includedItems, setIncludedItems] = useState<string[]>([])
   const [currentItem, setCurrentItem] = useState("")
 
@@ -39,8 +42,7 @@ export default function ListYourCompanyPage() {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const processSubmission = async () => {
     setLoading(true)
 
     try {
@@ -66,6 +68,21 @@ export default function ListYourCompanyPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!formData.email) {
+      alert("Please enter a valid email address.")
+      return
+    }
+
+    if (!isEmailVerifiedInSession(formData.email)) {
+      setShowVerifyModal(true)
+      return
+    }
+
+    processSubmission()
   }
 
   const addIncludedItem = () => {
@@ -251,10 +268,16 @@ export default function ListYourCompanyPage() {
               </div>
 
               <div className="p-6 rounded-2xl bg-muted/30 border border-border">
-                <h3 className="font-bold mb-4">Dashboard Credentials</h3>
+                <h3 className="font-bold mb-4">Dashboard Credentials <span className="text-rose-500 font-bold text-xs">* (Email Verification Mandatory)</span></h3>
                 <div className="grid md:grid-cols-2 gap-6">
-                  <input name="email" value={formData.email} onChange={handleInputChange} type="email" placeholder="Login Email" required className="bg-background px-4 py-3 rounded-xl border border-border" />
-                  <input name="password" value={formData.password} onChange={handleInputChange} type="password" placeholder="Create Password" required className="bg-background px-4 py-3 rounded-xl border border-border" />
+                  <div>
+                    <input name="email" value={formData.email} onChange={handleInputChange} type="email" placeholder="Login Email *(Verification Mandatory)" required className="w-full bg-background px-4 py-3 rounded-xl border border-border" />
+                    <InlineEmailOtpInput
+                      email={formData.email}
+                      onVerificationChange={() => {}}
+                    />
+                  </div>
+                  <input name="password" value={formData.password} onChange={handleInputChange} type="password" placeholder="Create Password" required className="w-full bg-background px-4 py-3 rounded-xl border border-border h-[46px]" />
                 </div>
               </div>
 
@@ -273,6 +296,16 @@ export default function ListYourCompanyPage() {
           </div>
         </div>
       </section>
+
+      <EmailVerificationModal
+        isOpen={showVerifyModal}
+        email={formData.email}
+        onClose={() => setShowVerifyModal(false)}
+        onVerified={() => {
+          setShowVerifyModal(false)
+          processSubmission()
+        }}
+      />
     </main>
   )
 }

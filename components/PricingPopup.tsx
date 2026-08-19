@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Loader2, X } from "lucide-react";
 
+import EmailVerificationModal, { isEmailVerifiedInSession } from "@/components/EmailVerificationModal";
+import InlineEmailOtpInput from "@/components/InlineEmailOtpInput";
+
 type FormState = {
   name: string;
   countryCode: string;
@@ -37,6 +40,8 @@ export default function PricingPopup() {
   const [show, setShow] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showVerifyModal, setShowVerifyModal] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const selectedCountry =
     COUNTRY_OPTIONS.find((item) => item.code === form.countryCode) ||
@@ -72,20 +77,8 @@ export default function PricingPopup() {
     sessionStorage.setItem("consultPopupClosed", "true");
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const processSubmission = async () => {
     const mobileDigits = form.mobile.replace(/\D/g, "");
-    const isMobileValid =
-      mobileDigits.length >= selectedCountry.min &&
-      mobileDigits.length <= selectedCountry.max;
-
-    if (!isMobileValid) {
-      alert(
-        `Please enter a valid ${selectedCountry.label} mobile number (${selectedCountry.min}-${selectedCountry.max} digits).`,
-      );
-      return;
-    }
-
     setSubmitting(true);
 
     try {
@@ -128,16 +121,46 @@ export default function PricingPopup() {
     }
   };
 
-  if (!show || !isClient) return null;
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const mobileDigits = form.mobile.replace(/\D/g, "");
+    const isMobileValid =
+      mobileDigits.length >= selectedCountry.min &&
+      mobileDigits.length <= selectedCountry.max;
+
+    if (!isMobileValid) {
+      alert(
+        `Please enter a valid ${selectedCountry.label} mobile number (${selectedCountry.min}-${selectedCountry.max} digits).`,
+      );
+      return;
+    }
+
+    if (!isEmailVerifiedInSession(form.email)) {
+      setShowVerifyModal(true);
+      return;
+    }
+
+    processSubmission();
+  };
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
-      <div
-        className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"
-        onClick={closePopup}
+    <>
+      <EmailVerificationModal
+        isOpen={showVerifyModal}
+        email={form.email}
+        onClose={() => setShowVerifyModal(false)}
+        onVerified={() => {
+          setShowVerifyModal(false);
+          processSubmission();
+        }}
       />
-
-      <div className="relative z-[100000] w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl md:p-8">
+      {show && isClient && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+          <div
+            className="absolute inset-0 bg-slate-900/70 backdrop-blur-sm"
+            onClick={closePopup}
+          />
+          <div className="relative z-[100000] w-full max-w-2xl rounded-3xl border border-slate-200 bg-white p-6 shadow-2xl md:p-8">
         <button
           onClick={closePopup}
           className="absolute right-4 top-4 rounded-full bg-slate-100 p-2 text-slate-500 hover:bg-slate-200"
@@ -207,7 +230,9 @@ export default function PricingPopup() {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">Mail Id</label>
+            <label className="mb-1 block text-xs font-bold uppercase text-slate-500">
+              Mail Id <span className="text-rose-500 font-bold">* (Verification Mandatory)</span>
+            </label>
             <input
               required
               type="email"
@@ -215,6 +240,10 @@ export default function PricingPopup() {
               onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
               className="w-full rounded-xl border border-slate-200 px-4 py-3 outline-none focus:border-cyan-500"
               placeholder="Email address"
+            />
+            <InlineEmailOtpInput
+              email={form.email}
+              onVerificationChange={(verified) => setIsEmailVerified(verified)}
             />
           </div>
 
@@ -265,5 +294,7 @@ export default function PricingPopup() {
         </form>
       </div>
     </div>
+      )}
+    </>
   );
 }
