@@ -56,15 +56,42 @@ export default function Home() {
   });
 
   const categories = [
-    { name: "Web Development", icon: "🌐", count: "500+" },
-    { name: "App Development", icon: "📱", count: "350+" },
-    { name: "SEO Services", icon: "📈", count: "200+" },
-    { name: "Logo Design", icon: "🎨", count: "450+" },
-    { name: "Digital Marketing", icon: "📣", count: "300+" },
-    { name: "E-Commerce", icon: "🛒", count: "150+" },
-    { name: "UI/UX Design", icon: "✨", count: "280+" },
-    { name: "Content Writing", icon: "✍️", count: "180+" },
-    {name:"Meta Ads",icon:"📢",count:"220+"},
+    {
+      name: "Web Development",
+      icon: "🌐",
+      description: "Responsive, fast and SEO-friendly websites for growing businesses.",
+      link: "/web-development",
+    },
+    {
+      name: "Mobile App Development",
+      icon: "📱",
+      description: "Scalable and user-friendly mobile apps for Android and iOS.",
+      link: "/mobile-app-development",
+    },
+    {
+      name: "SEO Services",
+      icon: "📈",
+      description: "Data-driven SEO strategies to improve rankings and organic traffic.",
+      link: "/seo-services",
+    },
+    {
+      name: "Digital Marketing",
+      icon: "📣",
+      description: "Performance-focused marketing to reach and convert your audience.",
+      link: "/digital-marketing",
+    },
+    {
+      name: "E-Commerce Development",
+      icon: "🛒",
+      description: "High-performing online stores built to increase sales.",
+      link: "/ecommerce-development",
+    },
+    {
+      name: "UI/UX Design",
+      icon: "✨",
+      description: "Modern and conversion-focused digital experiences.",
+      link: "/ui-ux-design",
+    },
   ];
 
   const companyCategories = [
@@ -117,11 +144,10 @@ export default function Home() {
 
   const trustStats = [
     { icon: Users, value: "50+", label: "Happy Clients" },
-    { icon: Award, value: "150+", label: "Projects Done" },
-    { icon: ThumbsUp, value: "98%", label: "Satisfaction" },
-    { icon: Clock, value: "5+", label: "Years Exp." },
+    { icon: Award, value: "150+", label: "Projects Delivered" },
+    { icon: ThumbsUp, value: "98%", label: "Client Satisfaction" },
+    { icon: Clock, value: "5+", label: "Years of Experience" },
   ];
-
   const citySuggestions = [
     "Nagpur",
     "Nashik",
@@ -161,7 +187,7 @@ export default function Home() {
       company: "Mounty River Resort",
       review:
         "Professional team, quick delivery, and great results. Jisnu Digital is definitely worth it.",
-         rating: 5,
+      rating: 5,
     },
     {
       name: "asmita shirsat",
@@ -250,8 +276,8 @@ export default function Home() {
     const offerValue = percentMatch
       ? `${percentMatch[1]}%`
       : amountMatch
-      ? `₹${amountMatch[1]}`
-      : "";
+        ? `₹${amountMatch[1]}`
+        : "";
 
     const params = new URLSearchParams();
     if (ad?.title) params.append("offerTitle", ad.title);
@@ -433,786 +459,863 @@ export default function Home() {
         <link rel="canonical" href="https://www.jisnudigital.com/" />
       </Head>
       <main className="bg-slate-50 min-h-screen relative">
-      <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="flex flex-wrap items-center gap-3 mb-6">
-            <div className="flex items-center gap-2 text-cyan-200">
-              <MapPin className="w-4 h-4" />
-              <span className="text-sm font-medium">Serving All Over India</span>
-              <ChevronRight className="w-4 h-4 text-cyan-300" />
-            </div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 backdrop-blur-md">
-              <Zap className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-              <span>Fast Turnaround & 24/7 Dedicated Support</span>
-            </div>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4">
-                India&apos;s #1 Digital
-                <span className="block bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-md">
-                  Service Provider
-                </span>
-              </h1>
-
-              <p className="text-slate-200 text-base mb-6 max-w-lg">
-                Empower your brand with top-tier Web Development, SEO, Mobile Apps & Digital Marketing. Transform your online presence with industry experts!
-              </p>
-
-              <div className="hidden bg-white rounded-xl shadow-xl p-2 flex flex-nowrap items-center gap-2 mb-6 border border-slate-100 relative overflow-x-auto">
-                <div
-                  className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
-                  ref={suggestionRef}
-                >
-                  <Search className="w-5 h-5 text-slate-400 shrink-0" />
-                  <input
-                    type="text"
-                    value={query}
-                    onFocus={() => setShowSuggestions(true)}
-                    onChange={(e) => {
-                      setQuery(e.target.value);
-                      setShowSuggestions(true);
-                    }}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    placeholder="Search for services "
-                    className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
-                  />
-
-                  {showSuggestions && suggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl z-[100] overflow-hidden">
-                      <div className="max-h-60 overflow-y-auto">
-                        {suggestions.map((cat, index) => (
-                          <button
-                            key={index}
-                            onClick={() => {
-                              setQuery(cat);
-                              setShowSuggestions(false);
-                            }}
-                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 text-left transition-colors border-b border-slate-50 last:border-0"
-                          >
-                            <Search className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-sm font-bold text-slate-700">
-                              {cat}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div className="w-px h-8 bg-slate-200 mx-2 shrink-0" />
-
-                <div
-                  className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
-                  ref={locationSuggestionRef}
-                >
-                  <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
-                  <input
-                    type="text"
-                    value={location}
-                    onFocus={() => setShowLocationSuggestions(true)}
-                    onChange={(e) => {
-                      setLocation(e.target.value);
-                      setShowLocationSuggestions(true);
-                    }}
-                    onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-                    placeholder="Location "
-                    className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
-                  />
-
-                  {showLocationSuggestions && locationSuggestions.length > 0 && (
-                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl z-[100] overflow-hidden">
-                      <div className="max-h-60 overflow-y-auto">
-                        {locationSuggestions.map((city, index) => (
-                          <button
-                            key={index}
-                            onClick={() => {
-                              setLocation(city);
-                              setShowLocationSuggestions(false);
-                            }}
-                            className="w-full flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 text-left transition-colors border-b border-slate-50 last:border-0"
-                          >
-                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                            <span className="text-sm font-bold text-slate-700">
-                              {city}
-                            </span>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <button
-                  onClick={handleSearch}
-                  className="shrink-0 bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
-                >
-                  Search
-                </button>
+        <section className="bg-gradient-to-br from-[#0f172a] via-[#134e4a] to-[#0d9488] pt-24 pb-12 text-white relative">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <div className="flex items-center gap-2 text-cyan-200">
+                <MapPin className="w-4 h-4" />
+                <span className="text-sm font-medium">Serving All Over India</span>
+                <ChevronRight className="w-4 h-4 text-cyan-300" />
               </div>
-
-              <div className="grid grid-cols-4 gap-2 md:flex md:flex-wrap md:gap-6">
-                {trustStats.map((stat, i) => (
-                  <div key={i} className="flex items-center gap-2 md:gap-4 min-w-0">
-                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
-                      <stat.icon className="w-5 h-5 text-cyan-300" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-black text-white text-sm md:text-base">{stat.value}</div>
-                      <div className="text-[10px] md:text-xs text-cyan-100/70 truncate">
-                        {stat.label}
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-400/30 backdrop-blur-md">
+                <Zap className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+                <span>Fast Turnaround & 24/7 Dedicated Support</span>
               </div>
             </div>
 
-            {/* Changed max-w-sm to max-w-md for more width */}
-            <div className="hidden lg:block w-full max-w-650px">
-              <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500 transition-all duration-500 ease-in-out min-h-[380px] flex flex-col justify-between">
-                <div className="animate-in fade-in slide-in-from-right-4 duration-500">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div
-                      className={`w-12 h-12 rounded-full flex items-center justify-center ${index === 0 ? "bg-cyan-50" : index === 1 ? "bg-amber-50" : "bg-emerald-50"}`}
-                    >
-                      {current.icon}
-                    </div>
-                    <div>
-                      <div className="font-bold text-slate-900">
-                        {current.title}
-                      </div>
-                      <div className="text-sm text-slate-500">
-                        {current.subtitle}
-                      </div>
-                    </div>
-                  </div>
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <h1 className="text-3xl md:text-5xl font-black text-white leading-tight mb-4">
+                  Digital Marketing & Web Development
+                  <span className="block bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent drop-shadow-md">
+                    Company in Pune
+                  </span>
+                </h1>
 
-                  <div className="space-y-3">
-                    {current.type === "image" && (
-                      <div className="grid grid-cols-2 gap-2 mb-4">
-                        {current.images?.map((img, i) => (
-                          <img
-                            key={i}
-                            src={img}
-                            alt="work"
-                            className="rounded-lg h-32 w-full object-cover border border-slate-100"
-                          />
-                        ))}
+                <p className="text-slate-200 text-base mb-6 max-w-lg">
+                  We build high-performance websites, mobile apps, and SEO-driven digital
+                  marketing solutions that help businesses grow, attract more customers,
+                  and strengthen their online presence.
+                </p>
+                <div className="hidden bg-white rounded-xl shadow-xl p-2 flex flex-nowrap items-center gap-2 mb-6 border border-slate-100 relative overflow-x-auto">
+                  <div
+                    className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
+                    ref={suggestionRef}
+                  >
+                    <Search className="w-5 h-5 text-slate-400 shrink-0" />
+                    <input
+                      type="text"
+                      value={query}
+                      onFocus={() => setShowSuggestions(true)}
+                      onChange={(e) => {
+                        setQuery(e.target.value);
+                        setShowSuggestions(true);
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                      placeholder="Search for services "
+                      className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
+                    />
+
+                    {showSuggestions && suggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl z-[100] overflow-hidden">
+                        <div className="max-h-60 overflow-y-auto">
+                          {suggestions.map((cat, index) => (
+                            <button
+                              key={index}
+                              onClick={() => {
+                                setQuery(cat);
+                                setShowSuggestions(false);
+                              }}
+                              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 text-left transition-colors border-b border-slate-50 last:border-0"
+                            >
+                              <Search className="w-3.5 h-3.5 text-slate-400" />
+                              <span className="text-sm font-bold text-slate-700">
+                                {cat}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
                     )}
+                  </div>
 
-                    {current.items.map((item, i) => (
+                  <div className="w-px h-8 bg-slate-200 mx-2 shrink-0" />
+
+                  <div
+                    className="flex-1 min-w-0 flex items-center gap-3 px-4 relative"
+                    ref={locationSuggestionRef}
+                  >
+                    <MapPin className="w-5 h-5 text-slate-400 shrink-0" />
+                    <input
+                      type="text"
+                      value={location}
+                      onFocus={() => setShowLocationSuggestions(true)}
+                      onChange={(e) => {
+                        setLocation(e.target.value);
+                        setShowLocationSuggestions(true);
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                      placeholder="Location "
+                      className="w-full py-3 outline-none text-slate-700 placeholder:text-slate-400"
+                    />
+
+                    {showLocationSuggestions && locationSuggestions.length > 0 && (
+                      <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-100 rounded-xl shadow-2xl z-[100] overflow-hidden">
+                        <div className="max-h-60 overflow-y-auto">
+                          {locationSuggestions.map((city, index) => (
+                            <button
+                              key={index}
+                              onClick={() => {
+                                setLocation(city);
+                                setShowLocationSuggestions(false);
+                              }}
+                              className="w-full flex items-center gap-3 px-4 py-3 hover:bg-cyan-50 text-left transition-colors border-b border-slate-50 last:border-0"
+                            >
+                              <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                              <span className="text-sm font-bold text-slate-700">
+                                {city}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={handleSearch}
+                    className="shrink-0 bg-cyan-600 hover:bg-cyan-700 text-white px-8 py-3 rounded-lg font-bold transition-colors"
+                  >
+                    Search
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-4 gap-1.5 sm:gap-3 md:gap-4 lg:gap-6 w-full items-center">
+                  {trustStats.map((stat, i) => (
+                    <div key={i} className="flex items-center gap-1.5 sm:gap-2 md:gap-3 min-w-0">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center shrink-0">
+                        <stat.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5 text-cyan-300" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="font-black text-white text-xs sm:text-sm md:text-base leading-tight">{stat.value}</div>
+                        <div className="text-[9px] sm:text-[10px] md:text-xs text-cyan-100/70 truncate leading-tight">
+                          {stat.label}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Changed max-w-sm to max-w-md for more width */}
+              <div className="hidden lg:block w-full max-w-650px">
+                <div className="bg-white rounded-2xl shadow-2xl p-6 text-slate-900 border-t-4 border-cyan-500 transition-all duration-500 ease-in-out min-h-[380px] flex flex-col justify-between">
+                  <div className="animate-in fade-in slide-in-from-right-4 duration-500">
+                    <div className="flex items-center gap-3 mb-4">
                       <div
-                        key={i}
-                        className="flex items-center gap-2 text-slate-700 text-sm"
+                        className={`w-12 h-12 rounded-full flex items-center justify-center ${index === 0 ? "bg-cyan-50" : index === 1 ? "bg-amber-50" : "bg-emerald-50"}`}
                       >
-                        <CheckCircle2
-                          className={`w-4 h-4 flex-shrink-0 ${index === 0 ? "text-cyan-500" : index === 1 ? "text-amber-500" : "text-emerald-500"}`}
-                        />
-                        {item}
+                        {current.icon}
                       </div>
-                    ))}
-                  </div>
-                </div>
+                      <div>
+                        <div className="font-bold text-slate-900">
+                          {current.title}
+                        </div>
+                        <div className="text-sm text-slate-500">
+                          {current.subtitle}
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-100">
-                  <div className="flex items-center justify-between">
-                    {current.type === "trust" ? (
-                      <div className="flex items-center gap-1">
-                        {[1, 2, 3, 4, 5].map((i) => (
-                          <Star
-                            key={i}
-                            className="w-4 h-4 fill-cyan-500 text-cyan-500"
+                    <div className="space-y-3">
+                      {current.type === "image" && (
+                        <div className="grid grid-cols-2 gap-2 mb-4">
+                          {current.images?.map((img, i) => (
+                            <img
+                              key={i}
+                              src={img}
+                              alt="work"
+                              className="rounded-lg h-32 w-full object-cover border border-slate-100"
+                            />
+                          ))}
+                        </div>
+                      )}
+
+                      {current.items.map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-2 text-slate-700 text-sm"
+                        >
+                          <CheckCircle2
+                            className={`w-4 h-4 flex-shrink-0 ${index === 0 ? "text-cyan-500" : index === 1 ? "text-amber-500" : "text-emerald-500"}`}
                           />
-                        ))}
-                        <span className="ml-2 font-bold text-slate-900 text-sm">
-                          4.9
-                        </span>
-                      </div>
-                    ) : (
-                      <span className="text-sm font-bold text-cyan-700 cursor-pointer hover:underline flex items-center gap-1">
-                        {current.footer} <Zap className="w-3 h-3" />
-                      </span>
-                    )}
-                    {current.type === "trust" && (
-                      <span className="text-xs text-slate-500">
-                        500+ reviews
-                      </span>
-                    )}
+                          {item}
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="flex gap-1.5 mt-4 justify-center">
-                    {cards.map((_, i) => (
-                      <div
-                        key={i}
-                        className={`h-1.5 rounded-full transition-all ${index === i ? "w-4 bg-cyan-500" : "w-1.5 bg-slate-200"}`}
-                      />
-                    ))}
+                  <div className="mt-6 pt-4 border-t border-slate-100">
+                    <div className="flex items-center justify-between">
+                      {current.type === "trust" ? (
+                        <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1">
+                            {[1, 2, 3, 4, 5].map((i) => (
+                              <Star
+                                key={i}
+                                className="w-4 h-4 fill-cyan-500 text-cyan-500"
+                              />
+                            ))}
+                          </div>
+
+                          <span className="font-bold text-slate-900 text-sm">
+                            Trusted by Businesses
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="text-sm font-bold text-cyan-700 cursor-pointer hover:underline flex items-center gap-1">
+                          {current.footer}
+                          <Zap className="w-3 h-3" />
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex gap-1.5 mt-4 justify-center">
+                      {cards.map((_, i) => (
+                        <div
+                          key={i}
+                          className={`h-1.5 rounded-full transition-all ${index === i
+                            ? "w-4 bg-cyan-500"
+                            : "w-1.5 bg-slate-200"
+                            }`}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
+
               </div>
-              
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ========== Companies SECTION (Home Page) ========== */}
-      <section className="bg-white py-12 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <div className="text-left">
-              <h2 className="text-lg md:text-2xl font-black text-slate-900 uppercase italic tracking-tight whitespace-nowrap">
-                Browse Categories
-              </h2>
-              <p className="text-slate-500 text-sm font-small">
-                Find the best businesses by industry
-              </p>
-            </div>
-            <Link
+        {/* ========== Companies SECTION (Home Page) ========== */}
+        <section className="bg-white py-12 border-b border-slate-100">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex justify-between items-center mb-8">
+              <div className="text-left">
+                <h2 className="text-lg md:text-2xl font-black text-slate-900 uppercase italic tracking-tight whitespace-nowrap">
+                  Browse Categories
+                </h2>
+                <p className="text-slate-500 text-sm font-small">
+                  Find the best businesses by industry
+                </p>
+              </div>
+              <Link
                 href="/categories"
                 className="text-cyan-700 text-sm font-medium flex items-center gap-1"
                 aria-label="View all categories"
               >
                 View All Categories <ChevronRight className="w-4 h-4" />
               </Link>
-          </div>
-
-          <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
-            {companyCategories.slice(0, 16).map((cat, i) => (
-              <Link
-                key={i}
-                href={`/companies?query=${encodeURIComponent(cat.name)}`}
-                aria-label={`Browse ${cat.name} companies`}
-                className={`group flex flex-col items-center gap-3 ${i >= 8 ? "hidden md:flex" : ""}`}
-              >
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
-                  {cat.icon}
-                </div>
-
-                <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors line-clamp-1">
-                  {cat.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== OFFERS SECTION ========== */}
-      <section className="bg-white py-6 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-cyan-700" />
-              <h2 className="font-bold text-slate-900">
-                Best Deals & Offers
-              </h2>
-            </div>
-            <Link
-              href="/services"
-              className="text-cyan-800 text-sm font-medium flex items-center gap-1"
-              aria-label="View all services"
-            >
-              View All Services <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="overflow-hidden">
-            <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
-              {/* Duplicate array twice for seamless endless marquee looping */}
-              {[1, 2].map((groupIndex) => (
-                <div key={groupIndex} className="flex gap-4 shrink-0">
-                  {/* offer.jpg Banner Card */}
-                  <Link
-                    href="/services"
-                    className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
-                  >
-                    <img
-                      src="/offer.jpg"
-                      alt="Special Offer 1"
-                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </Link>
-
-                  {/* offer3.png Banner Card */}
-                  <Link
-                    href="/services"
-                    className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
-                  >
-                    <img
-                      src="/offer3.png"
-                      alt="Special Offer 2"
-                      className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </Link>
-
-                  {/* Ads items if available */}
-                  {ads.map((ad, adIndex) => (
-                    <Link
-                      key={adIndex}
-                      href={buildOfferCartLink(ad)}
-                      className="w-[220px] h-[165px] bg-gradient-to-br from-teal-600 to-cyan-700 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between"
-                    >
-                      <div className="flex items-start justify-between gap-1">
-                        <div>
-                          <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-white text-[10px] font-bold uppercase mb-2">
-                            {ad.subtitle || ad.text || "Limited Offer"}
-                          </span>
-                          <h3 className="text-white font-bold text-sm leading-snug line-clamp-3">
-                            {ad.title}
-                          </h3>
-                        </div>
-                        <div className="text-2xl shrink-0">🎉</div>
-                      </div>
-                      <div>
-                        <span className="inline-block px-3 py-1 bg-white text-cyan-800 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
-                          Get Deal
-                        </span>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Category Grid Section */}
-      <section className="bg-white py-8 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-4 md:grid-cols-9 gap-4">
-            {categories.map((cat, i) => (
-              <Link
-                href={`/blog?query=${encodeURIComponent(cat.name)}`}
-                key={i}
-                aria-label={`Browse ${cat.name} blog posts`}
-                className="group flex flex-col items-center text-center p-3 rounded-xl hover:bg-cyan-50 transition-colors"
-              >
-                <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-2 transition-colors">
-                  {cat.icon}
-                </div>
-                <span className="text-xs font-medium text-slate-700 group-hover:text-cyan-700 leading-tight">
-                  {cat.name}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== PORTFOLIO SECTION ========== */}
-      <section className="py-8 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="text-xl font-bold text-slate-900">
-                Our Recent Work
-              </h2>
-              <p className="text-sm text-slate-500">
-                Projects delivered with excellence
-              </p>
-            </div>
-            <Link
-              href="/portfolio"
-              className="text-cyan-800 text-sm font-medium flex items-center gap-1"
-              aria-label="View all portfolio projects"
-            >
-              View All Portfolio <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {portfolio.length > 0 && (
-              <div className="col-span-1 md:col-span-2 lg:col-span-4">
-                <div
-                  key={portfolio[recentWorkIndex]?._id || recentWorkIndex}
-                  className="group mx-auto max-w-3xl bg-white rounded-xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all"
-                >
-                  <div className="relative aspect-[16/8] overflow-hidden">
-                    <Image
-                      src={portfolio[recentWorkIndex]?.image || "/project-placeholder.jpg"}
-                      alt={portfolio[recentWorkIndex]?.companyName || "Project"}
-                      fill
-                      className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="px-2 py-1 bg-cyan-700 text-white text-[10px] font-bold rounded">
-                        {portfolio[recentWorkIndex]?.category}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="p-5">
-                    <h3 className="font-bold text-slate-900 mb-1 group-hover:text-cyan-700 transition-colors">
-                      {portfolio[recentWorkIndex]?.companyName}
-                    </h3>
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="flex items-center">
-                        {[1, 2, 3, 4, 5].map((i) => (
-                          <Star
-                            key={i}
-                            className="w-3 h-3 fill-cyan-400 text-cyan-400"
-                          />
-                        ))}
-                      </div>
-                      <span className="text-slate-500 text-xs">
-                        (4.{9 - (recentWorkIndex % 2)})
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-teal-700 text-xs font-medium flex items-center gap-1">
-                        <BadgeCheck className="w-3 h-3" /> Verified Project
-                      </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-cyan-700 transition-colors" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 flex justify-center gap-2">
-                  {portfolio.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setRecentWorkIndex(i)}
-                      className={`h-10 w-10 flex items-center justify-center rounded-full transition-all ${
-                        recentWorkIndex === i ? "bg-cyan-700" : "bg-slate-300"
-                      }`}
-                      aria-label={`Go to project ${i + 1}`}
-                      aria-pressed={recentWorkIndex === i}
-                    >
-                      <span className={`block rounded-full ${recentWorkIndex === i ? "h-2.5 w-2.5 bg-white" : "h-2.5 w-2.5 bg-slate-700"}`} />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== CUSTOMER REVIEWS SECTION ========== */}
-      <section className="py-10 bg-slate-50 border-y border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-bold text-slate-900">Customer Reviews</h2>
-            <p className="text-sm text-slate-500">
-              What our clients say about our service quality
-            </p>
-          </div>
-
-          <div className="mx-auto max-w-4xl">
-            <div
-              key={reviewIndex}
-              className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm transition-all duration-500"
-            >
-              <div className="mb-4 flex items-center gap-1">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star
-                    key={i}
-                    className={`w-4 h-4 ${
-                      i <= customerReviews[reviewIndex].rating
-                        ? "fill-amber-400 text-amber-400"
-                        : "text-slate-300"
-                    }`}
-                  />
-                ))}
-              </div>
-
-              <p className="text-slate-700 text-base md:text-lg leading-relaxed">
-                "{customerReviews[reviewIndex].review}"
-              </p>
-
-              <div className="mt-5 pt-5 border-t border-slate-100">
-                <h3 className="font-bold text-slate-900">
-                  {customerReviews[reviewIndex].name}
-                </h3>
-                <p className="text-sm text-slate-500">
-                  {customerReviews[reviewIndex].company}
-                </p>
-              </div>
             </div>
 
-            <div className="mt-4 flex justify-center gap-2">
-              {customerReviews.map((_, i) => (
-                <button
+            <div className="grid grid-cols-4 md:grid-cols-8 gap-4 md:gap-6">
+              {companyCategories.slice(0, 16).map((cat, i) => (
+                <Link
                   key={i}
-                  onClick={() => setReviewIndex(i)}
-                  className={`h-10 w-10 flex items-center justify-center rounded-full transition-all ${
-                    reviewIndex === i ? "bg-cyan-700" : "bg-slate-300"
-                  }`}
-                  aria-label={`Go to review ${i + 1}`}
-                  aria-pressed={reviewIndex === i}
+                  href={`/companies?query=${encodeURIComponent(cat.name)}`}
+                  aria-label={`Browse ${cat.name} companies`}
+                  className={`group flex flex-col items-center gap-3 ${i >= 8 ? "hidden md:flex" : ""}`}
                 >
-                  <span className={`block rounded-full ${reviewIndex === i ? "h-2.5 w-2.5 bg-white" : "h-2.5 w-2.5 bg-slate-700"}`} />
-                </button>
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-cyan-100 border border-slate-100 flex items-center justify-center text-2xl transition-all duration-300 group-hover:bg-cyan-500 group-hover:text-white group-hover:shadow-lg group-hover:shadow-cyan-200 group-hover:-translate-y-1">
+                    {cat.icon}
+                  </div>
+
+                  <span className="text-[10px] md:text-xs font-black text-slate-700 uppercase tracking-tighter text-center group-hover:text-cyan-700 transition-colors line-clamp-1">
+                    {cat.name}
+                  </span>
+                </Link>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ========== WHY CHOOSE US ========== */}
-      <section className="py-10 bg-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <h2 className="text-xl font-bold text-slate-900">
-              Why Choose Jisnu Digital?
-            </h2>
-            <p className="text-sm text-slate-700">
-              Trusted by 1000+ businesses across India
-            </p>
-          </div>
-
-          <div className="grid grid-cols-4 gap-2 md:gap-4">
-            {[
-              {
-                icon: Shield,
-                title: "100% Secure",
-                desc: "Safe & Trusted Services",
-                color: "bg-teal-50 text-teal-600",
-              },
-              {
-                icon: Clock,
-                title: "On-Time Delivery",
-                desc: "We Value Your Time",
-                color: "bg-cyan-50 text-cyan-700",
-              },
-              {
-                icon: Headphones,
-                title: "24/7 Support",
-                desc: "Always Here to Help",
-                color: "bg-sky-50 text-sky-600",
-              },
-              {
-                icon: TrendingUp,
-                title: "Best Results",
-                desc: "Proven Track Record",
-                color: "bg-emerald-50 text-emerald-600",
-              },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="bg-white rounded-xl p-2.5 md:p-6 text-center border border-slate-200 hover:shadow-lg transition-shadow"
-              >
-                <div
-                  className={`w-9 h-9 md:w-14 md:h-14 ${item.color} rounded-full flex items-center justify-center mx-auto mb-2 md:mb-4`}
-                >
-                  <item.icon className="w-4 h-4 md:w-7 md:h-7" />
-                </div>
-                <h3 className="font-bold text-[11px] md:text-base text-slate-900 mb-1 leading-tight">{item.title}</h3>
-                <p className="text-[10px] md:text-sm text-slate-500 leading-tight">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== CONTACT SECTION ========== */}
-      <section className="py-10 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-8">
-            <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 md:p-8">
-              <div className="flex items-center gap-2 mb-2">
-                <Send className="w-5 h-5 text-cyan-700" />
-                <h2 className="text-xl font-bold text-slate-900">
-                  Get Free Quote
+        {/* ========== OFFERS SECTION 
+        <section className="bg-white py-6 border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Zap className="w-5 h-5 text-cyan-700" />
+                <h2 className="font-bold text-slate-900">
+                  Best Deals & Offers
                 </h2>
               </div>
-              <p className="text-slate-500 text-sm mb-6">
-                Fill the form and get callback within 30 minutes
-              </p>
-              <form className="space-y-4" onSubmit={handleQuoteSubmit}>
-                <input
-                  required
-                  type="text"
-                  value={quoteForm.name}
-                  onChange={(e) =>
-                    setQuoteForm((prev) => ({ ...prev, name: e.target.value }))
-                  }
-                  placeholder="Your Name *"
-                  className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                />
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <input
-                      required
-                      type="email"
-                      value={quoteForm.email}
-                      onChange={(e) =>
-                        setQuoteForm((prev) => ({ ...prev, email: e.target.value }))
-                      }
-                      placeholder="Email Address * (Verification Mandatory)"
-                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                    />
-                    <InlineEmailOtpInput
-                      email={quoteForm.email}
-                      onVerificationChange={() => {}}
-                    />
-                  </div>
-                  <input
-                    required
-                    type="tel"
-                    value={quoteForm.phone}
-                    onChange={(e) =>
-                      setQuoteForm((prev) => ({ ...prev, phone: e.target.value }))
-                    }
-                    placeholder="Phone Number *"
-                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                  />
-                </div>
-                <label htmlFor="service-select" className="block text-sm font-semibold text-slate-700 mb-2">
-                  Select Service *
-                </label>
-                <select
-                  id="service-select"
-                  required
-                  value={quoteForm.service}
-                  onChange={(e) =>
-                    setQuoteForm((prev) => ({ ...prev, service: e.target.value }))
-                  }
-                  className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
-                  aria-label="Select service"
-                >
-                  <option value="">Choose a service</option>
-                  <option value="Web Development">Web Development</option>
-                  <option value="App Development">App Development</option>
-                  <option value="SEO Services">SEO Services</option>
-                  <option value="Digital Marketing">Digital Marketing</option>
-                </select>
-                <textarea
-                  value={quoteForm.requirement}
-                  onChange={(e) =>
-                    setQuoteForm((prev) => ({
-                      ...prev,
-                      requirement: e.target.value,
-                    }))
-                  }
-                  placeholder="Tell us about your requirement..."
-                  rows={3}
-                  className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all resize-none"
-                ></textarea>
-                <button
-                  type="submit"
-                  disabled={quoteSubmitting}
-                  className="w-full py-4 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
-                >
-                  {quoteSubmitting ? "Submitting..." : "Get Free Quote"}{" "}
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
+              <Link
+                href="/services"
+                className="text-cyan-800 text-sm font-medium flex items-center gap-1"
+                aria-label="View all services"
+              >
+                View All Services <ChevronRight className="w-4 h-4" />
+              </Link>
             </div>
 
-            <div className="space-y-3 md:space-y-4">
-              <div className="bg-teal-700 rounded-xl p-4 md:p-6 text-white">
-                <div className="flex items-start gap-3 md:gap-4">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
+            <div className="overflow-hidden">
+              <div className="flex w-max gap-4 animate-marquee hover:[animation-play-state:paused]">
+               
+                {[1, 2].map((groupIndex) => (
+                  <div key={groupIndex} className="flex gap-4 shrink-0">
+                    
+                    <Link
+                      href="/services"
+                      className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
+                    >
+                      <img
+                        src="/offer.jpg"
+                        alt="Special Offer 1"
+                        className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </Link>
+
+                  
+                    <Link
+                      href="/services"
+                      className="w-[220px] h-[165px] relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex-shrink-0 border border-slate-200 group block"
+                    >
+                      <img
+                        src="/offer3.png"
+                        alt="Special Offer 2"
+                        className="w-full h-full object-fill group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </Link>
+
+            
+                    {ads.map((ad, adIndex) => (
+                      <Link
+                        key={adIndex}
+                        href={buildOfferCartLink(ad)}
+                        className="w-[220px] h-[165px] bg-gradient-to-br from-teal-600 to-cyan-700 rounded-xl p-4 flex-shrink-0 cursor-pointer shadow-md hover:shadow-xl transition-shadow flex flex-col justify-between"
+                      >
+                        <div className="flex items-start justify-between gap-1">
+                          <div>
+                            <span className="inline-block px-2 py-0.5 bg-white/20 rounded text-white text-[10px] font-bold uppercase mb-2">
+                              {ad.subtitle || ad.text || "Limited Offer"}
+                            </span>
+                            <h3 className="text-white font-bold text-sm leading-snug line-clamp-3">
+                              {ad.title}
+                            </h3>
+                          </div>
+                          <div className="text-2xl shrink-0">🎉</div>
+                        </div>
+                        <div>
+                          <span className="inline-block px-3 py-1 bg-white text-cyan-800 rounded-full text-xs font-bold hover:bg-cyan-50 transition-colors">
+                            Get Deal
+                          </span>
+                        </div>
+                      </Link>
+                    ))}
                   </div>
-                  <div>
-                    <div className="font-bold text-base md:text-lg mb-1">Call Us Now</div>
-                    <div className="text-lg md:text-xl font-bold">+91 7709936965 </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>  ========== */}
+
+        {/* Category Grid Section */}
+        <section className="bg-white py-14 border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            {/* Section Heading */}
+            <div className="text-center max-w-3xl mx-auto mb-10">
+              <span className="text-cyan-600 font-semibold text-sm uppercase tracking-wider">
+                Our Expertise
+              </span>
+
+              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">
+                Digital Marketing & Web Development Services in Pune
+              </h2>
+
+              <p className="text-slate-600 mt-4">
+                We provide web development, mobile app development, SEO, digital
+                marketing, e-commerce and UI/UX design solutions to help businesses
+                grow their online presence.
+              </p>
+            </div>
+
+            {/* Services */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {categories.map((cat, i) => (
+                <Link
+                  href={cat.link}
+                  key={i}
+                  aria-label={`Learn more about ${cat.name}`}
+                  className="group flex flex-col items-center text-center p-5 rounded-2xl border border-slate-200 hover:border-cyan-300 hover:bg-cyan-50 transition-all duration-300"
+                >
+                  <div className="w-14 h-14 rounded-full bg-slate-100 group-hover:bg-cyan-100 flex items-center justify-center text-2xl mb-3 transition-colors">
+                    {cat.icon}
                   </div>
+
+                  <h3 className="text-sm font-bold text-slate-800 group-hover:text-cyan-700 leading-tight">
+                    {cat.name}
+                  </h3>
+
+                  <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                    {cat.description}
+                  </p>
+
+                  <span className="text-xs font-semibold text-cyan-600 mt-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Explore Service →
+                  </span>
+                </Link>
+              ))}
+            </div>
+
+          </div>
+        </section>
+
+{/* ========== PORTFOLIO SECTION ========== */}
+<section className="py-14 bg-white">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    {/* Section Header */}
+    <div className="text-center max-w-3xl mx-auto mb-10">
+      <span className="text-cyan-600 font-semibold text-sm uppercase tracking-wider">
+        Our Portfolio
+      </span>
+
+      <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mt-2">
+        Web Development & Digital Marketing Projects
+      </h2>
+
+      <p className="text-sm md:text-base text-slate-600 mt-4">
+        Explore some of our recent web development, mobile app, e-commerce,
+        SEO, and digital marketing projects created for growing businesses.
+      </p>
+    </div>
+
+    {portfolio.length > 0 && (
+      <div className="max-w-4xl mx-auto">
+
+        {/* Project Card */}
+        <div
+          key={portfolio[recentWorkIndex]?._id || recentWorkIndex}
+          className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300"
+        >
+          {/* Project Image */}
+          <div className="relative aspect-[16/8] overflow-hidden">
+            <Image
+              src={
+                portfolio[recentWorkIndex]?.image ||
+                "/project-placeholder.jpg"
+              }
+              alt={
+                portfolio[recentWorkIndex]?.companyName
+                  ? `${portfolio[recentWorkIndex].companyName} ${portfolio[recentWorkIndex]?.category || "digital project"} by Jisnu Digital`
+                  : "Jisnu Digital web development project"
+              }
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+
+            {/* Category */}
+            {portfolio[recentWorkIndex]?.category && (
+              <div className="absolute top-4 left-4">
+                <span className="px-3 py-1.5 bg-cyan-700 text-white text-xs font-semibold rounded-full">
+                  {portfolio[recentWorkIndex]?.category}
+                </span>
+              </div>
+            )}
+          </div>
+
+          {/* Project Content */}
+          <div className="p-5 md:p-7">
+
+            <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 group-hover:text-cyan-700 transition-colors">
+              {portfolio[recentWorkIndex]?.companyName}
+            </h3>
+
+            <p className="text-sm text-slate-600 leading-relaxed mb-5">
+              A professionally designed digital solution developed to help
+              the business improve its online presence and deliver a better
+              customer experience.
+            </p>
+
+            <div className="flex items-center justify-between">
+
+              <span className="text-teal-700 text-sm font-medium flex items-center gap-2">
+                <BadgeCheck className="w-4 h-4" />
+                Featured Project
+              </span>
+
+              <Link
+                href="/portfolio"
+                className="text-cyan-700 text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all"
+              >
+                View Case Study
+                <ChevronRight className="w-4 h-4" />
+              </Link>
+
+            </div>
+          </div>
+        </div>
+
+        {/* Portfolio Navigation */}
+        {portfolio.length > 1 && (
+          <div className="mt-5 flex justify-center gap-2">
+            {portfolio.map((project, i) => (
+              <button
+                key={project._id || i}
+                onClick={() => setRecentWorkIndex(i)}
+                className={`h-2 rounded-full transition-all ${
+                  recentWorkIndex === i
+                    ? "w-8 bg-cyan-700"
+                    : "w-2 bg-slate-300 hover:bg-slate-400"
+                }`}
+                aria-label={`View ${project.companyName || `project ${i + 1}`}`}
+                aria-pressed={recentWorkIndex === i}
+              />
+            ))}
+          </div>
+        )}
+
+      </div>
+    )}
+
+    {/* View All */}
+    <div className="flex justify-center mt-8">
+      <Link
+        href="/portfolio"
+        className="inline-flex items-center gap-2 bg-cyan-700 hover:bg-cyan-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+      >
+        View All Projects
+        <ChevronRight className="w-4 h-4" />
+      </Link>
+    </div>
+
+  </div>
+</section>
+
+        {/* ========== CUSTOMER REVIEWS SECTION ========== */}
+        <section className="py-10 bg-slate-50 border-y border-slate-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <h2 className="text-xl font-bold text-slate-900">Customer Reviews</h2>
+              <p className="text-sm text-slate-500">
+                What our clients say about our service quality
+              </p>
+            </div>
+
+            <div className="mx-auto max-w-4xl">
+              <div
+                key={reviewIndex}
+                className="rounded-2xl border border-slate-200 bg-white p-6 md:p-8 shadow-sm transition-all duration-500"
+              >
+                <div className="mb-4 flex items-center gap-1">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <Star
+                      key={i}
+                      className={`w-4 h-4 ${i <= customerReviews[reviewIndex].rating
+                        ? "fill-amber-400 text-amber-400"
+                        : "text-slate-300"
+                        }`}
+                    />
+                  ))}
+                </div>
+
+                <p className="text-slate-700 text-base md:text-lg leading-relaxed">
+                  "{customerReviews[reviewIndex].review}"
+                </p>
+
+                <div className="mt-5 pt-5 border-t border-slate-100">
+                  <h3 className="font-bold text-slate-900">
+                    {customerReviews[reviewIndex].name}
+                  </h3>
+                  <p className="text-sm text-slate-500">
+                    {customerReviews[reviewIndex].company}
+                  </p>
                 </div>
               </div>
-              <div className="bg-cyan-700 rounded-xl p-4 md:p-6 text-white">
-                <div className="flex items-start gap-3 md:gap-4">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 md:w-6 md:h-6" />
+
+              <div className="mt-4 flex justify-center gap-2">
+                {customerReviews.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setReviewIndex(i)}
+                    className={`h-10 w-10 flex items-center justify-center rounded-full transition-all ${reviewIndex === i ? "bg-cyan-700" : "bg-slate-300"
+                      }`}
+                    aria-label={`Go to review ${i + 1}`}
+                    aria-pressed={reviewIndex === i}
+                  >
+                    <span className={`block rounded-full ${reviewIndex === i ? "h-2.5 w-2.5 bg-white" : "h-2.5 w-2.5 bg-slate-700"}`} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========== WHY CHOOSE US ========== */}
+        <section className="py-14 bg-slate-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <div className="text-center max-w-3xl mx-auto mb-10">
+              <span className="text-cyan-600 font-semibold text-sm uppercase tracking-wider">
+                Why Choose Us
+              </span>
+
+              <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mt-2">
+                Why Choose Jisnu Digital for Your Digital Growth?
+              </h2>
+
+              <p className="text-sm md:text-base text-slate-600 mt-4">
+                We combine modern technology, creative design, and result-driven
+                digital marketing strategies to create reliable digital solutions
+                that help businesses grow online.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {[
+                {
+                  icon: Shield,
+                  title: "Secure & Reliable",
+                  desc: "Reliable digital solutions built with security, stability, and user experience in mind.",
+                  color: "bg-teal-50 text-teal-600",
+                },
+                {
+                  icon: Clock,
+                  title: "On-Time Delivery",
+                  desc: "We follow a structured development process to deliver projects efficiently and on schedule.",
+                  color: "bg-cyan-50 text-cyan-700",
+                },
+                {
+                  icon: Headphones,
+                  title: "Dedicated Support",
+                  desc: "Get ongoing assistance and support throughout your digital project journey.",
+                  color: "bg-sky-50 text-sky-600",
+                },
+                {
+                  icon: TrendingUp,
+                  title: "Growth Focused",
+                  desc: "Our websites, SEO, and digital marketing solutions are designed with business growth in mind.",
+                  color: "bg-emerald-50 text-emerald-600",
+                },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="bg-white rounded-2xl p-5 md:p-7 text-center border border-slate-200 hover:border-cyan-200 hover:shadow-lg transition-all duration-300"
+                >
+                  <div
+                    className={`w-12 h-12 md:w-14 md:h-14 ${item.color} rounded-full flex items-center justify-center mx-auto mb-4`}
+                  >
+                    <item.icon className="w-6 h-6 md:w-7 md:h-7" />
                   </div>
-                  <div>
-                    <div className="font-bold text-base md:text-lg mb-1">Email Us</div>
-                    <div className="text-base md:text-lg font-bold break-all">
-                      info.jdsolutions2018@gmail.com
+
+                  <h3 className="font-bold text-sm md:text-lg text-slate-900 mb-2">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-xs md:text-sm text-slate-500 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </section>
+
+        {/* ========== CONTACT SECTION ========== */}
+        <section className="py-10 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-8">
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-6 md:p-8">
+                <div className="flex items-center gap-2 mb-2">
+                  <Send className="w-5 h-5 text-cyan-700" />
+                  <h2 className="text-xl font-bold text-slate-900">
+                    Get Free Quote
+                  </h2>
+                </div>
+                <p className="text-slate-500 text-sm mb-6">
+                  Fill the form and get callback within 30 minutes
+                </p>
+                <form className="space-y-4" onSubmit={handleQuoteSubmit}>
+                  <input
+                    required
+                    type="text"
+                    value={quoteForm.name}
+                    onChange={(e) =>
+                      setQuoteForm((prev) => ({ ...prev, name: e.target.value }))
+                    }
+                    placeholder="Your Name *"
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <input
+                        required
+                        type="email"
+                        value={quoteForm.email}
+                        onChange={(e) =>
+                          setQuoteForm((prev) => ({ ...prev, email: e.target.value }))
+                        }
+                        placeholder="Email Address * (Verification Mandatory)"
+                        className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                      />
+                      <InlineEmailOtpInput
+                        email={quoteForm.email}
+                        onVerificationChange={() => { }}
+                      />
+                    </div>
+                    <input
+                      required
+                      type="tel"
+                      value={quoteForm.phone}
+                      onChange={(e) =>
+                        setQuoteForm((prev) => ({ ...prev, phone: e.target.value }))
+                      }
+                      placeholder="Phone Number *"
+                      className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                    />
+                  </div>
+                  <label htmlFor="service-select" className="block text-sm font-semibold text-slate-700 mb-2">
+                    Select Service *
+                  </label>
+                  <select
+                    id="service-select"
+                    required
+                    value={quoteForm.service}
+                    onChange={(e) =>
+                      setQuoteForm((prev) => ({ ...prev, service: e.target.value }))
+                    }
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all"
+                    aria-label="Select service"
+                  >
+                    <option value="">Choose a service</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="App Development">App Development</option>
+                    <option value="SEO Services">SEO Services</option>
+                    <option value="Digital Marketing">Digital Marketing</option>
+                  </select>
+                  <textarea
+                    value={quoteForm.requirement}
+                    onChange={(e) =>
+                      setQuoteForm((prev) => ({
+                        ...prev,
+                        requirement: e.target.value,
+                      }))
+                    }
+                    placeholder="Tell us about your requirement..."
+                    rows={3}
+                    className="w-full px-4 py-3 bg-white border border-slate-300 rounded-lg outline-none focus:border-cyan-500 transition-all resize-none"
+                  ></textarea>
+                  <button
+                    type="submit"
+                    disabled={quoteSubmitting}
+                    className="w-full py-4 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg font-bold flex items-center justify-center gap-2 transition-all"
+                  >
+                    {quoteSubmitting ? "Submitting..." : "Get Free Quote"}{" "}
+                    <ArrowRight className="w-4 h-4" />
+                  </button>
+                </form>
+              </div>
+
+              <div className="space-y-3 md:space-y-4">
+                <div className="bg-teal-700 rounded-xl p-4 md:p-6 text-white">
+                  <div className="flex items-start gap-3 md:gap-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-base md:text-lg mb-1">Call Us Now</div>
+                      <div className="text-lg md:text-xl font-bold">+91 7709936965 </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-cyan-700 rounded-xl p-4 md:p-6 text-white">
+                  <div className="flex items-start gap-3 md:gap-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-white/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Mail className="w-5 h-5 md:w-6 md:h-6" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-base md:text-lg mb-1">Email Us</div>
+                      <div className="text-base md:text-lg font-bold break-all">
+                        info.jdsolutions2018@gmail.com
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ========== BOTTOM CTA BAR ========== */}
-      <section className="bg-slate-900 py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-white text-center md:text-left">
-              <div className="font-bold text-lg">
-                Looking for Digital Services?
+        {/* ========== BOTTOM CTA BAR ========== */}
+        <section className="bg-slate-900 py-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="text-white text-center md:text-left">
+                <div className="font-bold text-lg">
+                  Looking for Digital Services?
+                </div>
+                <div className="text-slate-400 text-sm">
+                  Get the best quotes from Jisnu Digital
+                </div>
               </div>
-              <div className="text-slate-400 text-sm">
-                Get the best quotes from Jisnu Digital
+              <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
+                <a
+                  href="https://wa.me/917709936965"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Call us on WhatsApp"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white rounded-lg font-bold transition-colors"
+                >
+                  <PhoneCall className="w-4 h-4" />
+                  Call Now
+                </a>
+                <a
+                  href="/contact"
+                  aria-label="Get a quote"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg font-bold transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                  Get Quote
+                </a>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-3">
-              <a
-                href="https://wa.me/917709936965"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Call us on WhatsApp"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-teal-700 hover:bg-teal-800 text-white rounded-lg font-bold transition-colors"
-              >
-                <PhoneCall className="w-4 h-4" />
-                Call Now
-              </a>
-              <a
-                href="/contact"
-                aria-label="Get a quote"
-                className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 bg-cyan-700 hover:bg-cyan-800 text-white rounded-lg font-bold transition-colors"
-              >
-                <Send className="w-4 h-4" />
-                Get Quote
-              </a>
+          </div>
+        </section>
+
+        {/* ========== VERTICAL FLOATING SIDEBAR ========== */}
+        <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[999] flex flex-col items-end pointer-events-none">
+          {/* Advertise Button (Vertical) */}
+          <Link
+            href="/companies/list-your-company"
+            className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#b43a18] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-3 sm:mb-10"
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+          >
+            <div className="flex items-center gap-2 transform rotate-180">
+              <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
+                Paid Listing
+              </span>
+              <Zap className="w-3 h-3 text-white fill-current transform rotate-180" />
             </div>
-          </div>
+          </Link>
+
+          {/* Free Listing Button (Vertical) */}
+          <Link
+            href="/companies/list-your-company"
+            className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#005ea8] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
+            style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+          >
+            <div className="flex items-center gap-2 transform rotate-180">
+              <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
+                Free Listing
+              </span>
+              <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />
+            </div>
+          </Link>
         </div>
-      </section>
 
-      {/* ========== VERTICAL FLOATING SIDEBAR ========== */}
-      <div className="fixed right-0 top-1/2 -translate-y-1/2 z-[999] flex flex-col items-end pointer-events-none">
-        {/* Advertise Button (Vertical) */}
-        <Link
-          href="/companies/list-your-company"
-          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#b43a18] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group border-b border-white/20 mb-3 sm:mb-10"
-          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-        >
-          <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
-              Paid Listing
-            </span>
-            <Zap className="w-3 h-3 text-white fill-current transform rotate-180" />
-          </div>
-        </Link>
-
-        {/* Free Listing Button (Vertical) */}
-        <Link
-          href="/companies/list-your-company"
-          className="pointer-events-auto w-[28px] sm:w-[34px] bg-[#005ea8] text-white py-2 sm:py-4 px-1 rounded-l-md shadow-lg transition-all duration-300 hover:pr-2 group"
-          style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-        >
-          <div className="flex items-center gap-2 transform rotate-180">
-            <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wider text-white">
-              Free Listing
-            </span>
-            <BadgeCheck className="w-3 h-3 text-white transform rotate-180" />
-          </div>
-        </Link>
-      </div>
-
-      <EmailVerificationModal
-        isOpen={showQuoteVerifyModal}
-        email={quoteForm.email}
-        onClose={() => setShowQuoteVerifyModal(false)}
-        onVerified={() => {
-          setShowQuoteVerifyModal(false);
-          processQuoteSubmission();
-        }}
-      />
+        <EmailVerificationModal
+          isOpen={showQuoteVerifyModal}
+          email={quoteForm.email}
+          onClose={() => setShowQuoteVerifyModal(false)}
+          onVerified={() => {
+            setShowQuoteVerifyModal(false);
+            processQuoteSubmission();
+          }}
+        />
       </main>
     </>
   );
