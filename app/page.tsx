@@ -818,18 +818,13 @@ export default function Home() {
             {/* Section Heading */}
             <div className="text-center max-w-3xl mx-auto mb-10">
               <span className="text-cyan-600 font-semibold text-sm uppercase tracking-wider">
-                Our Expertise
+                Our Services
               </span>
 
-              <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">
-                Digital Marketing & Web Development Services in Pune
+              <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mt-2">
+              Best Website Development & Digital Marketing Services in Pune
               </h2>
 
-              <p className="text-slate-600 mt-4">
-                We provide web development, mobile app development, SEO, digital
-                marketing, e-commerce and UI/UX design solutions to help businesses
-                grow their online presence.
-              </p>
             </div>
 
             {/* Services */}

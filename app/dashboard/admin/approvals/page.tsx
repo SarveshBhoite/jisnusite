@@ -1,4 +1,4 @@
-"use client"
+    "use client"
 
 import { useEffect, useState } from "react"
 import { 
@@ -12,8 +12,7 @@ export default function CompanyApprovalPage() {
   const [loading, setLoading] = useState(true)
 
   const fetchPending = async () => {
-    try {
-      const res = await fetch("/api/admin/pending")
+    try {      const res = await fetch("/api/admin/pending")
       const data = await res.json()
       setCompanies(data)
     } catch (err) {
