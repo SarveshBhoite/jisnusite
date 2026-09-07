@@ -331,56 +331,107 @@ export default function WebDevelopmentWhitePage() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-start">
-            {/* LEFT SIDE: LIST OF SERVICES ONE BY ONE (50% WIDTH WITH MARGIN & PADDING) */}
+            {/* LEFT SIDE: LIST OF SERVICES ONE BY ONE (50% WIDTH WITH MARGIN & PADDING ON DESKTOP, INLINE ON MOBILE) */}
             <div className="bg-slate-50/80 p-3 sm:p-4 rounded-3xl border border-slate-200/80 shadow-2xs space-y-3">
               {detailedServices.map((service) => {
                 const isActive = service.id === activeServiceId;
                 return (
-                  <button
-                    key={service.id}
-                    onClick={() => setActiveServiceId(service.id)}
-                    className={`w-full text-left p-5 sm:p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${
-                      isActive
-                        ? "bg-cyan-700 text-white border-cyan-700 shadow-xl shadow-cyan-700/25 scale-[1.01]"
-                        : "bg-white hover:bg-cyan-50/70 text-slate-800 border-slate-200/90 hover:border-cyan-300 shadow-2xs"
-                    }`}
-                  >
-                    <div className="flex items-start sm:items-center gap-4 sm:gap-5">
-                      <span
-                        className={`text-xl sm:text-2xl font-mono font-black shrink-0 mt-0.5 sm:mt-0 ${
-                          isActive ? "text-white" : "text-slate-400 group-hover:text-cyan-700"
-                        }`}
-                      >
-                        {service.number}
-                      </span>
-                      <div>
-                        <h3 className="font-bold text-base sm:text-lg leading-snug">
-                          {service.title}
-                        </h3>
-                        <p
-                          className={`text-xs sm:text-sm mt-1 line-clamp-1 ${
-                            isActive ? "text-cyan-100" : "text-slate-500"
+                  <div key={service.id} className="space-y-3">
+                    <button
+                      onClick={() => setActiveServiceId(service.id)}
+                      className={`w-full text-left p-5 sm:p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between group ${
+                        isActive
+                          ? "bg-cyan-700 text-white border-cyan-700 shadow-xl shadow-cyan-700/25 scale-[1.01]"
+                          : "bg-white hover:bg-cyan-50/70 text-slate-800 border-slate-200/90 hover:border-cyan-300 shadow-2xs"
+                      }`}
+                    >
+                      <div className="flex items-start sm:items-center gap-4 sm:gap-5">
+                        <span
+                          className={`text-xl sm:text-2xl font-mono font-black shrink-0 mt-0.5 sm:mt-0 ${
+                            isActive ? "text-white" : "text-slate-400 group-hover:text-cyan-700"
                           }`}
                         >
-                          {service.subtitle}
-                        </p>
+                          {service.number}
+                        </span>
+                        <div>
+                          <h3 className="font-bold text-base sm:text-lg leading-snug">
+                            {service.title}
+                          </h3>
+                          <p
+                            className={`text-xs sm:text-sm mt-1 line-clamp-1 ${
+                              isActive ? "text-cyan-100" : "text-slate-500"
+                            }`}
+                          >
+                            {service.subtitle}
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    <ChevronRight
-                      className={`w-5 h-5 shrink-0 transition-transform duration-300 ml-3 ${
-                        isActive
-                          ? "text-white translate-x-1"
-                          : "text-slate-400 group-hover:text-cyan-700 group-hover:translate-x-1"
-                      }`}
-                    />
-                  </button>
+                      <ChevronRight
+                        className={`w-5 h-5 shrink-0 transition-transform duration-300 ml-3 ${
+                          isActive
+                            ? "text-white translate-x-1 rotate-90 lg:rotate-0"
+                            : "text-slate-400 group-hover:text-cyan-700 group-hover:translate-x-1"
+                        }`}
+                      />
+                    </button>
+
+                    {/* MOBILE ONLY: INLINE DETAILED PANEL DIRECTLY BELOW CLICKED SERVICE */}
+                    {isActive && (
+                      <div className="block lg:hidden pt-1 pb-2">
+                        <div className="bg-slate-50 border border-slate-200/90 rounded-3xl p-6 sm:p-10 shadow-lg relative overflow-hidden transition-all duration-500 animate-in fade-in slide-in-from-top-2">
+                          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500" />
+                          <div className="flex items-center justify-between mb-6">
+                            <span className="text-4xl font-mono font-black text-cyan-700/25">
+                              {service.number}
+                            </span>
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold bg-cyan-100/80 text-cyan-700 border border-cyan-200">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-700" />
+                              <span>Technical Architecture</span>
+                            </div>
+                          </div>
+                          <h3 className="text-xl font-black text-slate-900 mb-3">
+                            {service.title}
+                          </h3>
+                          <p className="text-cyan-700 text-xs font-semibold mb-6">
+                            {service.subtitle}
+                          </p>
+                          <p className="text-slate-600 text-sm leading-relaxed mb-8">
+                            {service.description}
+                          </p>
+                          <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs mb-8">
+                            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
+                              <Code2 className="w-4 h-4 text-cyan-700" />
+                              <span>Key Engineering Deliverables</span>
+                            </h4>
+                            <div className="space-y-3">
+                              {service.details.map((detail, dIdx) => (
+                                <div key={dIdx} className="flex items-start gap-3 text-xs text-slate-700">
+                                  <CheckCircle2 className="w-4 h-4 text-cyan-700 shrink-0 mt-0.5" />
+                                  <span className="leading-relaxed">{detail}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="pt-2">
+                            <Link
+                              href="/contact"
+                              className="inline-flex items-center gap-2.5 bg-cyan-700 hover:bg-cyan-800 text-white font-bold px-6 py-3 rounded-xl shadow-md shadow-cyan-700/20 text-xs"
+                            >
+                              <span>Inquire About {service.title}</span>
+                              <ArrowRight className="w-4 h-4" />
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 );
               })}
             </div>
 
-            {/* RIGHT SIDE: ANIMATED FULL DESCRIPTION PANEL (50% WIDTH) */}
-            <div className="lg:sticky lg:top-28">
+            {/* RIGHT SIDE: DESKTOP ONLY ANIMATED FULL DESCRIPTION PANEL (50% WIDTH) */}
+            <div className="hidden lg:block lg:sticky lg:top-28">
               <div
                 key={activeService.id}
                 className="bg-slate-50 border border-slate-200/90 rounded-3xl p-8 sm:p-10 shadow-lg relative overflow-hidden transition-all duration-500 animate-in fade-in slide-in-from-right-4"

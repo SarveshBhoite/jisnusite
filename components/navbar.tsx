@@ -427,22 +427,6 @@ export default function Navbar() {
                   <Search className="w-5 h-5" />
                 </button>
 
-                <Link
-                  href="/cart"
-                  aria-label="View shopping cart"
-                  className="relative p-2 rounded-full hover:bg-black transition-colors"
-                >
-                  <ShoppingBag
-                    className={`w-5 h-5 ${
-                      useWhiteNav || isMobileMenuOpen ? "text-slate-700" : "text-white"
-                    }`}
-                  />
-                  {cartCount > 0 && (
-                    <span className="absolute top-0 right-0 bg-cyan-600 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full border-2 border-white animate-in zoom-in">
-                      {cartCount}
-                    </span>
-                  )}
-                </Link>
 
                 <div className="hidden md:flex items-center gap-4">
                   {status === "authenticated" ? (
