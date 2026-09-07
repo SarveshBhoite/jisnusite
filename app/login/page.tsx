@@ -18,7 +18,6 @@ export default function CombinedLoginPage() {
     setLoading(true);
     setError("");
 
-    // If the user clicked the button while in "Not Listed" state
     if (isNotListed) {
       router.push("/companies/list-your-company");
       return;

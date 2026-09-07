@@ -60,37 +60,37 @@ export default function Home() {
       name: "Web Development",
       icon: "🌐",
       description: "Responsive, fast and SEO-friendly websites for growing businesses.",
-      link: "/web-development",
+      link: "/services/web-development",
     },
     {
       name: "Mobile App Development",
       icon: "📱",
       description: "Scalable and user-friendly mobile apps for Android and iOS.",
-      link: "/mobile-app-development",
+      link: "/services/mobile-app-development",
     },
     {
       name: "SEO Services",
       icon: "📈",
       description: "Data-driven SEO strategies to improve rankings and organic traffic.",
-      link: "/seo-services",
+      link: "/services/seo-services",
     },
     {
       name: "Digital Marketing",
       icon: "📣",
       description: "Performance-focused marketing to reach and convert your audience.",
-      link: "/digital-marketing",
+      link: "/services/digital-marketing",
     },
     {
       name: "E-Commerce Development",
       icon: "🛒",
       description: "High-performing online stores built to increase sales.",
-      link: "/ecommerce-development",
+      link: "/services/ecommerce-development",
     },
     {
       name: "UI/UX Design",
       icon: "✨",
       description: "Modern and conversion-focused digital experiences.",
-      link: "/ui-ux-design",
+      link: "/services/ui-ux-design",
     },
   ];
 
