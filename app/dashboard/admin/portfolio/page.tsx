@@ -13,6 +13,9 @@ interface Portfolio {
   category: string
   description: string
   image: string
+  logo?: string
+  projectUrl?: string
+  projectType?: "tech" | "non-tech"
   createdAt: string
 }
 
@@ -38,7 +41,10 @@ export default function AdminPortfolio() {
     serviceName: "",
     category: "Web Development",
     description: "",
-    image: ""
+    image: "",
+    logo: "",
+    projectUrl: "",
+    projectType: "tech" as "tech" | "non-tech"
   })
 
   // Fetch all portfolios
@@ -69,7 +75,10 @@ export default function AdminPortfolio() {
       serviceName: "",
       category: "Web Development",
       description: "",
-      image: ""
+      image: "",
+      logo: "",
+      projectUrl: "",
+      projectType: "tech"
     })
     setEditingId(null)
   }
@@ -159,7 +168,10 @@ export default function AdminPortfolio() {
       serviceName: project.serviceName,
       category: project.category,
       description: project.description,
-      image: project.image
+      image: project.image || "",
+      logo: project.logo || "",
+      projectUrl: project.projectUrl || "",
+      projectType: project.projectType || "tech"
     })
     setEditingId(project._id)
     window.scrollTo({ top: 0, behavior: "smooth" })
@@ -211,15 +223,38 @@ export default function AdminPortfolio() {
             className="w-full p-4 rounded-2xl border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-primary outline-none"
             onChange={(e) => setFormData({...formData, serviceName: e.target.value})}
           />
-          <select 
-            value={formData.category}
-            className="w-full p-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-primary"
-            onChange={(e) => setFormData({...formData, category: e.target.value})}
-          >
-            {CATEGORIES.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
+          <input 
+            type="url" 
+            placeholder="Project Live URL (e.g. https://example.com)" 
+            value={formData.projectUrl}
+            className="w-full p-4 rounded-2xl border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-primary outline-none"
+            onChange={(e) => setFormData({...formData, projectUrl: e.target.value})}
+          />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-bold uppercase text-slate-500 mb-1 ml-1">Category</label>
+              <select 
+                value={formData.category}
+                className="w-full p-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-primary text-sm"
+                onChange={(e) => setFormData({...formData, category: e.target.value})}
+              >
+                {CATEGORIES.map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-bold uppercase text-slate-500 mb-1 ml-1">Type Row</label>
+              <select 
+                value={formData.projectType}
+                className="w-full p-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-primary text-sm"
+                onChange={(e) => setFormData({...formData, projectType: e.target.value as "tech" | "non-tech"})}
+              >
+                <option value="tech">Tech Project</option>
+                <option value="non-tech">Non-Tech Project</option>
+              </select>
+            </div>
+          </div>
         </div>
         
         <div className="space-y-4 text-center">
@@ -230,13 +265,68 @@ export default function AdminPortfolio() {
             className="w-full p-4 rounded-2xl border-none ring-1 ring-slate-200 outline-none focus:ring-2 focus:ring-primary"
             onChange={(e) => setFormData({...formData, description: e.target.value})}
           />
+
+          {/* Company Logo Upload Box */}
+          <div className="p-4 rounded-2xl border border-slate-200 bg-white space-y-3">
+            <label className="block text-xs font-bold uppercase text-slate-500 text-left">Company Logo</label>
+            
+            {formData.logo ? (
+              <div className="flex items-center gap-4 p-2 bg-slate-50 rounded-xl border border-slate-200">
+                <img src={formData.logo} alt="Logo Preview" className="w-14 h-14 object-contain rounded-full bg-white p-1 border border-slate-200" />
+                <div className="flex-1 text-left">
+                  <p className="text-xs font-bold text-slate-700 truncate">Logo Uploaded</p>
+                  <button
+                    type="button"
+                    onClick={() => setFormData(prev => ({ ...prev, logo: "" }))}
+                    className="text-xs text-red-600 font-bold hover:underline mt-0.5"
+                  >
+                    Remove / Change Logo
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <CloudinaryUploadButton
+                  label="Upload Company Logo"
+                  onUploaded={(secureUrl) =>
+                    setFormData((prev) => ({ ...prev, logo: secureUrl }))
+                  }
+                />
+                
+                <div className="relative flex py-1 items-center">
+                  <div className="flex-grow border-t border-slate-200"></div>
+                  <span className="flex-shrink mx-2 text-[10px] text-slate-400 font-bold uppercase">or choose file</span>
+                  <div className="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setFormData((prev) => ({ ...prev, logo: reader.result as string }));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer"
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Main Project Image Upload Box */}
           <div className="space-y-3">
+            <label className="block text-xs font-bold uppercase text-slate-500 text-left">Project Showcase Image</label>
             {formData.image ? (
-              <div className="h-40 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white">
+              <div className="h-36 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white">
                 <img src={formData.image} alt="Project" className="h-full w-full object-cover" />
               </div>
             ) : (
-              <div className="flex h-32 w-full items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50">
+              <div className="flex h-28 w-full items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50">
                 <ImageIcon className="text-slate-400" />
               </div>
             )}

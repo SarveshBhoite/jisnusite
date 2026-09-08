@@ -9,6 +9,7 @@ import {
   Mail,
   Phone,
   MapPin,
+  Twitter
 } from "lucide-react"
 
 export function Footer() {
@@ -140,7 +141,7 @@ export function Footer() {
                 label: "Facebook",
               },
               {
-                icon: Linkedin,
+                icon: Twitter,
                 href: "https://x.com/Jisnudigital018",
                 label: "X / Twitter",
               },
@@ -149,6 +150,11 @@ export function Footer() {
                 href: "https://www.instagram.com/jisnu_digitalsolution_pvt_ltd/",
                 label: "Instagram",
               },
+              {
+                icon:Linkedin,
+                href: "https://www.linkedin.com/company/jisnu-digital-solution-s-pvt-ltd/?viewAsMember=true",
+                label:"Linkedin"
+              }
             ].map((social, i) => (
               <a
                 key={i}

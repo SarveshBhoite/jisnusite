@@ -370,7 +370,7 @@ export default function Home() {
         if (portRes.ok) {
           const pData = await portRes.json();
           const cleanPort = Array.isArray(pData) ? pData : pData.data || [];
-          setPortfolio(cleanPort.slice(0, 4));
+          setPortfolio(cleanPort);
         }
       } catch (err) {
         console.error("Failed to fetch data", err);
@@ -859,123 +859,158 @@ export default function Home() {
         </section>
 
 {/* ========== PORTFOLIO SECTION ========== */}
-<section className="py-14 bg-white">
+<section className="py-16 bg-slate-50 border-t border-slate-200">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
     {/* Section Header */}
-    <div className="text-center max-w-3xl mx-auto mb-10">
-      <span className="text-cyan-600 font-semibold text-sm uppercase tracking-wider">
-        Our Portfolio
+    <div className="text-center max-w-3xl mx-auto mb-12">
+      <span className="text-cyan-700 font-bold text-xs uppercase tracking-widest px-3 py-1 bg-cyan-100/80 rounded-full border border-cyan-200">
+        Our Showcase
       </span>
 
-      <h2 className="text-2xl md:text-4xl font-bold text-slate-900 mt-2">
-        Web Development & Digital Marketing Projects
+      <h2 className="text-2xl sm:text-3xl md:text-4xl font-black text-slate-900 mt-3">
+        Featured Projects
       </h2>
 
-      <p className="text-sm md:text-base text-slate-600 mt-4">
-        Explore some of our recent web development, mobile app, e-commerce,
-        SEO, and digital marketing projects created for growing businesses.
+      <p className="text-sm md:text-base text-slate-600 mt-3 max-w-2xl mx-auto">
+        Discover our proven track record delivering custom web engineering, mobile apps, digital marketing, and SEO growth for clients across industries.
       </p>
     </div>
 
-    {portfolio.length > 0 && (
-      <div className="max-w-4xl mx-auto">
+    {(() => {
+      // Default High-Quality Projects with Direct Website / Social Media Links
+      const defaultProjects = [
+        {
+          _id: "proj-1",
+          companyName: "Mounty River Resort",
+          serviceName: "Web & Booking System",
+          category: "Web Development",
+          logo: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=150&q=80",
+          logoInitial: "MR",
+          logoBg: "bg-cyan-700",
+          projectUrl: "https://mountyriverresort.com"
+        },
+        {
+          _id: "proj-2",
+          companyName: "Kidz Explore Therapy",
+          serviceName: "Mobile & Parent Portal",
+          category: "App Development",
+          logo: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=150&q=80",
+          logoInitial: "KE",
+          logoBg: "bg-teal-700",
+          projectUrl: "https://kidzexploretherapy.com"
+        },
+        {
+          _id: "proj-3",
+          companyName: "OmniStore Platform",
+          serviceName: "E-Commerce Architecture",
+          category: "E-Commerce Development",
+          logo: "https://images.unsplash.com/photo-1556742049-0a670f4a4591?auto=format&fit=crop&w=150&q=80",
+          logoInitial: "OS",
+          logoBg: "bg-blue-700",
+          projectUrl: "https://omnistore.com"
+        },
+        {
+          _id: "proj-4",
+          companyName: "Lonkar Enterprises",
+          serviceName: "Performance Marketing",
+          category: "Digital Marketing",
+          logo: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=150&q=80",
+          logoInitial: "LE",
+          logoBg: "bg-amber-600",
+          projectUrl: "https://lonkarenterprises.com"
+        },
+        {
+          _id: "proj-5",
+          companyName: "Nair Interiors",
+          serviceName: "Organic & Local SEO",
+          category: "SEO Services",
+          logo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=150&q=80",
+          logoInitial: "NI",
+          logoBg: "bg-emerald-700",
+          projectUrl: "https://nairinteriors.com"
+        },
+        {
+          _id: "proj-6",
+          companyName: "Pulse Media",
+          serviceName: "Social Growth & Branding",
+          category: "Social Media Marketing",
+          logo: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=150&q=80",
+          logoInitial: "PM",
+          logoBg: "bg-purple-700",
+          projectUrl: "https://instagram.com/pulsemedia"
+        },
+        {
+          _id: "proj-7",
+          companyName: "Apex Logistics",
+          serviceName: "Enterprise Software & Fleet",
+          category: "Custom Software",
+          logo: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=150&q=80",
+          logoInitial: "AL",
+          logoBg: "bg-indigo-700",
+          projectUrl: "https://apexlogistics.com"
+        }
+      ];
 
-        {/* Project Card */}
-        <div
-          key={portfolio[recentWorkIndex]?._id || recentWorkIndex}
-          className="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300"
-        >
-          {/* Project Image */}
-          <div className="relative aspect-[16/8] overflow-hidden">
-            <Image
-              src={
-                portfolio[recentWorkIndex]?.image ||
-                "/project-placeholder.jpg"
-              }
-              alt={
-                portfolio[recentWorkIndex]?.companyName
-                  ? `${portfolio[recentWorkIndex].companyName} ${portfolio[recentWorkIndex]?.category || "digital project"} by Jisnu Digital`
-                  : "Jisnu Digital web development project"
-              }
-              fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
-            />
+      // Display up to 7 database projects on the home page
+      const projectList = (portfolio.length > 0 ? portfolio : defaultProjects).slice(0, 7);
 
-            {/* Category */}
-            {portfolio[recentWorkIndex]?.category && (
-              <div className="absolute top-4 left-4">
-                <span className="px-3 py-1.5 bg-cyan-700 text-white text-xs font-semibold rounded-full">
-                  {portfolio[recentWorkIndex]?.category}
-                </span>
-              </div>
-            )}
-          </div>
+      return (
+        <div className="space-y-12">
+          {/* Simple Client Logo Grid */}
+          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
+            {projectList.map((project: any, idx: number) => {
+              const targetUrl = project.projectUrl || project.websiteUrl || project.socialUrl || "#";
+              const isExternal = targetUrl.startsWith("http");
+              const initials = (project.companyName || "JP").split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase();
 
-          {/* Project Content */}
-          <div className="p-5 md:p-7">
+              return (
+                <a
+                  key={project._id || idx}
+                  href={targetUrl}
+                  target={isExternal ? "_blank" : undefined}
+                  rel={isExternal ? "noopener noreferrer" : undefined}
+                  title={`Visit ${project.companyName}`}
+                  className="group flex flex-col items-center cursor-pointer text-center max-w-[140px]"
+                >
+                  {/* Simple Clean Circular Logo Badge */}
+                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white border border-slate-200/90 shadow-2xs group-hover:shadow-md group-hover:border-cyan-500 transition-all duration-300 flex items-center justify-center p-3 overflow-hidden transform group-hover:-translate-y-1">
+                    {project.logo ? (
+                      <img
+                        src={project.logo}
+                        alt={`${project.companyName} logo`}
+                        className="w-full h-full object-contain p-1 rounded-full"
+                      />
+                    ) : project.image ? (
+                      <img
+                        src={project.image}
+                        alt={`${project.companyName} logo`}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      <div className={`w-full h-full rounded-full ${project.logoBg || "bg-cyan-700"} text-white font-bold text-lg flex items-center justify-center shadow-inner`}>
+                        {project.logoInitial || initials}
+                      </div>
+                    )}
+                  </div>
 
-            <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-2 group-hover:text-cyan-700 transition-colors">
-              {portfolio[recentWorkIndex]?.companyName}
-            </h3>
-
-            <p className="text-sm text-slate-600 leading-relaxed mb-5">
-              A professionally designed digital solution developed to help
-              the business improve its online presence and deliver a better
-              customer experience.
-            </p>
-
-            <div className="flex items-center justify-between">
-
-              <span className="text-teal-700 text-sm font-medium flex items-center gap-2">
-                <BadgeCheck className="w-4 h-4" />
-                Featured Project
-              </span>
-
-              <Link
-                href="/portfolio"
-                className="text-cyan-700 text-sm font-semibold flex items-center gap-1 hover:gap-2 transition-all"
-              >
-                View Case Study
-                <ChevronRight className="w-4 h-4" />
-              </Link>
-
-            </div>
+                  {/* Label */}
+                  <div className="mt-2.5">
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-cyan-700 transition-colors line-clamp-1">
+                      {project.companyName}
+                    </h4>
+                    <p className="text-[10px] text-slate-500 mt-0.5 truncate">
+                      {project.serviceName || project.category || "Client Project"}
+                    </p>
+                  </div>
+                </a>
+              );
+            })}
           </div>
         </div>
+      );
+    })()}
 
-        {/* Portfolio Navigation */}
-        {portfolio.length > 1 && (
-          <div className="mt-5 flex justify-center gap-2">
-            {portfolio.map((project, i) => (
-              <button
-                key={project._id || i}
-                onClick={() => setRecentWorkIndex(i)}
-                className={`h-2 rounded-full transition-all ${
-                  recentWorkIndex === i
-                    ? "w-8 bg-cyan-700"
-                    : "w-2 bg-slate-300 hover:bg-slate-400"
-                }`}
-                aria-label={`View ${project.companyName || `project ${i + 1}`}`}
-                aria-pressed={recentWorkIndex === i}
-              />
-            ))}
-          </div>
-        )}
-
-      </div>
-    )}
-
-    {/* View All */}
-    <div className="flex justify-center mt-8">
-      <Link
-        href="/portfolio"
-        className="inline-flex items-center gap-2 bg-cyan-700 hover:bg-cyan-800 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-      >
-        View All Projects
-        <ChevronRight className="w-4 h-4" />
-      </Link>
-    </div>
 
   </div>
 </section>
