@@ -952,8 +952,8 @@ export default function Home() {
         }
       ];
 
-      // Display up to 7 database projects on the home page
-      const projectList = (portfolio.length > 0 ? portfolio : defaultProjects).slice(0, 7);
+      // Display the last 7 database projects on the home page
+      const projectList = (portfolio.length > 0 ? portfolio.slice(-7) : defaultProjects.slice(-7));
 
       return (
         <div className="space-y-12">
@@ -994,15 +994,6 @@ export default function Home() {
                     )}
                   </div>
 
-                  {/* Label */}
-                  <div className="mt-2.5">
-                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-cyan-700 transition-colors line-clamp-1">
-                      {project.companyName}
-                    </h4>
-                    <p className="text-[10px] text-slate-500 mt-0.5 truncate">
-                      {project.serviceName || project.category || "Client Project"}
-                    </p>
-                  </div>
                 </a>
               );
             })}
