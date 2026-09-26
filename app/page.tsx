@@ -24,6 +24,7 @@ import {
   Zap,
   Trophy,
   TrendingUp,
+  Target,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -428,6 +429,8 @@ export default function Home() {
     },
   ];
 
+  const [activeProjectCategory, setActiveProjectCategory] = useState("Website");
+
   // Logic to rotate index every 4 seconds
   useEffect(() => {
     const timer = setInterval(() => {
@@ -689,6 +692,58 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ========== WHO WE ARE SECTION ========== */}
+        <section className="py-12 md:py-16 text-black bg-gradient-to-b from-cyan-50/70 via-slate-50 to-teal-50/50 relative overflow-hidden border-y border-slate-200/60">
+          {/* Subtle Background Glow Elements */}
+          <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-72 h-72 bg-teal-400/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="max-w-5xl mx-auto px-6 sm:px-10 lg:px-12 relative z-10 text-center space-y-6">
+            
+            {/* HEADING & TOP BADGE */}
+            <div className="space-y-3 flex flex-col items-center animate-in fade-in slide-in-from-top duration-700">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-700 border border-cyan-400/30 backdrop-blur-md">
+                <Users className="w-3.5 h-3.5 text-cyan-600" />
+                <span>Who We Are</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-black leading-tight tracking-tight">
+                We Are Best Digital Marketing Agency in Pune
+              </h2>
+            </div>
+
+            {/* CENTERED TEXT CONTENT */}
+            <div className="space-y-4 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom duration-700">
+              <p className="text-slate-800 text-sm sm:text-base leading-relaxed">
+                <strong className="text-cyan-700 font-semibold">Jisnu Digital</strong> is a Digital Marketing Agency in Pune helping startups, small businesses, and established brands build a stronger online presence. We provide Digital Marketing Services, SEO Services, Website Development, Mobile App Development, UI/UX Design, and eCommerce Solutions tailored to your business goals.
+              </p>
+
+              <p className="text-slate-800 text-sm sm:text-base leading-relaxed">
+                Our team combines creativity, technology, and data-driven strategies to improve online visibility, attract relevant traffic, generate quality leads, and strengthen your brand. With customized digital solutions and a growth-focused approach, we help businesses build a competitive and sustainable presence online.
+              </p>
+
+              {/* CENTERED CTA BUTTONS */}
+              <div className="pt-3 flex flex-wrap items-center justify-center gap-3">
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-1.5 bg-gradient-to-r from-cyan-500 to-teal-600 hover:from-cyan-400 hover:to-teal-500 text-white font-bold px-6 py-2.5 rounded-lg shadow-md text-xs sm:text-sm transition-all duration-300 group hover:-translate-y-0.5"
+                >
+                  <span>Discover More</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center gap-1.5 bg-slate-800/90 hover:bg-slate-700/90 text-slate-200 font-semibold px-5 py-2.5 rounded-lg border border-slate-700 hover:border-cyan-500/50 text-xs sm:text-sm transition-all duration-300"
+                >
+                  <span>Free Consultation</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
         {/* ========== Companies SECTION (Home Page) ========== */}
         <section className="bg-white py-12 border-b border-slate-100">
           <div className="max-w-7xl mx-auto px-4">
@@ -858,6 +913,141 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ========== OUR CLIENTS SECTION ========== */}
+        <section className="py-10 md:py-16 bg-slate-50 text-slate-900 relative overflow-hidden border-b border-slate-200/80">
+          {/* Decorative Background Glows */}
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+
+              {/* LEFT SIDE: 3 VERTICAL SCROLLING / ROTATING LOGO COLUMNS (NO SQUARES) */}
+              <div className="lg:col-span-6 relative h-[380px] sm:h-[440px] overflow-hidden rounded-3xl bg-slate-100/70 p-10 group">
+                {/* Top & Bottom Fade Gradients */}
+                <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-slate-100 via-slate-100/90 to-transparent z-20 pointer-events-none" />
+                <div className="absolute bottom-0 inset-x-0 h-16 bg-gradient-to-t from-slate-100 via-slate-100/90 to-transparent z-20 pointer-events-none" />
+
+                <div className="grid grid-cols-3 gap-6 h-full items-center">
+                  {/* Column 1 - Downwards Scroll */}
+                  <div className="flex flex-col gap-6 animate-marquee-vertical">
+                    {[
+                      "/logo/Ksmart.png",
+                      "/logo/maaya logo.png",
+                      "/logo/PNG logo evenizerss.png",
+                      "/logo/kidz logo .png",
+                      "/logo/moksha logo.jpeg",
+                      "/logo/Ksmart.png",
+                      "/logo/maaya logo.png",
+                      "/logo/PNG logo evenizerss.png",
+                    ].map((src, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-center p-2 hover:scale-110 transition-transform duration-300 h-24 shrink-0"
+                      >
+                        <Image
+                          src={src}
+                          alt="Client Partner Logo"
+                          width={110}
+                          height={65}
+                          className="max-h-16 w-auto object-contain drop-shadow-sm hover:drop-shadow-md transition-all duration-300"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Column 2 - Upwards Scroll (Reverse) */}
+                  <div className="flex flex-col gap-6 animate-marquee-vertical-reverse">
+                    {[
+                      "/logo/v-smart logo.jpg.jpeg",
+                      "/logo/hd logo jvm.jpg",
+                      "/logo/shreefinance.jpg",
+                      "/logo/sk world.png",
+                      "/logo/sneham.png",
+                      "/logo/v-smart logo.jpg.jpeg",
+                      "/logo/hd logo jvm.jpg",
+                      "/logo/shreefinance.jpg",
+                    ].map((src, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-center p-2 hover:scale-110 transition-transform duration-300 h-24 shrink-0"
+                      >
+                        <Image
+                          src={src}
+                          alt="Client Partner Logo"
+                          width={110}
+                          height={65}
+                          className="max-h-16 w-auto object-contain drop-shadow-sm hover:drop-shadow-md transition-all duration-300"
+                        />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Column 3 - Downwards Scroll */}
+                  <div className="flex flex-col gap-6 animate-marquee-vertical">
+                    {[
+                      "/logo/Express Paintingss .png",
+                      "/logo/Sensory.png",
+                      "/logo/sawariya.png",
+                      "/logo/mapout loho.png",
+                      "/logo/shiv arts & events .png",
+                      "/logo/Express Paintingss .png",
+                      "/logo/Sensory.png",
+                      "/logo/sawariya.png",
+                    ].map((src, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-center p-2 hover:scale-110 transition-transform duration-300 h-24 shrink-0"
+                      >
+                        <Image
+                          src={src}
+                          alt="Client Partner Logo"
+                          width={110}
+                          height={65}
+                          className="max-h-16 w-auto object-contain drop-shadow-sm hover:drop-shadow-md transition-all duration-300"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* RIGHT SIDE: TEXT CONTENT & STATS */}
+              <div className="lg:col-span-6 space-y-6 text-left">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase bg-cyan-100 text-cyan-800 border border-cyan-300/60">
+                  <Star className="w-4 h-4 text-cyan-600 fill-cyan-600" />
+                  <span>Trusted By Industry Leaders</span>
+                </div>
+
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 leading-tight tracking-tight">
+                  Empowering 150+ Brands To{" "}
+                  <span className="bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 bg-clip-text text-transparent">
+                    Scale & Dominate
+                  </span>
+                </h2>
+
+                <p className="text-slate-700 text-base sm:text-lg leading-relaxed">
+                  We partner with ambitious startups, growing enterprises, and established local businesses across India to engineer digital success. From SEO & Web Apps to strategic campaigns, our clients rely on us for consistent, measurable growth.
+                </p>
+
+                {/* Key Client Achievements Grid */}
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
+                    <div className="text-2xl sm:text-3xl font-black text-cyan-600">150+</div>
+                    <div className="text-xs text-slate-600 mt-0.5 font-medium">Happy Corporate Clients</div>
+                  </div>
+
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-sm">
+                    <div className="text-2xl sm:text-3xl font-black text-teal-600">98%</div>
+                    <div className="text-xs text-slate-600 mt-0.5 font-medium">Client Retention Rate</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
 {/* ========== PORTFOLIO SECTION ========== */}
 <section className="py-16 bg-slate-50 border-t border-slate-200">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -878,14 +1068,16 @@ export default function Home() {
     </div>
 
     {(() => {
-      // Default High-Quality Projects with Direct Website / Social Media Links
+      // Extended Default Projects with categories
       const defaultProjects = [
         {
           _id: "proj-1",
           companyName: "Mounty River Resort",
-          serviceName: "Web & Booking System",
-          category: "Web Development",
+          serviceName: "Web & Booking Engine",
+          category: "Website",
+          description: "High-performance resort website with real-time room booking system and custom CMS.",
           logo: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=150&q=80",
+          image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80",
           logoInitial: "MR",
           logoBg: "bg-cyan-700",
           projectUrl: "https://mountyriverresort.com"
@@ -895,7 +1087,9 @@ export default function Home() {
           companyName: "Kidz Explore Therapy",
           serviceName: "Mobile & Parent Portal",
           category: "App Development",
+          description: "Cross-platform mobile application for appointment tracking, child progress logs & direct therapist chat.",
           logo: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=150&q=80",
+          image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=600&q=80",
           logoInitial: "KE",
           logoBg: "bg-teal-700",
           projectUrl: "https://kidzexploretherapy.com"
@@ -904,8 +1098,10 @@ export default function Home() {
           _id: "proj-3",
           companyName: "OmniStore Platform",
           serviceName: "E-Commerce Architecture",
-          category: "E-Commerce Development",
+          category: "E-Commerce",
+          description: "Scalable online shopping engine supporting 50,000+ SKU inventory and instant payment integration.",
           logo: "https://images.unsplash.com/photo-1556742049-0a670f4a4591?auto=format&fit=crop&w=150&q=80",
+          image: "https://images.unsplash.com/photo-1556742049-0a670f4a4591?auto=format&fit=crop&w=600&q=80",
           logoInitial: "OS",
           logoBg: "bg-blue-700",
           projectUrl: "https://omnistore.com"
@@ -914,8 +1110,10 @@ export default function Home() {
           _id: "proj-4",
           companyName: "Lonkar Enterprises",
           serviceName: "Performance Marketing",
-          category: "Digital Marketing",
+          category: "Performance Marketing",
+          description: "Data-driven Google & Meta ad campaigns achieving a 4.8x ROAS and 300+ monthly qualified B2B leads.",
           logo: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=150&q=80",
+          image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
           logoInitial: "LE",
           logoBg: "bg-amber-600",
           projectUrl: "https://lonkarenterprises.com"
@@ -924,8 +1122,10 @@ export default function Home() {
           _id: "proj-5",
           companyName: "Nair Interiors",
           serviceName: "Organic & Local SEO",
-          category: "SEO Services",
+          category: "SEO",
+          description: "Ranked #1 on Google for 25+ targeted local interior design keywords in Pune within 4 months.",
           logo: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=150&q=80",
+          image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80",
           logoInitial: "NI",
           logoBg: "bg-emerald-700",
           projectUrl: "https://nairinteriors.com"
@@ -934,8 +1134,10 @@ export default function Home() {
           _id: "proj-6",
           companyName: "Pulse Media",
           serviceName: "Social Growth & Branding",
-          category: "Social Media Marketing",
+          category: "Performance Marketing",
+          description: "End-to-end viral content creation and influencer management driving 2M+ organic impressions.",
           logo: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=150&q=80",
+          image: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=600&q=80",
           logoInitial: "PM",
           logoBg: "bg-purple-700",
           projectUrl: "https://instagram.com/pulsemedia"
@@ -943,58 +1145,123 @@ export default function Home() {
         {
           _id: "proj-7",
           companyName: "Apex Logistics",
-          serviceName: "Enterprise Software & Fleet",
-          category: "Custom Software",
+          serviceName: "Enterprise Fleet App",
+          category: "App Development",
+          description: "Driver tracking & real-time dispatching Android app with offline sync capability.",
           logo: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=150&q=80",
+          image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80",
           logoInitial: "AL",
           logoBg: "bg-indigo-700",
           projectUrl: "https://apexlogistics.com"
         }
       ];
 
-      // Display the last 7 database projects on the home page
-      const projectList = (portfolio.length > 0 ? portfolio.slice(-7) : defaultProjects.slice(-7));
+      const allProjects = portfolio.length > 0 ? portfolio : defaultProjects;
+
+      // Filter tabs list
+      const projectCategories = [
+        "Website",
+        "SEO",
+        "Performance Marketing",
+        "App Development",
+        "E-Commerce",
+      ];
+
+      // Filter projects based on active selection
+      const filteredProjects = allProjects.filter((p: any) => {
+            const cat = (p.category || p.serviceName || "").toLowerCase();
+            const selected = activeProjectCategory.toLowerCase();
+            if (selected === "website") return cat.includes("web") || cat.includes("site");
+            if (selected === "seo") return cat.includes("seo");
+            if (selected === "performance marketing") return cat.includes("marketing") || cat.includes("performance") || cat.includes("social");
+            if (selected === "app development") return cat.includes("app") || cat.includes("mobile");
+            if (selected === "e-commerce") return cat.includes("commerce") || cat.includes("store");
+            return cat.includes(selected);
+          });
 
       return (
-        <div className="space-y-12">
-          {/* Simple Client Logo Grid */}
-          <div className="flex flex-wrap justify-center items-center gap-6 md:gap-8">
-            {projectList.map((project: any, idx: number) => {
-              const targetUrl = project.projectUrl || project.websiteUrl || project.socialUrl || "#";
+        <div className="space-y-10">
+          {/* CATEGORY FILTER TABS */}
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            {projectCategories.map((catName) => {
+              const isActive = activeProjectCategory === catName;
+              return (
+                <button
+                  key={catName}
+                  onClick={() => setActiveProjectCategory(catName)}
+                  className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 ${
+                    isActive
+                      ? "bg-gradient-to-r from-cyan-500 to-teal-600 text-white shadow-md shadow-cyan-500/20 scale-105"
+                      : "bg-white text-slate-700 hover:bg-slate-100 border border-slate-200"
+                  }`}
+                >
+                  {catName}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* PROJECT DISPLAY CARDS GRID */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {filteredProjects.map((project: any, idx: number) => {
+              const targetUrl = project.projectUrl || project.websiteUrl || project.socialUrl || "/portfolio";
               const isExternal = targetUrl.startsWith("http");
               const initials = (project.companyName || "JP").split(" ").map((n: string) => n[0]).join("").slice(0, 2).toUpperCase();
 
               return (
-                <a
+                <div
                   key={project._id || idx}
-                  href={targetUrl}
-                  target={isExternal ? "_blank" : undefined}
-                  rel={isExternal ? "noopener noreferrer" : undefined}
-                  title={`Visit ${project.companyName}`}
-                  className="group flex flex-col items-center cursor-pointer text-center max-w-[140px]"
+                  className="group rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-cyan-400/60 transition-all duration-300 overflow-hidden flex flex-col justify-between"
                 >
-                  {/* Simple Clean Circular Logo Badge */}
-                  <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-white border border-slate-200/90 shadow-2xs group-hover:shadow-md group-hover:border-cyan-500 transition-all duration-300 flex items-center justify-center p-3 overflow-hidden transform group-hover:-translate-y-1">
-                    {project.logo ? (
-                      <img
-                        src={project.logo}
-                        alt={`${project.companyName} logo`}
-                        className="w-full h-full object-contain p-1 rounded-full"
-                      />
-                    ) : project.image ? (
-                      <img
-                        src={project.image}
-                        alt={`${project.companyName} logo`}
-                        className="w-full h-full object-cover rounded-full"
-                      />
-                    ) : (
-                      <div className={`w-full h-full rounded-full ${project.logoBg || "bg-cyan-700"} text-white font-bold text-lg flex items-center justify-center shadow-inner`}>
-                        {project.logoInitial || initials}
-                      </div>
-                    )}
+                  {/* Card Image / Header */}
+                  <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
+                    <img
+                      src={project.image || project.logo}
+                      alt={project.companyName}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+
+                    {/* Category Tag Badge */}
+                    <span className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-cyan-300 border border-cyan-500/30 text-[11px] font-bold px-3 py-1 rounded-full">
+                      {project.category || "Project Showcase"}
+                    </span>
                   </div>
 
-                </a>
+                  {/* Card Body */}
+                  <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full bg-cyan-100 border border-cyan-200 text-cyan-800 font-bold text-xs flex items-center justify-center shrink-0">
+                          {project.logoInitial || initials}
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-900 group-hover:text-cyan-700 transition-colors line-clamp-1">
+                          {project.companyName}
+                        </h3>
+                      </div>
+
+                      <p className="text-xs font-medium text-cyan-600">
+                        {project.serviceName}
+                      </p>
+
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 pt-1">
+                        {project.description || "Delivered high-impact digital strategy, user experience optimization, and performance scaling."}
+                      </p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <a
+                        href={targetUrl}
+                        target={isExternal ? "_blank" : undefined}
+                        rel={isExternal ? "noopener noreferrer" : undefined}
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-700 hover:text-cyan-900 transition-colors"
+                      >
+                        <span>Visit Project</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>

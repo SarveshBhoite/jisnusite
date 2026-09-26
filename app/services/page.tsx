@@ -31,7 +31,7 @@ const servicesData = [
     number: "01",
     title: "Web Development",
     slug: "web-development",
-    link: "/services/web-development",
+    link: "/web-development",
     icon: Globe,
     tagline:
       "Build fast, responsive, and SEO-friendly websites that create a strong digital presence and turn visitors into long-term customers.",
@@ -49,7 +49,7 @@ const servicesData = [
     number: "02",
     title: "Mobile App Development",
     slug: "mobile-app-development",
-    link: "/services/mobile-app-development",
+    link: "/mobile-app-development",
     icon: Smartphone,
     tagline:
       "Develop scalable, high-performance Android and iOS mobile applications engineered to deliver seamless user experiences across modern devices.",
@@ -67,7 +67,7 @@ const servicesData = [
     number: "03",
     title: "SEO Services",
     slug: "seo-services",
-    link: "/services/seo-services",
+    link: "/seo-services",
     icon: TrendingUp,
     tagline:
       "Boost search visibility, attract qualified organic traffic, and secure top rankings on Google with data-backed search engine optimization.",
@@ -85,7 +85,7 @@ const servicesData = [
     number: "04",
     title: "Digital Marketing",
     slug: "digital-marketing",
-    link: "/services/digital-marketing",
+    link: "/digital-marketing",
     icon: Megaphone,
     tagline:
       "Reach the right target audience and generate high-converting leads through strategic, performance-driven digital marketing campaigns.",
@@ -103,7 +103,7 @@ const servicesData = [
     number: "05",
     title: "UI/UX Design",
     slug: "ui-ux-design",
-    link: "/services/ui-ux-design",
+    link: "/ui-ux-design",
     icon: Palette,
     tagline:
       "Craft modern, visually stunning, and intuitive user interfaces that elevate brand perception, usability, and customer engagement.",
@@ -121,7 +121,7 @@ const servicesData = [
     number: "06",
     title: "E-Commerce Development",
     slug: "ecommerce-development",
-    link: "/services/ecommerce-development",
+    link: "/ecommerce-development",
     icon: ShoppingCart,
     tagline:
       "Build secure, fast, and feature-rich online stores equipped with friction-free checkout flows and integrated payment gateways to maximize sales.",
