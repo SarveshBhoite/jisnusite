@@ -34,7 +34,7 @@ const servicesData = [
     link: "/web-development",
     icon: Globe,
     tagline:
-      "Build fast, responsive, and SEO-friendly websites that create a strong digital presence and turn visitors into long-term customers.",
+      "Create a professional online presence with our *website development services in Pune*. We build fast, mobile-friendly, and SEO-friendly websites that showcase your brand, improve user experience, and help turn website visitors into potential customers. Our web development solutions are designed to support your business growth and strengthen your online visibility.",
     capabilities: [
       "Business Website Development",
       "Corporate Web Portals",
@@ -52,7 +52,7 @@ const servicesData = [
     link: "/mobile-app-development",
     icon: Smartphone,
     tagline:
-      "Develop scalable, high-performance Android and iOS mobile applications engineered to deliver seamless user experiences across modern devices.",
+      "Build powerful mobile apps with our *mobile app development services in Pune*. We develop user-friendly, high-performance Android and iOS applications that work smoothly across devices. Our mobile app solutions focus on speed, functionality, and seamless user experiences to help businesses connect with customers, improve engagement, and support long-term growth.",
     capabilities: [
       "Android App Development",
       "iOS App Development",
@@ -70,7 +70,7 @@ const servicesData = [
     link: "/seo-services",
     icon: TrendingUp,
     tagline:
-      "Boost search visibility, attract qualified organic traffic, and secure top rankings on Google with data-backed search engine optimization.",
+      "Improve your online visibility with our *SEO services in Pune*. We help businesses reach the right audience through keyword research, on-page SEO, technical optimization, and quality link building. Our search engine optimization strategies focus on attracting relevant organic traffic, improving Google search visibility, and helping your business generate more enquiries over time.",
     capabilities: [
       "Technical SEO Audits",
       "On-Page & Off-Page SEO",
@@ -88,7 +88,7 @@ const servicesData = [
     link: "/digital-marketing",
     icon: Megaphone,
     tagline:
-      "Reach the right target audience and generate high-converting leads through strategic, performance-driven digital marketing campaigns.",
+      "Grow your business with our *digital marketing services in Pune*, designed to reach the right audience and generate quality leads. We create targeted marketing campaigns using Google Ads, Meta Ads, and data-driven strategies to increase brand awareness, attract potential customers, and improve conversions. Our goal is to help your business achieve measurable results and sustainable online growth.",
     capabilities: [
       "Social Media Marketing (SMM)",
       "Google Pay-Per-Click (PPC) Ads",
@@ -106,7 +106,7 @@ const servicesData = [
     link: "/ui-ux-design",
     icon: Palette,
     tagline:
-      "Craft modern, visually stunning, and intuitive user interfaces that elevate brand perception, usability, and customer engagement.",
+      "Enhance your brand with our *UI/UX design services in Pune*, focused on creating attractive, user-friendly, and intuitive digital experiences. We design modern website and mobile app interfaces that improve navigation, strengthen brand identity, and keep users engaged. Our goal is to make every interaction simple and enjoyable, helping businesses build customer trust and improve the overall user experience.",
     capabilities: [
       "Website & Web App UI/UX",
       "Mobile Application Interface Design",
@@ -124,7 +124,7 @@ const servicesData = [
     link: "/ecommerce-development",
     icon: ShoppingCart,
     tagline:
-      "Build secure, fast, and feature-rich online stores equipped with friction-free checkout flows and integrated payment gateways to maximize sales.",
+      "Grow your online business with our *e-commerce website development services in Pune*. We create secure, fast, and user-friendly online stores with smooth checkout processes, integrated payment gateways, and easy product management. Our e-commerce solutions are designed to improve the shopping experience, build customer trust, and help businesses increase sales and grow online.",
     capabilities: [
       "Custom E-Commerce Storefronts",
       "Dynamic Product Catalog Management",
@@ -139,28 +139,28 @@ const servicesData = [
 const growthPillars = [
   {
     icon: Target,
-    title: "Targeted Customer Acquisition",
-    desc: "We combine technical SEO, Google PPC, and social media advertising to put your business directly in front of active buyers seeking your products and services.",
+    title: "Quality Lead Generation",
+    desc: "Looking to attract more customers and grow your business? As a *digital marketing company in Pune*, we help businesses connect with the right audience through effective Meta Ads, Google Ads, SEO, and performance marketing. Our goal is to bring potential customers to your business, increase enquiries, and turn more leads into paying clients. Whether you're a startup or an established company, our lead generation strategies help you reach the right people, build your brand, and grow your business across Pune and Maharashtra.",
   },
   {
     icon: Rocket,
-    title: "High-Converting Digital Assets",
-    desc: "Our web and mobile development solutions are engineered from the ground up for speed, security, and conversion rate optimization to turn clicks into clients.",
+    title: "High-Converting Websites",
+    desc: "6Your website is often the first impression customers have of your business. We create professional, mobile-friendly, and SEO-friendly websites that look great, load quickly, and make it easy for visitors to connect with you. As a website development company in Pune, we focus on building websites that showcase your services, build customer trust, and help generate more enquiries. Whether you need a new business website or an e-commerce store, we develop practical digital solutions that support your business growth in Pune and beyond."
   },
   {
     icon: BarChart3,
-    title: "Data-Driven ROI Strategies",
-    desc: "Every campaign and design decision is backed by analytics and transparent performance metrics, ensuring maximum ROI for your digital marketing budget.",
+    title: "Data-Driven Growth",
+    desc: "Grow your business with marketing strategies backed by real data and measurable results. As a digital marketing agency in Pune, we use campaign insights, audience behaviour, and performance analysis to understand what works best for your business. From Google Ads and Meta Ads to SEO and performance marketing, we help you make smarter marketing decisions, reach the right customers, and get more value from your budget. Our focus is on improving campaign performance, increasing quality enquiries, and helping your business achieve steady, long-term growth",
   },
   {
     icon: ShieldCheck,
-    title: "Scalable Technology & Security",
-    desc: "We build digital platforms using modern, future-proof tech stacks (Next.js, React, Node.js, MongoDB) that scale effortlessly as your enterprise expands.",
+    title: "Scalable Web Solutions",
+    desc: "Build a strong digital foundation for your growing business with reliable, secure, and scalable web solutions. As a web development company in Pune, we create modern websites and digital platforms that are easy to use, perform smoothly, and adapt as your business grows. From business websites to advanced web applications, our solutions focus on speed, security, mobile responsiveness, and user experience. We help startups and established businesses build a strong online presence with technology designed to support their future growth.",
   },
   {
     icon: Users,
-    title: "Dedicated Support & Growth Partnership",
-    desc: "Our engagement extends far beyond launch. We provide continuous technical maintenance, security updates, and growth strategies to keep your brand leading.",
+    title: "Dedicated Growth Support",
+    desc: "Your business deserves more than a one-time service. We work closely with you to understand your goals, provide ongoing support, and help your business grow online. As a digital marketing agency in Pune, we offer guidance, regular performance updates, and practical strategies to improve your website, strengthen your online presence, and reach more potential customers. From SEO and social media management to paid advertising, we focus on building a long-term partnership that supports your business growth across Pune and Maharashtra..",
   },
 ];
 
@@ -346,7 +346,7 @@ export default function ServicesPage() {
               How We Help You Grow
             </h2>
             <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-4">
-              At Jisnu Digital, we believe digital growth is not accidental—it is engineered. In today&apos;s hyper-competitive digital market, simply having an online presence is no longer enough. We provide professional <strong>web development services in Pune</strong>, targeted <strong>SEO services in Pune</strong>, and performance-driven <strong>digital marketing solutions</strong> that work together to strengthen your online presence, attract the right audience, and support sustainable business growth.
+             At Jisnu Digital, we help businesses reach more customers and grow their online presence with the right digital marketing strategies. As a digital marketing company in Pune, we offer SEO, website development, social media marketing, and online advertising services to help your business get noticed. We focus on understanding your goals, reaching the right audience, and bringing more potential customers to your business. Whether you're a startup or an established company, we work with you to build your brand, improve online visibility, and support long-term growth across Pune and Maharashtra.
             </p>
           </div>
 
