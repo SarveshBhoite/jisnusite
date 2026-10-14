@@ -13,17 +13,39 @@ import {
 
 export default function AboutPage() {
   return (
-    <main className="pt-24">
+    <main className="relative bg-background">
       {/* ================= HERO ================= */}
-      <section className="py-24 bg-muted/40">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="font-display text-4xl md:text-5xl xl:text-6xl font-semibold mb-6">
-            About Jisnu Digital Solutions
+      <section className="relative overflow-hidden min-h-[50vh] flex items-center justify-center pt-32 pb-20 md:pt-40 md:pb-24 bg-slate-900 text-white">
+        {/* Background Team & Tech Image with Opacity & Overlay */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20 mix-blend-luminosity scale-105 transition-transform duration-1000"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=2000&q=80')`,
+          }}
+        />
+
+        {/* Semi-Transparent Dark & Vibrant Gradient Layers */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/90 via-slate-900/80 to-slate-950/95 backdrop-blur-[2px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-full bg-cyan-500/15 blur-[140px] rounded-full pointer-events-none" />
+
+        {/* Subtle Tech Grid Lines Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0d_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0d_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] pointer-events-none" />
+
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 my-auto">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-cyan-300 text-xs sm:text-sm font-medium mb-6 backdrop-blur-md shadow-inner">
+            <Users className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Who We Are</span>
+          </div>
+
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl xl:text-6xl font-bold tracking-tight text-white mb-6 mx-auto leading-tight">
+            About{" "}
+            <span className="bg-gradient-to-r from-cyan-400 via-teal-300 to-blue-400 bg-clip-text text-transparent">
+              Jisnu Digital Solutions
+            </span>
           </h1>
-          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed max-w-3xl">
-            We are a digital services company helping businesses design, build,
-            and scale meaningful digital products through thoughtful design and
-            reliable technology.
+
+          <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
+            Jisnu Digital Solutions is a best digital marketing  company helping businesses grow through website development, SEO, digital marketing, mobile apps, and UI/UX design. We create practical digital solutions that improve online visibility, attract customers, and support business growth across Pune and Maharashtra.
           </p>
         </div>
       </section>
@@ -36,15 +58,11 @@ export default function AboutPage() {
               Our Story
             </h2>
             <p className="text-muted-foreground leading-relaxed">
-              <b>Jisnu Digital</b> is a leading digital marketing agency in Pune
-              providing result-oriented online marketing services for
-              businesses. We help brands grow online through advanced SEO
-              strategies, social media marketing, Google Ads campaigns and
-              professional website development.
+             At Jisnu Digital, we help businesses find new opportunities and grow in the digital world. We understand that running a business takes time and effort, so our goal is to make online marketing simpler and more effective. As a digital marketing agency in Pune, we work with startups, small businesses, and established brands to help them reach more customers and build a strong online presence.
+
+We offer a range of services, including SEO, social media marketing, Google Ads, Meta Ads, website development, and performance marketing. From improving your website's visibility on Google to creating engaging social media content and running targeted ad campaigns, we focus on helping your business connect with the right audience.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
-             Our goal is to help businesses increase online visibility, generate quality leads and improve their brand presence in the digital world.
-            </p>
+
           </div>
 
           <div className="relative aspect-[4/3] rounded-xl overflow-hidden border border-border bg-muted">
@@ -72,19 +90,19 @@ export default function AboutPage() {
             {[
               {
                 title: "SEO Services",
-                desc: "We provide professional SEO services in Pune to improve your website ranking on Google and increase organic traffic.",
+                desc: "We offer professional SEO services in Pune to improve Google rankings, increase organic traffic, and boost online visibility. Our SEO strategies include keyword research, on-page SEO, technical SEO, and local SEO to help businesses attract customers and grow online.",
               },
               {
                 title: "Social Media Marketing",
-                desc: "Our social media experts create engaging campaigns on Facebook, Instagram and other platforms to build your brand and connect with customers.",
+                desc: "We offer social media marketing services in Pune to help businesses grow their brand through engaging Facebook and Instagram content, targeted campaigns, and better audience engagement.",
               },
               {
                 title: "Google Ads Management",
-                desc: "We run targeted Google Ads campaigns that bring high-quality leads and maximize ROI for your business.",
+                desc: "We provide expert Google Ads management services in Pune to reach the right audience, generate quality leads, and grow your business with cost-effective advertising campaigns.",
               },
               {
                 title: "Website Development",
-                desc: "We design fast, responsive and SEO-friendly websites that help businesses grow online.",
+                desc: "Looking for professional website development services in Pune? We create fast, mobile-friendly, and SEO-friendly websites that showcase your business, attract potential customers, and help you grow online.",
               },
             ].map((service, i) => (
               <div
