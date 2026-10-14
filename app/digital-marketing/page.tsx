@@ -16,6 +16,9 @@ import {
   Users,
   ShieldCheck,
   Layout,
+  Eye,
+  TrendingUp,
+  X,
 } from "lucide-react";
 
 const detailedServices = [
@@ -121,6 +124,54 @@ const otherServices = [
 
 export default function DigitalMarketingPage() {
   const [activeServiceId, setActiveServiceId] = useState(detailedServices[0].id);
+  const [selectedProof, setSelectedProof] = useState<any | null>(null);
+
+  const liveCampaigns = [
+    {
+      company: "Bosch & Ashok Leyland Dealer",
+      service: "Commercial Vehicle & Coupler Lead Ads",
+      image: "/portfolio/performance-bosh-ashok-leyland.png",
+      metricHighlight: "628 Leads @ ₹10.59 CPL",
+      results: "628 Qualified Inquiries",
+      cpl: "₹10.59 / Lead",
+      spend: "₹6,652.71",
+      impressions: "191,355",
+      description: "High-volume Meta ad messaging campaign driving 628+ qualified commercial vehicle & industrial coupler inquiries at ₹10.59 cost per lead."
+    },
+    {
+      company: "Saffron Realty & Developers",
+      service: "Real Estate NA Plots & Land Leads",
+      image: "/portfolio/performance-saffron-realty.png",
+      metricHighlight: "800+ Leads @ ₹4.67 CPL",
+      results: "800+ Buyer Inquiries",
+      cpl: "₹4.67 - ₹5.70",
+      spend: "₹11,257.34",
+      impressions: "100,209",
+      description: "Laser-focused NA plot buyer targeting across Pune delivering 800+ buyer leads with industry-record low CPL starting at just ₹4.67."
+    },
+    {
+      company: "Solar Energy Solutions",
+      service: "PM Surya Ghar & Rooftop Subsidy Leads",
+      image: "/portfolio/performance-solar-energy.png",
+      metricHighlight: "698 Leads @ ₹17.91 CPL",
+      results: "698 Verified Applications",
+      cpl: "₹17.91 / Lead",
+      spend: "₹12,499.98",
+      impressions: "525,301",
+      description: "Nationwide residential and commercial rooftop solar campaign driving 698+ verified homeowner applications across 525K+ impressions."
+    },
+    {
+      company: "MPSC Maths Coaching Academy",
+      service: "EdTech & Student Admission Ads",
+      image: "/portfolio/performance-mpsc-education.png",
+      metricHighlight: "27 Leads @ ₹19.15 CPL",
+      results: "27 Admissions",
+      cpl: "₹19.15 / Lead",
+      spend: "₹516.96",
+      impressions: "20,984",
+      description: "Direct-to-WhatsApp student enrollment campaigns targeting competitive exam aspirants, producing immediate student admissions at ₹19.15 per lead."
+    }
+  ];
 
   const activeService =
     detailedServices.find((s) => s.id === activeServiceId) || detailedServices[0];
@@ -341,6 +392,163 @@ export default function DigitalMarketingPage() {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ===== VERIFIED PERFORMANCE MARKETING LIVE RESULTS ===== */}
+      <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(#0891b2_1px,transparent_1px)] [background-size:24px_24px] opacity-15" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-cyan-400 font-bold text-xs uppercase tracking-widest px-3 py-1 bg-cyan-950/80 rounded-full border border-cyan-800 inline-block mb-3">
+              Performance Marketing Portfolio
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight mb-4">
+              Live Campaign Results & Dashboard Proofs
+            </h2>
+            <p className="text-slate-300 text-sm sm:text-base">
+              Real screenshots from our active Meta Ads Manager accounts proving lowest cost-per-lead (CPL) and predictable return on ad spend.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {liveCampaigns.map((camp, idx) => (
+              <div
+                key={idx}
+                className="bg-slate-800/90 rounded-2xl border border-slate-700/80 overflow-hidden shadow-lg hover:border-cyan-500/60 transition-all duration-300 flex flex-col justify-between group cursor-pointer"
+                onClick={() => setSelectedProof(camp)}
+              >
+                {/* Image */}
+                <div className="relative h-44 bg-slate-950 overflow-hidden">
+                  <img
+                    src={camp.image}
+                    alt={camp.company}
+                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-transparent to-transparent pointer-events-none" />
+                  
+                  <span className="absolute bottom-2.5 left-3 bg-emerald-500/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-md shadow-sm border border-emerald-400/30 flex items-center gap-1">
+                    <TrendingUp className="w-3 h-3" />
+                    {camp.metricHighlight}
+                  </span>
+
+                  <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-slate-900 rounded-full font-bold text-xs shadow-lg">
+                      <Eye className="w-3.5 h-3.5 text-cyan-700" />
+                      View Dashboard Proof
+                    </span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-5 flex-1 flex flex-col justify-between">
+                  <div>
+                    <h3 className="font-bold text-base text-white group-hover:text-cyan-300 transition-colors line-clamp-1 mb-1">
+                      {camp.company}
+                    </h3>
+                    <p className="text-xs text-cyan-400 font-medium mb-3">
+                      {camp.service}
+                    </p>
+                    <p className="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                      {camp.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-slate-700/60 flex items-center justify-between text-xs font-semibold text-cyan-300">
+                    <span>Inspect Metrics</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Modal Lightbox */}
+        {selectedProof && (
+          <div
+            className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+            onClick={() => setSelectedProof(null)}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="relative max-w-4xl w-full bg-white text-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
+            >
+              <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                <div>
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-700 bg-cyan-100 px-2.5 py-0.5 rounded-full">
+                    Verified Meta Ads Campaign Proof
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+                    {selectedProof.company}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-500">
+                    {selectedProof.service}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelectedProof(null)}
+                  className="p-2 rounded-full bg-slate-200/70 hover:bg-slate-300 text-slate-700 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="overflow-y-auto p-5 sm:p-6 space-y-6">
+                <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-950 shadow-inner">
+                  <img
+                    src={selectedProof.image}
+                    alt={selectedProof.company}
+                    className="w-full h-auto object-contain max-h-[55vh] mx-auto"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-3.5 rounded-xl bg-cyan-50/70 border border-cyan-100 text-center">
+                    <span className="text-xs text-slate-500 font-medium block">Total Results</span>
+                    <span className="text-lg sm:text-xl font-black text-cyan-800">{selectedProof.results}</span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-100 text-center">
+                    <span className="text-xs text-slate-500 font-medium block">Cost Per Result</span>
+                    <span className="text-lg sm:text-xl font-black text-emerald-800">{selectedProof.cpl}</span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-blue-50/70 border border-blue-100 text-center">
+                    <span className="text-xs text-slate-500 font-medium block">Impressions</span>
+                    <span className="text-lg sm:text-xl font-black text-blue-800">{selectedProof.impressions}</span>
+                  </div>
+                  <div className="p-3.5 rounded-xl bg-slate-100/70 border border-slate-200 text-center">
+                    <span className="text-xs text-slate-500 font-medium block">Amount Spent</span>
+                    <span className="text-lg sm:text-xl font-black text-slate-800">{selectedProof.spend}</span>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 leading-relaxed">
+                  {selectedProof.description}
+                </div>
+              </div>
+
+              <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex flex-wrap items-center justify-between gap-3">
+                <span className="text-xs text-slate-500">
+                  Source: Live Meta Ads Manager Verification
+                </span>
+                <div className="flex gap-2.5">
+                  <button
+                    onClick={() => setSelectedProof(null)}
+                    className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200 transition-colors"
+                  >
+                    Close
+                  </button>
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-cyan-700 hover:bg-cyan-800 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-700/20 transition-all hover:scale-105"
+                  >
+                    <span>Scale Your Campaigns</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </section>
 
 

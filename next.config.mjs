@@ -11,6 +11,20 @@ const nextConfig = {
       },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: "/contact/contact",
+        destination: "/contact",
+        permanent: true,
+      },
+      {
+        source: "/contact/contact/:path*",
+        destination: "/contact",
+        permanent: true,
+      },
+    ];
+  },
 }
 
 export default nextConfig

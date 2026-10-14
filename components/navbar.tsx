@@ -45,6 +45,27 @@ export default function Navbar() {
   const isHomePage = pathname === "/";
   const useWhiteNav = !isHomePage || isScrolled;
 
+  const [isIndustryOpen, setIsIndustryOpen] = useState(false);
+  const [isMobileIndustryOpen, setIsMobileIndustryOpen] = useState(false);
+  const industryRef = useRef<HTMLDivElement>(null);
+
+  const [isProductOpen, setIsProductOpen] = useState(false);
+  const [isMobileProductOpen, setIsMobileProductOpen] = useState(false);
+  const productRef = useRef<HTMLDivElement>(null);
+
+  const productOptions = [
+    { name: "CRM", href: "https://crm.jisnudigital.com/" },
+    { name: "ERP", href: "/products#erp" },
+    { name: "My Jisnu Digitals (App)", href: "https://play.google.com/store/apps/details?id=com.jisnu.employeeportal" },
+  ];
+
+  const industryOptions = [
+    { name: "Real Estate", href: "/industry/real-estate" },
+    { name: "Manufacturing", href: "/industry/manufacturing" },
+    { name: "Education Sector", href: "/industry/education" },
+    { name: "Hotels & Restaurants", href: "/industry/hotels-restaurants" },
+  ];
+
   // Logic to update count from localStorage
   useEffect(() => {
     const updateCount = () => {
@@ -80,6 +101,10 @@ export default function Navbar() {
     setIsMobileMenuOpen(false);
     setIsSearchOpen(false);
     setIsProfileOpen(false);
+    setIsIndustryOpen(false);
+    setIsMobileIndustryOpen(false);
+    setIsProductOpen(false);
+    setIsMobileProductOpen(false);
   }, [pathname]);
 
   const companyCategoryNames = [
@@ -181,6 +206,18 @@ export default function Navbar() {
       ) {
         setShowLocationSuggestions(false);
       }
+      if (
+        industryRef.current &&
+        !industryRef.current.contains(event.target as Node)
+      ) {
+        setIsIndustryOpen(false);
+      }
+      if (
+        productRef.current &&
+        !productRef.current.contains(event.target as Node)
+      ) {
+        setIsProductOpen(false);
+      }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -197,11 +234,9 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
     { name: "Services", href: "/services" },
-    { name: "Portfolio", href: "/portfolio" },
-    { name: "Companies", href: "/companies" },
-    { name: "About ", href: "/about" },
-    { name: "Blogs", href: "/blog" },
+    { name: "Blog", href: "/blog" },
   ];
 
   const socialLinks = [
@@ -291,6 +326,111 @@ export default function Navbar() {
                 />
               </Link>
             ))}
+
+            {/* Industry Dropdown Link */}
+            <div className="relative" ref={industryRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsIndustryOpen(!isIndustryOpen);
+                  setIsProductOpen(false);
+                }}
+                className={`px-4 py-1 text-sm font-bold transition-all inline-flex items-center gap-1.5 relative group ${
+                  pathname.startsWith("/industry") || isIndustryOpen
+                    ? "text-cyan-600"
+                    : useWhiteNav
+                    ? "text-slate-600 hover:text-cyan-600"
+                    : "text-slate-200 hover:text-white"
+                }`}
+              >
+                <span>Industry</span>
+                <span className="text-cyan-500 font-extrabold">+</span>
+                
+                <span
+                  className={`absolute bottom-0 left-4 right-4 h-0.5 bg-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform ${
+                    pathname.startsWith("/industry") ? "scale-x-100" : ""
+                  }`}
+                />
+              </button>
+
+              {isIndustryOpen && (
+                <div className="absolute left-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100/80 py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="px-3 py-1.5 border-b border-slate-100 mb-1">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Explore Industries
+                    </span>
+                  </div>
+                  {industryOptions.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      onClick={() => setIsIndustryOpen(false)}
+                      className="group flex items-center justify-between px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 hover:text-cyan-600 transition-all rounded-lg mx-1"
+                    >
+                      <span>{item.name}</span>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-cyan-600" />
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Products Dropdown Link */}
+            <div className="relative" ref={productRef}>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsProductOpen(!isProductOpen);
+                  setIsIndustryOpen(false);
+                }}
+                className={`px-4 py-1 text-sm font-bold transition-all inline-flex items-center gap-1.5 relative group ${
+                  pathname.startsWith("/products") || isProductOpen
+                    ? "text-cyan-600"
+                    : useWhiteNav
+                    ? "text-slate-600 hover:text-cyan-600"
+                    : "text-slate-200 hover:text-white"
+                }`}
+              >
+                <span>Products</span>
+                <span className="text-cyan-500 font-extrabold">+</span>
+
+                <span
+                  className={`absolute bottom-0 left-4 right-4 h-0.5 bg-cyan-500 transform scale-x-0 group-hover:scale-x-100 transition-transform ${
+                    pathname.startsWith("/products") ? "scale-x-100" : ""
+                  }`}
+                />
+              </button>
+
+              {isProductOpen && (
+                <div className="absolute left-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border border-slate-100/80 py-2.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="px-3 py-1.5 border-b border-slate-100 mb-1 flex items-center justify-between">
+                    <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-400">
+                      Explore Products
+                    </span>
+                    <Link
+                      href="/products"
+                      onClick={() => setIsProductOpen(false)}
+                      className="text-[11px] font-extrabold text-cyan-600 hover:underline"
+                    >
+                      All
+                    </Link>
+                  </div>
+                  {productOptions.map((item) => (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      target={item.href.startsWith("http") ? "_blank" : undefined}
+                      rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                      onClick={() => setIsProductOpen(false)}
+                      className="group flex items-center justify-between px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-50 hover:text-cyan-600 transition-all rounded-lg mx-1"
+                    >
+                      <span>{item.name}</span>
+                      <ArrowRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-cyan-600" />
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className={`${isSearchOpen ? "flex-1 flex items-center justify-end min-w-0" : "flex items-center gap-2 md:gap-4"}`}>
@@ -516,7 +656,85 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
-              <hr className="my-2 border-slate-100" />
+
+              {/* Mobile Industry Accordion */}
+              <div className="border-t border-slate-100 my-1 py-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileIndustryOpen(!isMobileIndustryOpen);
+                    setIsMobileProductOpen(false);
+                  }}
+                  className="w-full flex items-center justify-between px-4 py-3 text-base font-bold text-slate-600 hover:bg-slate-50 rounded-xl"
+                >
+                  <span className="flex items-center gap-1.5">
+                    Industry <span className="text-cyan-500 font-extrabold">+</span>
+                  </span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
+                      isMobileIndustryOpen ? "rotate-180 text-cyan-600" : ""
+                    }`}
+                  />
+                </button>
+                {isMobileIndustryOpen && (
+                  <div className="pl-6 pr-2 py-1 space-y-1 animate-in fade-in duration-200">
+                    {industryOptions.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-100 hover:text-cyan-600 rounded-lg transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Mobile Products Accordion */}
+              <div className="border-y border-slate-100 my-1 py-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsMobileProductOpen(!isMobileProductOpen);
+                    setIsMobileIndustryOpen(false);
+                  }}
+                  className="w-full flex items-center justify-between px-4 py-3 text-base font-bold text-slate-600 hover:bg-slate-50 rounded-xl"
+                >
+                  <span className="flex items-center gap-1.5">
+                    Products <span className="text-cyan-500 font-extrabold">+</span>
+                  </span>
+                  <ChevronDown
+                    className={`w-5 h-5 text-slate-400 transition-transform duration-300 ${
+                      isMobileProductOpen ? "rotate-180 text-cyan-600" : ""
+                    }`}
+                  />
+                </button>
+                {isMobileProductOpen && (
+                  <div className="pl-6 pr-2 py-1 space-y-1 animate-in fade-in duration-200">
+                    {productOptions.map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        target={item.href.startsWith("http") ? "_blank" : undefined}
+                        rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block px-4 py-2.5 text-sm font-semibold text-slate-900 hover:bg-slate-100 hover:text-cyan-600 rounded-lg transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    <Link
+                      href="/products"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block px-4 py-2 text-xs font-bold text-cyan-600 hover:underline"
+                    >
+                      View All Products →
+                    </Link>
+                  </div>
+                )}
+              </div>
 
               <div className="px-4 py-2">
                 <div className="flex items-center gap-2">

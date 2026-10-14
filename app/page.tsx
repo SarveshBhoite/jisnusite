@@ -25,6 +25,9 @@ import {
   Trophy,
   TrendingUp,
   Target,
+  X,
+  Eye,
+  BarChart3,
 } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -430,6 +433,7 @@ export default function Home() {
   ];
 
   const [activeProjectCategory, setActiveProjectCategory] = useState("Website");
+  const [selectedCampaignModal, setSelectedCampaignModal] = useState<any | null>(null);
 
   // Logic to rotate index every 4 seconds
   useEffect(() => {
@@ -744,7 +748,7 @@ export default function Home() {
         </section>
 
 
-        {/* ========== Companies SECTION (Home Page) ========== */}
+        {/* ========== Companies SECTION (Home Page) ========== 
         <section className="bg-white py-12 border-b border-slate-100">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex justify-between items-center mb-8">
@@ -1068,8 +1072,93 @@ export default function Home() {
     </div>
 
     {(() => {
+      // Verified Performance Marketing Case Studies from Meta Ads Manager
+      const performanceMarketingProjects = [
+        {
+          _id: "perf-1",
+          companyName: "Bosch & Ashok Leyland Dealer",
+          serviceName: "B2B Automotive Lead Generation",
+          category: "Performance Marketing",
+          metricBadge: "628 Leads @ ₹10.59 CPL",
+          metrics: ["628 Qualified Leads", "₹10.59 / Lead", "191K+ Impressions", "Meta Ads"],
+          description: "High-volume Meta ad messaging campaign driving 628+ qualified commercial vehicle & industrial coupler inquiries at an incredible ₹10.59 cost per lead across 191,355 targeted impressions.",
+          logo: "/portfolio/performance-bosh-ashok-leyland.png",
+          image: "/portfolio/performance-bosh-ashok-leyland.png",
+          logoInitial: "BA",
+          logoBg: "bg-blue-700",
+          projectUrl: "/services/digital-marketing",
+          stats: {
+            leads: "628 Leads",
+            cpl: "₹10.59",
+            spend: "₹6,652.71",
+            impressions: "191,355"
+          }
+        },
+        {
+          _id: "perf-2",
+          companyName: "Saffron Realty & Developers",
+          serviceName: "Real Estate NA Plots Lead Gen",
+          category: "Performance Marketing",
+          metricBadge: "800+ Leads @ ₹4.67 CPL",
+          metrics: ["800+ Buyer Leads", "₹4.67 / Lead", "100K+ Impressions", "Meta Ads"],
+          description: "Hyper-targeted real estate plot sales campaign in Pune delivering 800+ verified buyer leads with an industry-record low CPL starting at just ₹4.67 per messaging inquiry.",
+          logo: "/portfolio/performance-saffron-realty.png",
+          image: "/portfolio/performance-saffron-realty.png",
+          logoInitial: "SR",
+          logoBg: "bg-amber-600",
+          projectUrl: "/services/digital-marketing",
+          stats: {
+            leads: "800+ Inquiries",
+            cpl: "₹4.67 - ₹5.70",
+            spend: "₹11,257.34",
+            impressions: "100,209"
+          }
+        },
+        {
+          _id: "perf-3",
+          companyName: "Solar Energy Solutions",
+          serviceName: "Rooftop Solar Subsidy Leads",
+          category: "Performance Marketing",
+          metricBadge: "698 Leads @ ₹17.91 CPL",
+          metrics: ["698 Solar Applications", "₹17.91 / Lead", "525K+ Impressions", "Meta Ads"],
+          description: "Nationwide residential and commercial rooftop solar campaign driving 698+ verified homeowner applications across 525,000+ targeted Meta impressions at ₹17.91 CPL.",
+          logo: "/portfolio/performance-solar-energy.png",
+          image: "/portfolio/performance-solar-energy.png",
+          logoInitial: "SE",
+          logoBg: "bg-emerald-600",
+          projectUrl: "/services/digital-marketing",
+          stats: {
+            leads: "698 Inquiries",
+            cpl: "₹17.91",
+            spend: "₹12,499.98",
+            impressions: "525,301"
+          }
+        },
+        {
+          _id: "perf-4",
+          companyName: "MPSC Maths Coaching Academy",
+          serviceName: "EdTech & Student Admission Ads",
+          category: "Performance Marketing",
+          metricBadge: "27 Leads @ ₹19.15 CPL",
+          metrics: ["27 Student Leads", "₹19.15 / Lead", "20K+ Impressions", "Meta Ads"],
+          description: "Direct-to-WhatsApp student enrollment campaigns targeting competitive exam aspirants, producing immediate student admissions at an optimized ₹19.15 per lead.",
+          logo: "/portfolio/performance-mpsc-education.png",
+          image: "/portfolio/performance-mpsc-education.png",
+          logoInitial: "MM",
+          logoBg: "bg-indigo-600",
+          projectUrl: "/services/digital-marketing",
+          stats: {
+            leads: "27 Enrollments",
+            cpl: "₹19.15",
+            spend: "₹516.96",
+            impressions: "20,984"
+          }
+        }
+      ];
+
       // Extended Default Projects with categories
       const defaultProjects = [
+        ...performanceMarketingProjects,
         {
           _id: "proj-1",
           companyName: "Mounty River Resort",
@@ -1107,18 +1196,6 @@ export default function Home() {
           projectUrl: "https://omnistore.com"
         },
         {
-          _id: "proj-4",
-          companyName: "Lonkar Enterprises",
-          serviceName: "Performance Marketing",
-          category: "Performance Marketing",
-          description: "Data-driven Google & Meta ad campaigns achieving a 4.8x ROAS and 300+ monthly qualified B2B leads.",
-          logo: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=150&q=80",
-          image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80",
-          logoInitial: "LE",
-          logoBg: "bg-amber-600",
-          projectUrl: "https://lonkarenterprises.com"
-        },
-        {
           _id: "proj-5",
           companyName: "Nair Interiors",
           serviceName: "Organic & Local SEO",
@@ -1129,18 +1206,6 @@ export default function Home() {
           logoInitial: "NI",
           logoBg: "bg-emerald-700",
           projectUrl: "https://nairinteriors.com"
-        },
-        {
-          _id: "proj-6",
-          companyName: "Pulse Media",
-          serviceName: "Social Growth & Branding",
-          category: "Performance Marketing",
-          description: "End-to-end viral content creation and influencer management driving 2M+ organic impressions.",
-          logo: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=150&q=80",
-          image: "https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=600&q=80",
-          logoInitial: "PM",
-          logoBg: "bg-purple-700",
-          projectUrl: "https://instagram.com/pulsemedia"
         },
         {
           _id: "proj-7",
@@ -1156,27 +1221,53 @@ export default function Home() {
         }
       ];
 
-      const allProjects = portfolio.length > 0 ? portfolio : defaultProjects;
+      // Ensure verified performance marketing projects are always prioritized in showcase
+      const baseProjects = portfolio.length > 0 ? portfolio : defaultProjects;
+      const allProjects = [
+        ...performanceMarketingProjects,
+        ...baseProjects.filter((p: any) => !performanceMarketingProjects.some((pf) => pf._id === p._id || pf.companyName.toLowerCase() === (p.companyName || "").toLowerCase()))
+      ];
 
       // Filter tabs list
       const projectCategories = [
         "Website",
         "SEO",
         "Performance Marketing",
+        "Social Media Marketing",
         "App Development",
         "E-Commerce",
       ];
 
       // Filter projects based on active selection
       const filteredProjects = allProjects.filter((p: any) => {
-            const cat = (p.category || p.serviceName || "").toLowerCase();
+            const cat = (p.category || "").toLowerCase();
+            const serv = (p.serviceName || "").toLowerCase();
+            const combined = `${cat} ${serv}`;
             const selected = activeProjectCategory.toLowerCase();
-            if (selected === "website") return cat.includes("web") || cat.includes("site");
-            if (selected === "seo") return cat.includes("seo");
-            if (selected === "performance marketing") return cat.includes("marketing") || cat.includes("performance") || cat.includes("social");
-            if (selected === "app development") return cat.includes("app") || cat.includes("mobile");
-            if (selected === "e-commerce") return cat.includes("commerce") || cat.includes("store");
-            return cat.includes(selected);
+
+            if (selected === "performance marketing") {
+              // Strictly exclude any Social Media Marketing and SEO projects
+              if (
+                cat.includes("social") ||
+                serv.includes("social") ||
+                combined.includes("smm") ||
+                cat.includes("seo") ||
+                serv.includes("seo")
+              ) {
+                return false;
+              }
+              return cat.includes("performance") || combined.includes("performance marketing") || combined.includes("meta ad") || combined.includes("google ad") || combined.includes("lead");
+            }
+
+            if (selected === "social media marketing") {
+              return cat.includes("social") || serv.includes("social") || combined.includes("smm");
+            }
+
+            if (selected === "website") return cat.includes("web") || cat.includes("site") || serv.includes("web") || serv.includes("site");
+            if (selected === "seo") return cat.includes("seo") || serv.includes("seo");
+            if (selected === "app development") return cat.includes("app") || cat.includes("mobile") || serv.includes("app") || serv.includes("mobile");
+            if (selected === "e-commerce") return cat.includes("commerce") || cat.includes("store") || serv.includes("commerce") || serv.includes("store");
+            return combined.includes(selected);
           });
 
       return (
@@ -1214,25 +1305,44 @@ export default function Home() {
                   className="group rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:shadow-xl hover:border-cyan-400/60 transition-all duration-300 overflow-hidden flex flex-col justify-between"
                 >
                   {/* Card Image / Header */}
-                  <div className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-100">
+                  <div
+                    className="relative h-48 sm:h-52 w-full overflow-hidden bg-slate-900 cursor-pointer group/img"
+                    onClick={() => setSelectedCampaignModal(project)}
+                  >
                     <img
                       src={project.image || project.logo}
                       alt={project.companyName}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-top group-hover/img:scale-105 transition-transform duration-500"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
 
                     {/* Category Tag Badge */}
                     <span className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-cyan-300 border border-cyan-500/30 text-[11px] font-bold px-3 py-1 rounded-full">
                       {project.category || "Project Showcase"}
                     </span>
+
+                    {/* Metric Pill Badge if available */}
+                    {project.metricBadge && (
+                      <span className="absolute bottom-3 left-3 bg-emerald-600/95 text-white backdrop-blur-md text-[11px] font-bold px-2.5 py-1 rounded-lg shadow-sm border border-emerald-400/30 flex items-center gap-1">
+                        <TrendingUp className="w-3 h-3" />
+                        {project.metricBadge}
+                      </span>
+                    )}
+
+                    {/* Hover to View Proof Button */}
+                    <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white text-slate-900 rounded-full font-bold text-xs shadow-lg transform -translate-y-1 group-hover/img:translate-y-0 transition-transform">
+                        <Eye className="w-3.5 h-3.5 text-cyan-600" />
+                        View Dashboard Proof
+                      </span>
+                    </div>
                   </div>
 
                   {/* Card Body */}
                   <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
                     <div className="space-y-1.5">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-8 h-8 rounded-full bg-cyan-100 border border-cyan-200 text-cyan-800 font-bold text-xs flex items-center justify-center shrink-0">
+                        <div className={`w-8 h-8 rounded-full ${project.logoBg || "bg-cyan-100"} border border-slate-200 text-white font-bold text-xs flex items-center justify-center shrink-0`}>
                           {project.logoInitial || initials}
                         </div>
                         <h3 className="text-lg font-bold text-slate-900 group-hover:text-cyan-700 transition-colors line-clamp-1">
@@ -1244,27 +1354,131 @@ export default function Home() {
                         {project.serviceName}
                       </p>
 
+                      {/* Metric chips */}
+                      {project.metrics && (
+                        <div className="flex flex-wrap gap-1.5 pt-1">
+                          {project.metrics.map((m: string, mIdx: number) => (
+                            <span key={mIdx} className="text-[10px] font-bold px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200/80">
+                              {m}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
                       <p className="text-xs text-slate-600 leading-relaxed line-clamp-2 pt-1">
                         {project.description || "Delivered high-impact digital strategy, user experience optimization, and performance scaling."}
                       </p>
                     </div>
 
                     <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
-                      <a
-                        href={targetUrl}
-                        target={isExternal ? "_blank" : undefined}
-                        rel={isExternal ? "noopener noreferrer" : undefined}
+                      <button
+                        onClick={() => setSelectedCampaignModal(project)}
                         className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-700 hover:text-cyan-900 transition-colors"
                       >
-                        <span>Visit Project</span>
+                        <span>View Campaign Proof</span>
                         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
               );
             })}
           </div>
+
+          {/* CAMPAIGN LIGHTBOX / DETAIL MODAL */}
+          {selectedCampaignModal && (
+            <div
+              className="fixed inset-0 z-[100] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6"
+              onClick={() => setSelectedCampaignModal(null)}
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="relative max-w-4xl w-full bg-white rounded-3xl overflow-hidden shadow-2xl border border-slate-200 flex flex-col max-h-[90vh] animate-in zoom-in-95 duration-200"
+              >
+                {/* Header */}
+                <div className="p-5 sm:p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-700 bg-cyan-100 px-2.5 py-0.5 rounded-full">
+                      {selectedCampaignModal.category} • Verified Campaign Result
+                    </span>
+                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 mt-1">
+                      {selectedCampaignModal.companyName}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-500">
+                      {selectedCampaignModal.serviceName}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setSelectedCampaignModal(null)}
+                    className="p-2 rounded-full bg-slate-200/70 hover:bg-slate-300 text-slate-700 transition-colors"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Content - Image & Stats */}
+                <div className="overflow-y-auto p-5 sm:p-6 space-y-6">
+                  {/* Full Image Proof */}
+                  <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 shadow-inner">
+                    <img
+                      src={selectedCampaignModal.image || selectedCampaignModal.logo}
+                      alt={selectedCampaignModal.companyName}
+                      className="w-full h-auto object-contain max-h-[55vh] mx-auto"
+                    />
+                  </div>
+
+                  {/* Highlight Stats Row */}
+                  {selectedCampaignModal.stats && (
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                      <div className="p-3.5 rounded-xl bg-cyan-50/70 border border-cyan-100 text-center">
+                        <span className="text-xs text-slate-500 font-medium block">Total Leads</span>
+                        <span className="text-lg sm:text-xl font-black text-cyan-800">{selectedCampaignModal.stats.leads}</span>
+                      </div>
+                      <div className="p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-100 text-center">
+                        <span className="text-xs text-slate-500 font-medium block">Cost Per Lead</span>
+                        <span className="text-lg sm:text-xl font-black text-emerald-800">{selectedCampaignModal.stats.cpl}</span>
+                      </div>
+                      <div className="p-3.5 rounded-xl bg-blue-50/70 border border-blue-100 text-center">
+                        <span className="text-xs text-slate-500 font-medium block">Impressions</span>
+                        <span className="text-lg sm:text-xl font-black text-blue-800">{selectedCampaignModal.stats.impressions}</span>
+                      </div>
+                      <div className="p-3.5 rounded-xl bg-slate-100/70 border border-slate-200 text-center">
+                        <span className="text-xs text-slate-500 font-medium block">Ad Spend</span>
+                        <span className="text-lg sm:text-xl font-black text-slate-800">{selectedCampaignModal.stats.spend}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Description */}
+                  <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-sm text-slate-700 leading-relaxed">
+                    {selectedCampaignModal.description}
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="p-4 sm:p-5 border-t border-slate-100 bg-slate-50 flex flex-wrap items-center justify-between gap-3">
+                  <span className="text-xs text-slate-500">
+                    Source: Verified Meta Ads Manager Campaign Report
+                  </span>
+                  <div className="flex gap-2.5">
+                    <button
+                      onClick={() => setSelectedCampaignModal(null)}
+                      className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200 transition-colors"
+                    >
+                      Close
+                    </button>
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center gap-1.5 px-5 py-2.5 bg-cyan-700 hover:bg-cyan-800 text-white rounded-xl text-xs font-bold shadow-md shadow-cyan-700/20 transition-all hover:scale-105"
+                    >
+                      <span>Scale Your Ads With Us</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       );
     })()}

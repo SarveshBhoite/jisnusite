@@ -15,6 +15,7 @@ import {
   RefreshCw,
   Layout,
   Lock,
+  ExternalLink,
 } from "lucide-react";
 
 const detailedServices = [
@@ -334,6 +335,102 @@ export default function MobileAppDevelopmentPage() {
                   >
                     <span>Inquire About {activeService.title}</span>
                     <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ===== FEATURED LIVE APP ON GOOGLE PLAY ===== */}
+      <section className="py-20 bg-gradient-to-b from-white via-cyan-50/40 to-slate-50 border-t border-slate-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950 rounded-3xl p-8 sm:p-12 text-white relative overflow-hidden shadow-2xl border border-cyan-500/20">
+            {/* Background Glow */}
+            <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+            
+            <div className="relative z-10 grid lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-7">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 text-xs font-bold uppercase tracking-wider mb-4">
+                  <Smartphone className="w-3.5 h-3.5" />
+                  Live on Google Play Store
+                </div>
+
+                <h2 className="text-2xl sm:text-4xl font-black text-white tracking-tight mb-4">
+                  My Jisnu Digitals
+                </h2>
+
+                <p className="text-cyan-200 text-sm font-semibold mb-4">
+                  Smart Workforce Attendance & Employee Management Mobile Solution
+                </p>
+
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-6 font-medium">
+                  Designed and engineered by Jisnu Digital Solutions, <strong>My Jisnu Digitals</strong> is our production-ready employee management mobile application published on Google Play. It streamlines daily punch-in/out attendance, task allocation, work report submissions, and admin approvals.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8 text-xs text-slate-200">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Geo-tagged Punch In / Punch Out</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Daily Task & Work Report Logs</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Leave & WFH Request Routing</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Centralized Admin Insights</span>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-4">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.jisnu.employeeportal"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-6 py-3 rounded-xl font-bold text-sm transition-all shadow-lg shadow-emerald-500/20 hover:scale-[1.02] active:scale-95"
+                  >
+                    <span>Get on Google Play</span>
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                  <Link
+                    href="/products#my-jisnu-digitals"
+                    className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 px-6 py-3 rounded-xl font-bold text-sm transition-all"
+                  >
+                    <span>View in Products</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 flex justify-center">
+                <div className="w-full max-w-sm bg-slate-900/90 border border-cyan-500/30 rounded-3xl p-6 backdrop-blur-sm shadow-xl">
+                  <div className="flex items-center gap-4 mb-4 pb-4 border-b border-slate-800">
+                    <div className="w-14 h-14 rounded-2xl bg-cyan-600/30 border border-cyan-400/30 flex items-center justify-center text-cyan-300">
+                      <Smartphone className="w-7 h-7" />
+                    </div>
+                    <div>
+                      <h4 className="font-bold text-white text-base">My Jisnu Digitals</h4>
+                      <p className="text-xs text-slate-400">JISNU DIGITAL SOLUTIONS</p>
+                      <span className="inline-block mt-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300">
+                        Android App • Google Play
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-300 leading-relaxed mb-4">
+                    Ready to scale your business with custom Android & iOS mobile applications just like this?
+                  </p>
+                  <Link
+                    href="/contact"
+                    className="w-full py-2.5 px-4 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-bold text-center transition-colors flex items-center justify-center gap-1.5 shadow-md shadow-cyan-600/20"
+                  >
+                    Build Your Custom Mobile App <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
               </div>
