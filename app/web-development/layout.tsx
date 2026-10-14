@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Jisnu Digital provides professional web development services in Pune, including business websites, custom web applications, e-commerce development and SEO-friendly websites.",
   alternates: {
-    canonical: "https://www.jisnudigital.com/services/web-development",
+    canonical: "https://www.jisnudigital.com/web-development",
   },
 };
 

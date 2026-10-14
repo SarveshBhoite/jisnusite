@@ -424,49 +424,6 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* ========================================================================= */}
-      {/* 5. FINAL CALL TO ACTION (CTA) */}
-      {/* ========================================================================= */}
-      <section className="py-20 relative bg-transparent">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 text-white p-10 sm:p-16 text-center overflow-hidden shadow-2xl border border-slate-800">
-            {/* Ambient Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[250px] bg-cyan-500/15 blur-[120px] rounded-full pointer-events-none" />
-
-            <div className="relative z-10 max-w-3xl mx-auto">
-              <div className="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-300 flex items-center justify-center mx-auto mb-6">
-                <Zap className="w-7 h-7 text-amber-400 animate-pulse" />
-              </div>
-
-              <h2 className="text-3xl sm:text-5xl font-black tracking-tight mb-6">
-                Ready to Accelerate Your Digital Growth?
-              </h2>
-
-              <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-10">
-                Let’s collaborate to build modern web engineering and digital marketing campaigns designed specifically for your target audience.
-              </p>
-
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2.5 bg-cyan-600 hover:bg-cyan-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg transition-all hover:scale-[1.02] active:scale-95"
-                >
-                  <span>Start Your Project</span>
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 font-bold px-8 py-4 rounded-xl transition-all"
-                >
-                  <span>Get Free Consultation</span>
-                  <ArrowUpRight className="w-5 h-5 text-cyan-300" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
   );
 }

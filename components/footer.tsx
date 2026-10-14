@@ -43,8 +43,7 @@ export function Footer() {
             </Link>
 
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              Jisnu Digital Solutions provides reliable, modern digital services
-              to help businesses build, scale, and grow their online presence.
+              Jisnu Digital Solutions provides reliable, modern digital services and digital marketing services in Pune to help businesses build, scale, and grow their online presence
             </p>
           </div>
 

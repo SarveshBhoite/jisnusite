@@ -723,19 +723,19 @@ export default function WebDevelopmentWhitePage() {
           {/* Internal Sibling Links */}
           <div className="mt-16 pt-12 border-t border-slate-800 flex flex-wrap justify-center gap-3 text-xs">
             <span className="text-slate-400 font-bold self-center mr-2">Explore Other Services:</span>
-            <Link href="/services/seo-services" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
+            <Link href="/seo-services" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
               SEO Services
             </Link>
-            <Link href="/services/mobile-app-development" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
+            <Link href="/mobile-app-development" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
               Mobile App Development
             </Link>
-            <Link href="/services/digital-marketing" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
+            <Link href="/digital-marketing" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
               Digital Marketing
             </Link>
-            <Link href="/services/ui-ux-design" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
+            <Link href="/ui-ux-design" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
               UI/UX Design
             </Link>
-            <Link href="/services/ecommerce-development" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
+            <Link href="/ecommerce-development" className="px-3.5 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 hover:text-white hover:border-blue-400/40 transition-colors">
               E-Commerce Development
             </Link>
           </div>

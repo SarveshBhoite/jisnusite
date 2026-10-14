@@ -111,11 +111,11 @@ const detailedServices = [
 ];
 
 const otherServices = [
-  { title: "Web Development", link: "/services/web-development" },
-  { title: "Mobile App Development", link: "/services/mobile-app-development" },
-  { title: "SEO Services", link: "/services/seo-services" },
-  { title: "Digital Marketing", link: "/services/digital-marketing" },
-  { title: "E-Commerce Development", link: "/services/ecommerce-development" },
+  { title: "Web Development", link: "/web-development" },
+  { title: "Mobile App Development", link: "/mobile-app-development" },
+  { title: "SEO Services", link: "/seo-services" },
+  { title: "Digital Marketing", link: "/digital-marketing" },
+  { title: "E-Commerce Development", link: "/ecommerce-development" },
 ];
 
 export default function UiUxDesignPage() {

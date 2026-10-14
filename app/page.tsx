@@ -64,37 +64,37 @@ export default function Home() {
       name: "Web Development",
       icon: "🌐",
       description: "Responsive, fast and SEO-friendly websites for growing businesses.",
-      link: "/services/web-development",
+      link: "/web-development",
     },
     {
       name: "Mobile App Development",
       icon: "📱",
       description: "Scalable and user-friendly mobile apps for Android and iOS.",
-      link: "/services/mobile-app-development",
+      link: "/mobile-app-development",
     },
     {
       name: "SEO Services",
       icon: "📈",
       description: "Data-driven SEO strategies to improve rankings and organic traffic.",
-      link: "/services/seo-services",
+      link: "/seo-services",
     },
     {
       name: "Digital Marketing",
       icon: "📣",
       description: "Performance-focused marketing to reach and convert your audience.",
-      link: "/services/digital-marketing",
+      link: "/digital-marketing",
     },
     {
       name: "E-Commerce Development",
       icon: "🛒",
       description: "High-performing online stores built to increase sales.",
-      link: "/services/ecommerce-development",
+      link: "/ecommerce-development",
     },
     {
       name: "UI/UX Design",
       icon: "✨",
       description: "Modern and conversion-focused digital experiences.",
-      link: "/services/ui-ux-design",
+      link: "/ui-ux-design",
     },
   ];
 
@@ -1086,7 +1086,7 @@ export default function Home() {
           image: "/portfolio/performance-bosh-ashok-leyland.png",
           logoInitial: "BA",
           logoBg: "bg-blue-700",
-          projectUrl: "/services/digital-marketing",
+          projectUrl: "/digital-marketing",
           stats: {
             leads: "628 Leads",
             cpl: "₹10.59",
@@ -1106,7 +1106,7 @@ export default function Home() {
           image: "/portfolio/performance-saffron-realty.png",
           logoInitial: "SR",
           logoBg: "bg-amber-600",
-          projectUrl: "/services/digital-marketing",
+          projectUrl: "/digital-marketing",
           stats: {
             leads: "800+ Inquiries",
             cpl: "₹4.67 - ₹5.70",
@@ -1126,7 +1126,7 @@ export default function Home() {
           image: "/portfolio/performance-solar-energy.png",
           logoInitial: "SE",
           logoBg: "bg-emerald-600",
-          projectUrl: "/services/digital-marketing",
+          projectUrl: "/digital-marketing",
           stats: {
             leads: "698 Inquiries",
             cpl: "₹17.91",
@@ -1146,7 +1146,7 @@ export default function Home() {
           image: "/portfolio/performance-mpsc-education.png",
           logoInitial: "MM",
           logoBg: "bg-indigo-600",
-          projectUrl: "/services/digital-marketing",
+          projectUrl: "/digital-marketing",
           stats: {
             leads: "27 Enrollments",
             cpl: "₹19.15",

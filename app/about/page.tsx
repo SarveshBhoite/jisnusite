@@ -45,7 +45,7 @@ export default function AboutPage() {
           </h1>
 
           <p className="text-base sm:text-lg md:text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
-            Jisnu Digital Solutions is a best digital marketing  company helping businesses grow through website development, SEO, digital marketing, mobile apps, and UI/UX design. We create practical digital solutions that improve online visibility, attract customers, and support business growth across Pune and Maharashtra.
+            Jisnu Digital Solutions is a best digital marketing  company in Pune helping businesses grow through website development, SEO, digital marketing, mobile apps, and UI/UX design. We create practical digital solutions that improve online visibility, attract customers, and support business growth across Pune and Maharashtra.
           </p>
         </div>
       </section>
@@ -168,11 +168,6 @@ We offer a range of services, including SEO, social media marketing, Google Ads,
                 name: "Rohit Pawar",
                 role: "Sales Manager",
                 image: "/Rohit.jpg",
-              },
-              {
-                name: "Pratik Ghalme",
-                role: "Manager",
-                image: "/pratik.jpg",
               },
               {
                 name: " Hrushikesh patil",
