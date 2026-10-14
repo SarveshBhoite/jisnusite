@@ -128,10 +128,10 @@ const industryDataMap: Record<string, IndustryData> = {
     heroImage: "/real istate industry.png",
     icon: Building2,
     stats: [
-      { value: "150+", label: "Real Estate Apps & Portals", subtext: "Delivered for top builders & agencies" },
+      { value: "10+", label: "Projects Delivered", subtext: "Web portals, CRM systems & marketing funnels" },
       { value: "3.5x", label: "Average Lead Conversion", subtext: "Compared to traditional property ads" },
-      { value: "$120M+", label: "Property Sales Enabled", subtext: "Generated through custom digital funnels" },
-      { value: "99.4%", label: "Client Satisfaction Rate", subtext: "Based on 100+ partner reviews" },
+      { value: "1,500+", label: "Verified Buyer Inquiries", subtext: "Generated through custom digital funnels" },
+      { value: "99%", label: "Client Satisfaction Rate", subtext: "Trusted by top builders & agencies" },
     ],
     challengesSubtitle: "The real estate market is highly competitive. We help you overcome digital marketing challenges, reach the right audience, generate quality enquiries and build a stronger online presence.",
     challenges: [
@@ -317,10 +317,10 @@ const industryDataMap: Record<string, IndustryData> = {
     heroImage: "/manufacturing industry.png",
     icon: Factory,
     stats: [
-      { value: "80+", label: "Industrial Manufacturers", subtext: "Partnered for digital transformation" },
-      { value: "$50M+", label: "B2B Orders Processed", subtext: "Across B2B catalog platforms" },
-      { value: "99.9%", label: "System & ERP Uptime", subtext: "Reliable industrial portal infrastructure" },
-      { value: "4.8/5", label: "Enterprise Client Rating", subtext: "Trusted by top OEMs & exporters" },
+      { value: "10+", label: "Projects Delivered", subtext: "B2B portals, catalogs & OEM platforms" },
+      { value: "500+", label: "B2B Inquiries & RFQs", subtext: "Generated for parts & custom manufacturing" },
+      { value: "99.9%", label: "System & Portal Uptime", subtext: "Reliable industrial portal infrastructure" },
+      { value: "4.9/5", label: "Client Satisfaction Rating", subtext: "Trusted by industrial OEMs & exporters" },
     ],
     challengesSubtitle: "Industrial market demands technical clarity. We help manufacturers modernize product discovery, streamline RFQ processes, and connect with global B2B buyers.",
     challenges: [
@@ -498,10 +498,10 @@ const industryDataMap: Record<string, IndustryData> = {
     heroImage: "/education institute.png",
     icon: GraduationCap,
     stats: [
-      { value: "120+", label: "Educational Partners", subtext: "Schools, colleges & EdTech brands" },
-      { value: "50,000+", label: "Student Enrollments", subtext: "Generated through digital funnels" },
-      { value: "98.8%", label: "Platform Uptime", subtext: "High-capacity LMS infrastructure" },
-      { value: "4.9/5", label: "Parent & Student Rating", subtext: "For intuitive digital experiences" },
+      { value: "10+", label: "Projects Delivered", subtext: "Schools, colleges & coaching academy portals" },
+      { value: "1,200+", label: "Student Inquiries", subtext: "Generated through targeted digital funnels" },
+      { value: "99%", label: "Platform & Portal Uptime", subtext: "Seamless admission & student engagement" },
+      { value: "4.9/5", label: "Client Satisfaction Rating", subtext: "Proven admission growth for academic brands" },
     ],
     challengesSubtitle: "Academic recruitment is evolving rapidly. We help institutions increase student admissions, enhance campus brand trust, and engage tech-savvy parents.",
     challenges: [
@@ -667,20 +667,21 @@ const industryDataMap: Record<string, IndustryData> = {
   },
   "hotels-restaurants": {
     slug: "hotels-restaurants",
-    title: "Hotels & Hospitality Suite",
+    title: "Hotels & Restaurants Suite",
     subtitle: "Maximized Direct Bookings, Digital Menus & Guest Loyalty for Hotels & Restaurants",
     description:"Driving direct room bookings, contactless QR code menu ordering, and localized search dominance.",
     breadcrumbTitle: "Hotels & Restaurants",
     headlinePrefix: "DIGITAL SOLUTIONS FOR",
-    headlineFirst: "HOSPI",
-    headlineSecond: "TALITY",
+    headlineFirst: "HOTELS & ",
+    headlineSecond: "RESTAURANTS",
     heroBg: "from-amber-50 via-orange-50/40 to-slate-50",
+    heroImage: "/hotel and restarunts.png",
     icon: Hotel,
     stats: [
-      { value: "200+", label: "Hotels & Restaurants", subtext: "Digitized across major tourist hubs" },
-      { value: "45%", label: "Direct Booking Increase", subtext: "Saving thousands in OTA commissions" },
-      { value: "2M+", label: "Digital Menu Orders", subtext: "Processed via QR table ordering" },
-      { value: "4.9/5", label: "Average Guest Review", subtext: "Boosted via automated review flows" },
+      { value: "10+", label: "Projects Delivered", subtext: "Resorts, hotels & dining portals launched" },
+      { value: "45%", label: "Direct Booking Increase", subtext: "Saving on third-party OTA commission fees" },
+      { value: "2,500+", label: "Direct Guest Bookings & Orders", subtext: "Handled through web & QR channels" },
+      { value: "4.9/5", label: "Average Client Rating", subtext: "Boosted via automated guest review flows" },
     ],
     challengesSubtitle: "Hospitality relies on direct guest connections. We help hotels and restaurants eliminate high OTA commissions, boost direct bookings, and dominate local search.",
     challenges: [
@@ -787,6 +788,7 @@ const industryDataMap: Record<string, IndustryData> = {
       {
         client: "Grand Heritage Resort & Spa",
         projectTitle: "Direct Booking Portal & Local SEO Campaign",
+        image: "/hotel and restarunts.png",
         challenge: "Paying over $12,000 monthly in OTA commission fees for weekend bookings.",
         solution: "Built a mobile-first booking portal offering direct guest perks, backed by local Google Map SEO and Meta ads.",
         result: "Shifted 42% of bookings to direct channels within 90 days, saving $65,000 in annual commissions.",
@@ -795,6 +797,7 @@ const industryDataMap: Record<string, IndustryData> = {
       {
         client: "Spice & Wood Bistro Chain",
         projectTitle: "Contactless QR Ordering & Guest Review Automation",
+        image: "/hotel and restarunts.png",
         challenge: "Slow table turn time during weekend lunch rushes due to staff shortages.",
         solution: "Implemented QR code table menus with instant UPI payment and automated post-meal review collection.",
         result: "Increased table turnover rate by 30% and grew Google reviews from 340 to 1,850+ rated 4.9 stars.",
