@@ -10,6 +10,7 @@ import "./globals.css"
 import AuthProvider from "@/components/SessionProvider"
 // Import the new component (assuming you save it in components/PricingPopup.tsx)
 import PricingPopup from "@/components/PricingPopup"
+import { OrganizationJsonLd } from "@/components/JsonLd"
 
 const sora = Sora({
   subsets: ["latin"],
@@ -25,10 +26,33 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.jisnudigital.com"),
-  title: "Best Digital Marketing Agency in Pune|Jisnu Digital",
-  description: "Best Digital Marketing Agency in Pune. Jisnu Digital Solutions Pvt. Ltd. offers SEO, Social Media Marketing,Google Ads and Website development services.",
+  title: {
+    default: "Best Digital Marketing Agency in Pune | Jisnu Digital",
+    template: "%s | Jisnu Digital",
+  },
+  description: "Best Digital Marketing Agency in Pune. Jisnu Digital Solutions Pvt. Ltd. offers SEO, Social Media Marketing, Google Ads, Mobile Apps, and Website development services.",
   alternates: {
-    canonical: "/",
+    canonical: "https://www.jisnudigital.com",
+  },
+  openGraph: {
+    title: "Best Digital Marketing Agency in Pune | Jisnu Digital",
+    description: "Best Digital Marketing Agency in Pune. Jisnu Digital Solutions Pvt. Ltd. offers SEO, Social Media Marketing, Google Ads, Mobile Apps, and Website development services.",
+    url: "https://www.jisnudigital.com",
+    siteName: "Jisnu Digital Solutions",
+    locale: "en_IN",
+    type: "website",
+    images: [
+      {
+        url: "https://www.jisnudigital.com/icon.jpeg",
+        width: 800,
+        height: 800,
+        alt: "Jisnu Digital Solutions",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@Jisnudigital018",
   },
   icons: { icon: "/icon.jpeg", apple: "/icon.jpeg" },
 }
@@ -41,6 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${sora.variable} ${inter.variable} font-sans antialiased`}>
+        <OrganizationJsonLd />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />
         <Script

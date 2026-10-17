@@ -2,6 +2,7 @@ import { notFound } from "next/navigation"
 import dbConnect from "@/lib/mongodb"
 import Company from "@/models/Company"
 import Link from "next/link"
+import type { Metadata } from "next"
 import ServiceRequest from "@/models/ServiceRequest"
 import RatingSystem from "@/components/RatingSystem" 
 import { 
@@ -11,6 +12,40 @@ import {
   Instagram, Linkedin, Facebook, Twitter,
   Share2, Sparkles, ExternalLink, Crown, ArrowLeft
 } from "lucide-react"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const { id } = await params
+  await dbConnect()
+  try {
+    const company = (await Company.findById(id).lean()) as any
+    if (!company) {
+      return { title: "Company Profile | Jisnu Digital" }
+    }
+
+    const companyName = company.name || "Company Profile"
+    const desc = company.description || `${companyName} listed on Jisnu Digital Solutions Business Directory in Pune.`
+
+    return {
+      title: `${companyName} | Jisnu Digital Business Directory`,
+      description: desc.slice(0, 160),
+      alternates: {
+        canonical: `https://www.jisnudigital.com/companies/${id}`,
+      },
+      openGraph: {
+        title: `${companyName} | Jisnu Digital Directory`,
+        description: desc.slice(0, 160),
+        url: `https://www.jisnudigital.com/companies/${id}`,
+        type: "website",
+      },
+    }
+  } catch {
+    return { title: "Company Profile | Jisnu Digital" }
+  }
+}
 
 export default async function PublicCompanyPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params

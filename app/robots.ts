@@ -1,27 +1,24 @@
 import type { MetadataRoute } from "next";
 
-function getBaseUrl() {
-  const envUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL;
-  if (envUrl && !envUrl.includes("localhost")) {
-    return envUrl.replace(/\/$/, "");
-  }
-  if (process.env.NODE_ENV === "production") {
-    return "https://www.jisnudigital.com";
-  }
-  return (envUrl || "https://www.jisnudigital.com").replace(/\/$/, "");
-}
+const PRODUCTION_SITE_URL = "https://www.jisnudigital.com";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = getBaseUrl();
-
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/dashboard/"],
+        disallow: [
+          "/api/",
+          "/dashboard/",
+          "/cart",
+          "/login",
+          "/logout",
+        ],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: `${PRODUCTION_SITE_URL}/sitemap.xml`,
+    host: PRODUCTION_SITE_URL,
   };
 }
+

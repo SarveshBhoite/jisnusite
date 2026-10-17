@@ -101,8 +101,8 @@ const defaultPortfolios = [
 ];
 
 export default function PortfolioPage() {
-  const [portfolioItems, setPortfolioItems] = useState<any[]>([])
-  const [loading, setLoading] = useState(true)
+  const [portfolioItems, setPortfolioItems] = useState<any[]>(defaultPortfolios)
+  const [loading, setLoading] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [activeItem, setActiveItem] = useState<any | null>(null)
 
@@ -110,13 +110,15 @@ export default function PortfolioPage() {
     const fetchPortfolio = async () => {
       try {
         const res = await fetch("/api/admin/portfolio", { cache: 'no-store' })
-        const data = await res.json()
-        const actualData = Array.isArray(data) ? data : (data?.data || [])
-        setPortfolioItems(actualData)
+        if (res.ok) {
+          const data = await res.json()
+          const actualData = Array.isArray(data) ? data : (data?.data || [])
+          if (actualData.length > 0) {
+            setPortfolioItems(actualData)
+          }
+        }
       } catch (err) {
         console.error("Failed to fetch portfolio:", err)
-      } finally {
-        setLoading(false)
       }
     }
     fetchPortfolio()
@@ -164,14 +166,6 @@ export default function PortfolioPage() {
         return combined.includes(sel);
       });
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <Loader2 className="w-10 h-10 animate-spin text-black" />
-      </div>
-    )
-  }
-
   return (
     <main className="pt-28 pb-20 bg-[#F8F9FA]">
       {/* ===== HERO ===== */}
@@ -180,8 +174,8 @@ export default function PortfolioPage() {
           <span className="text-cyan-700 font-bold text-xs uppercase tracking-widest px-3 py-1 bg-cyan-100 rounded-full border border-cyan-200 mb-4 inline-block">
             Verified Client Results
           </span>
-          <h1 className="font-display text-5xl md:text-7xl font-black mb-4 uppercase italic tracking-tighter text-black">
-            Our Work
+          <h1 className="font-display text-4xl sm:text-5xl md:text-7xl font-black mb-4 uppercase italic tracking-tighter text-black">
+            Our Work & Client Portfolio
           </h1>
           <p className="text-gray-500 max-w-xl mx-auto text-lg">
             Showcasing proven campaign metrics, web engineering, and performance marketing delivered for verified partners.

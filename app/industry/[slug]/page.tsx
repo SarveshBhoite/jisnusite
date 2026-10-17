@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import type { Metadata } from "next";
 import {
   ArrowRight,
   CheckCircle2,
@@ -830,6 +831,30 @@ export async function generateStaticParams() {
     { slug: "education" },
     { slug: "hotels-restaurants" },
   ];
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const data = industryDataMap[slug];
+  if (!data) return { title: "Industry Solutions | Jisnu Digital" };
+
+  return {
+    title: `${data.title} | Digital Marketing & Growth | Jisnu Digital`,
+    description: data.subtitle || "Specialized digital marketing, web engineering, and lead generation solutions for the industry.",
+    alternates: {
+      canonical: `https://www.jisnudigital.com/industry/${slug}`,
+    },
+    openGraph: {
+      title: `${data.title} | Digital Marketing & Growth | Jisnu Digital`,
+      description: data.subtitle || "Specialized digital marketing, web engineering, and lead generation solutions for the industry.",
+      url: `https://www.jisnudigital.com/industry/${slug}`,
+      type: "website",
+    },
+  };
 }
 
 export default async function IndustryPage({ params }: { params: Promise<{ slug: string }> }) {
